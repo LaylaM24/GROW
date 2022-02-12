@@ -25,7 +25,7 @@ namespace Grow.Controllers
             string actionButton, string sortDirection = "asc", string sortField = "Household No.")
         {
             ViewData["Filtering"] = "";
-
+               
             PopulateDropDownLists();
 
             string[] sortOptions = new[] { "Household No.", "Address", "City" };
