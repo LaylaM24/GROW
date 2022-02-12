@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Grow.Models.Household>
+
+@{
+    ViewData["Title"] = "Household Income Report";
+}
+
+<a asp-action="Index">Back to Reports</a>
+<br />
+
+<h1>Household Income Report</h1>
+
+<p>
+    <a asp-action="DownloadHouseholdIncome" asp-route-lowRange="@ViewData["lowRange"]" asp-route-highRange="@ViewData["highRange"]" class="btn btn-info float-right">Download Report</a>
+</p>
+
+<form id="IncomeForm" asp-action="HouseholdIncome" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label id="lblError" style="color: red;"></label>
+            <label class="control-label">Filter by Income:</label> <br />
+            $@Html.TextBox("LowRange", null, new { @id = "txtLow", @class = "form-control", @style = "display: inline; width: 100px;" })
+            <label>&emsp; to &emsp;</label>
+            $@Html.TextBox("HighRange", null, new { @id = "txtHigh", @class = "form-control", @style = "display: inline; width: 100px;" })
+            <br /><br />
+            <input id="btnFilter" value="Filter" class="btn btn-outline-primary" style="width: 60px;" />
+            <a asp-action="HouseholdIncome" class="btn btn-outline-dark">Clear</a>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <input type="submit" name="actionButton" value="Membership No." class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="No. Members" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Total Income" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="LICO Verified" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="LICO Verified Date" class="btn btn-link" />
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MembershipNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumOfMembers)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IncomeTotal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LICOVerified)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LICOVerifiedDate)
+                    </td>
+                    <td>
+                        <a asp-controller="Households" asp-action="Details" asp-route-id="@item.ID">View Household</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <partial name="_PagingNavBar" />
+</form>
+
+@section Scripts{
+    <script>
+        $("#btnFilter").click(function () {
+            var low = $("#txtLow").val();
+            var high = $("#txtHigh").val();
+
+            if ($.isNumeric(low) && $.isNumeric(high)) {
+                if (low < high) {
+                    $("#IncomeForm").submit();
+                }
+                else {
+                    $("#lblError").empty();
+                    $("#lblError").append("First value must be less than second value.");
+                }
+            }
+            else {
+                $("#lblError").empty();
+                $("#lblError").append("Values must be numeric.");
+            }
+        });
+
+        $("#txtLow").focus(function () {
+            $("#lblError").empty();
+        });
+
+        $("#txtHigh").focus(function () {
+            $("#lblError").empty();
+        });
+    </script>
+}

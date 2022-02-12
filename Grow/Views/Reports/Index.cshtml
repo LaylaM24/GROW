@@ -1,0 +1,75 @@
+﻿<h1>Reports</h1>
+<br />
+
+<form asp-action="Index" method="get">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <label>Report Type</label>
+                </th>
+                <th>
+                    <label>Description</label>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <label>Membership Renewals</label>
+                </td>
+                <td>
+                    <label>Memberships that are due for renewal.</label>
+                </td>
+                <td>
+                    <a asp-action="ViewReport" asp-route-id="MembershipRenewal">View Report</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Household Locations</label>
+                </td>
+                <td>
+                    <label>Review of households based on city.</label>
+                </td>
+                <td>
+                    <a asp-action="ViewReport" asp-route-id="HouseholdLocations">View Report</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Household Income</label>
+                </td>
+                <td>
+                    <label>Review of households based on total income.</label>
+                </td>
+                <td>
+                    <a asp-action="ViewReport" asp-route-id="HouseholdIncome">View Report</a>
+                </td>
+            </tr>
+            @*<tr>
+                    <td>
+                        <label>Member Ages</label>
+                    </td>
+                    <td>
+                        <label>Review of members based on age group.</label>
+                    </td>
+                    <td>
+                        <a asp-action="ViewReport" asp-route-id="MemberAges">View Report</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Member Genders</label>
+                    </td>
+                    <td>
+                        <label>Review of members based on gender.</label>
+                    </td>
+                    <td>
+                        <a asp-action="ViewReport" asp-route-id="MemberGenders">View Report</a>
+                    </td>
+                </tr>*@
+        </tbody>
+    </table>
+</form>
