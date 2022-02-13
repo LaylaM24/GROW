@@ -9,8 +9,8 @@ namespace Grow.Models
         public Household()
         {
             this.Members = new HashSet<Member>();
-            this.Transactions = new HashSet<Transactions>();
-            this.MembershipChanges = new HashSet<MembershipChanges>();
+            this.Transactions = new HashSet<Transaction>();
+            this.MembershipChanges = new HashSet<MembershipChange>();
         }
 
         public string Address
@@ -23,40 +23,45 @@ namespace Grow.Models
 
         public int ID { get; set; }
 
-        [Display(Name = "Household No.")]
-        [Required(ErrorMessage = "Household number required to create a membership.")]
+        [Display(Name = "Membership No.")]
+        [Required(ErrorMessage = "Membership number is required to create a membership.")]
         public int MembershipNumber { get; set; }
+
+        [Required(ErrorMessage = "Active must be set to true or false.")]
+        public bool Active { get; set; }
 
         [Display(Name = "Number of Members")]
         [Required(ErrorMessage = "Number of members is required.")]
-        public byte? NumOfMembers { get; set; }
+        public byte NumOfMembers { get; set; }
 
         [Display(Name = "Creation Date")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Creation Date is a required field.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         [Display(Name = "LICO Verified")]
         [Required(ErrorMessage = "LICO Verified must be true or false.")]
-        public Boolean LICOVerified { get; set; }
+        public bool LICOVerified { get; set; }
 
         [Display(Name = "LICO Verification Date")]
         [DataType(DataType.Date)]
-        [Required(ErrorMessage = "LICO Verification Date is a required field.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? LICOVerifiedDate { get; set; }
+
+        [Display(Name = "LICO Verified By")]
+        public string LICOVerifiedBy { get; set; }
 
         [Display(Name = "Total Income")]
         [DataType(DataType.Currency)]
         [Required(ErrorMessage = "Total Income is a required field.")]
-        public double? IncomeTotal { get; set; }
+        public double IncomeTotal { get; set; }
 
         [Display(Name = "Renewal Date")]
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "Renewal Date is a required field.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? RenewalDate { get; set; }
+        public DateTime RenewalDate { get; set; }
 
         [Display(Name = "Street No.")]
         [Required(ErrorMessage = "Street Number is a required field.")]
@@ -78,23 +83,18 @@ namespace Grow.Models
         public string PostalCode { get; set; }
 
         // Foreign Keys
-        [Display(Name = "Province")]
-        [Required(ErrorMessage = "You must select a Province.")]
-        public int? ProvinceID { get; set; }
-        public Province Province { get; set; }
-
         [Display(Name = "City")]
         [Required(ErrorMessage = "You must select a City.")]
-        public int? CityID { get; set; }
+        public int CityID { get; set; }
         public City City { get; set; }
 
         public ICollection<Member> Members { get; set; }
-        public ICollection<Transactions> Transactions { get; set; }
-        public ICollection<MembershipChanges> MembershipChanges { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
+        public ICollection<MembershipChange> MembershipChanges { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (CreatedDate.GetValueOrDefault() > DateTime.Today)
+            if (CreatedDate > DateTime.Today)
             {
                 yield return new ValidationResult("Creation Date cannot be set in the future.", new[] { "CreatedDate" });
             }
@@ -104,7 +104,7 @@ namespace Grow.Models
                 yield return new ValidationResult("LICO Verification Date cannot be set in the future.", new[] { "LICOVerifiedDate" });
             }
 
-            if (RenewalDate.GetValueOrDefault() > DateTime.Today)
+            if (RenewalDate > DateTime.Today)
             {
                 yield return new ValidationResult("Renewal Date cannot be set in the future.", new[] { "RenewalDate" });
             }

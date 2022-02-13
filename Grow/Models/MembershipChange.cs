@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Grow.Models
 {
-    public class MembershipChanges
+    public class MembershipChange
     {
         public int ID { get; set; }
 
