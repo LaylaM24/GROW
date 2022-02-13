@@ -56,11 +56,8 @@ namespace Grow.Models
         public string PostalCode { get; set; }
 
         //Foreign Keys
-        [Display(Name = "Province")]
-        public int ProvinceID { get; set; }
-        public Province Province { get; set; }
-
         [Display(Name = "City")]
+        [Required(ErrorMessage = "City is a required field.")]
         public int CityID { get; set; }
         public City City { get; set; }
     }

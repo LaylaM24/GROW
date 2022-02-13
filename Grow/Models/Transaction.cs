@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Grow.Models
 {
-    public class Transactions
+    public class Transaction
     {
-        public Transactions()
+        public Transaction()
         {
-            this.TransactionDetails = new HashSet<TransactionDetails>();
+            this.TransactionDetails = new HashSet<TransactionDetail>();
         }
 
         public int ID { get; set; }
@@ -25,10 +25,17 @@ namespace Grow.Models
 
         // Foreign keys
         [Display(Name = "Household")]
+        [Required(ErrorMessage = "Household is required.")]
         public int HouseholdID { get; set; }
         public Household Household { get; set; }
 
+
+        [Display(Name = "Volunteer")]
+        [Required(ErrorMessage = "Volunteer is required.")]
+        public int VolunteerID { get; set; }
+        public Volunteer Volunteer { get; set; }
+
         [Display(Name = "Transaction Details")]
-        public ICollection<TransactionDetails> TransactionDetails { get; set; }
+        public ICollection<TransactionDetail> TransactionDetails { get; set; }
     }
 }

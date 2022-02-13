@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Grow.Models
 {
-    public class DietaryRestrictions
+    public class DietaryRestriction
     {
-        public DietaryRestrictions()
+        public DietaryRestriction()
         {
-            this.MemberRestrictions = new HashSet<MemberRestrictions>();
+            this.MemberRestrictions = new HashSet<MemberRestriction>();
         }
 
         public int ID { get; set; }
@@ -17,6 +17,6 @@ namespace Grow.Models
         public string Restriction { get; set; }
 
         [Display(Name = "Member Restrictions")]
-        public ICollection<MemberRestrictions> MemberRestrictions { get; set; }
+        public ICollection<MemberRestriction> MemberRestrictions { get; set; }
     }
 }

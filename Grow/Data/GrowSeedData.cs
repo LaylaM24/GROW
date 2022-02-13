@@ -14,67 +14,7 @@ namespace Grow.Data
             using (var context = new GrowContext(
                 serviceProvider.GetRequiredService<DbContextOptions<GrowContext>>()))
             {
-                #region Provinces
-                if (!context.Provinces.Any())
-                {
-                    context.Provinces.AddRange(
-                        new Province
-                        {
-                            ProvinceName = "Alberta"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "British Columbia"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Manitoba"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "New Brunswick"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Newfoundland and Labrador"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Northwest Territories"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Nova Scotia"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Nunavut"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Ontario"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Prince Edward Island"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Quebec"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Saskatchewan"
-                        },
-                        new Province
-                        {
-                            ProvinceName = "Yukon"
-                        }
-                    );
-                    context.SaveChanges();
-                }
-                #endregion
-
+                // Look-up tables
                 #region Cities
                 if (!context.Cities.Any())
                 {
@@ -85,19 +25,19 @@ namespace Grow.Data
                         },
                         new City
                         {
-                            CityName = "Welland"
-                        },
-                        new City
-                        {
-                            CityName = "Thunder Bay"
-                        },
-                        new City
-                        {
-                            CityName = "Vancouver"
-                        },
-                        new City
-                        {
                             CityName = "Niagara Falls"
+                        },
+                        new City
+                        {
+                            CityName = "Thorold"
+                        },
+                        new City
+                        {
+                            CityName = "Port Colborne"
+                        },
+                        new City
+                        {
+                            CityName = "Welland"
                         }
                     );
                     context.SaveChanges();
@@ -108,49 +48,62 @@ namespace Grow.Data
                 if (!context.DietaryRestrictions.Any())
                 {
                     context.DietaryRestrictions.AddRange(
-                        new DietaryRestrictions
+                        new DietaryRestriction
                         {
                             Restriction = "Other"
                         },
-                        new DietaryRestrictions
+                        new DietaryRestriction
                         {
                             Restriction = "Caffine Intolerance"
                         },
-                        new DietaryRestrictions
+                        new DietaryRestriction
                         {
-                            Restriction = "Food Allergies"
+                            Restriction = "Food Allergy"
                         },
-                        new DietaryRestrictions
-                        {
-                            Restriction = "Digestive Disorders"
-                        },
-                        new DietaryRestrictions
-                        {
-                            Restriction = "Osteoperosis"
-                        },
-                        new DietaryRestrictions
-                        {
-                            Restriction = "Heart Disease"
-                        },
-                        new DietaryRestrictions
-                        {
-                            Restriction = "Cancer"
-                        },
-                        new DietaryRestrictions
+                        new DietaryRestriction
                         {
                             Restriction = "Gluten Intolerance"
                         },
-                        new DietaryRestrictions
+                        new DietaryRestriction
                         {
                             Restriction = "Lactose Intolerance"
-                        },
-                        new DietaryRestrictions
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                #region Health Concerns
+                if (!context.HealthConcerns.Any())
+                {
+                    context.HealthConcerns.AddRange(
+                        new HealthConcern
                         {
-                            Restriction = "Obesity"
+                            Concern = "Other"
                         },
-                        new DietaryRestrictions
+                        new HealthConcern
                         {
-                            Restriction = "Diabetes"
+                            Concern = "Osteoperosis"
+                        },
+                        new HealthConcern
+                        {
+                            Concern = "Heart Disease"
+                        },
+                        new HealthConcern
+                        {
+                            Concern = "Cancer"
+                        },
+                        new HealthConcern
+                        {
+                            Concern = "Obesity"
+                        },
+                        new HealthConcern
+                        {
+                            Concern = "Diabetes"
+                        },
+                        new HealthConcern
+                        {
+                            Concern = "Digestive Disorder"
                         }
                     );
                     context.SaveChanges();
@@ -163,11 +116,11 @@ namespace Grow.Data
                     context.Genders.AddRange(
                         new Gender
                         {
-                            GenderType = "Prefer not to say"
+                            GenderType = "Other"
                         },
                         new Gender
                         {
-                            GenderType = "Other"
+                            GenderType = "Prefer not to say"
                         },
                         new Gender
                         {
@@ -182,44 +135,114 @@ namespace Grow.Data
                 }
                 #endregion
 
-                #region Financial Statuses
-                if (!context.FinancialStatuses.Any())
+                #region Income Sources
+                if (!context.IncomeSources.Any())
                 {
-                    context.FinancialStatuses.AddRange(
-                        new FinancialStatus
+                    context.IncomeSources.AddRange(
+                        new IncomeSource
                         {
-                            Status = "ODSP"
+                            Source = "Other"
                         },
-                        new FinancialStatus
+                        new IncomeSource
                         {
-                            Status = "Ontario Works"
+                            Source = "ODSP"
                         },
-                        new FinancialStatus
+                        new IncomeSource
                         {
-                            Status = "CPP-Disability"
+                            Source = "Ontario Works"
                         },
-                        new FinancialStatus
+                        new IncomeSource
                         {
-                            Status = "EI"
+                            Source = "CPP-Disability"
                         },
-                        new FinancialStatus
+                        new IncomeSource
                         {
-                            Status = "GAINS"
+                            Source = "EI"
                         },
-                        new FinancialStatus
+                        new IncomeSource
                         {
-                            Status = "Post-Secondary Student"
+                            Source = "GAINS"
                         },
-                        new FinancialStatus
+                        new IncomeSource
                         {
-                            Status = "Other"
+                            Source = "Post-Secondary Student"
+                        },
+                        new IncomeSource
+                        {
+                            Source = "WSIB"
+                        },
+                        new IncomeSource
+                        {
+                            Source = "Employed"
                         }
                     );
                     context.SaveChanges();
                 }
                 #endregion
 
-                // Everything below to be removed at later date 
+                #region Item Categories
+                if (!context.ItemCategories.Any())
+                {
+                    context.ItemCategories.AddRange(
+                        new ItemCategory
+                        {
+                            CategoryName = "Produce"
+                        },
+                        new ItemCategory
+                        {
+                            CategoryName = "Freezer"
+                        },
+                        new ItemCategory
+                        {
+                            CategoryName = "Pantry"
+                        },
+                        new ItemCategory
+                        {
+                            CategoryName = "Dairy/Eggs/Bread"
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                // Test data
+                #region Items
+                if (!context.Items.Any())
+                {
+                    context.Items.AddRange(
+                        new Item
+                        {
+                            ItemNo = 101,
+                            ItemName = "Apples",
+                            Price = 0.10,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 104,
+                            ItemName = "Bananas",
+                            Price = 0.10,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 205,
+                            ItemName = "Ground Beef",
+                            Price = 2.75,
+                            ItemCategoryID = 2
+                        },
+                        new Item
+                        {
+                            ItemNo = 445,
+                            ItemName = "Coffee",
+                            Price = 4.00,
+                            ItemCategoryID = 3
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
                 #region Households
                 if (!context.Households.Any())
                 {
@@ -227,76 +250,74 @@ namespace Grow.Data
                         new Household
                         {
                             MembershipNumber = 1,
+                            Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
                             LICOVerified = true,
                             LICOVerifiedDate = DateTime.Now,
                             IncomeTotal = 1000,
-                            RenewalDate = DateTime.Now,
+                            RenewalDate = new DateTime(DateTime.Now.Year + 1, DateTime.Now.Month, DateTime.Now.Day),
                             StreetNumber = "123",
                             StreetName = "Main St.",
-                            PostalCode = "l2n2y3",
-                            ProvinceID = 9,
+                            PostalCode = "L2N2Y3",
                             CityID = 1
                         },
                         new Household
                         {
                             MembershipNumber = 2,
+                            Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
                             LICOVerified = false,
-                            LICOVerifiedDate = DateTime.Now,
                             IncomeTotal = 5000,
-                            RenewalDate = DateTime.Now,
+                            RenewalDate = new DateTime(DateTime.Now.Year + 1, DateTime.Now.Month, DateTime.Now.Day),
                             StreetNumber = "700",
                             StreetName = "Geneva Ave.",
-                            PostalCode = "k2n3h3",
-                            ProvinceID = 2,
+                            PostalCode = "K2N3H3",
                             CityID = 2
                         },
                         new Household
                         {
                             MembershipNumber = 3,
+                            Active = false,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
                             LICOVerified = true,
                             LICOVerifiedDate = DateTime.Now,
                             IncomeTotal = 20000,
-                            RenewalDate = DateTime.Now,
+                            RenewalDate = new DateTime(DateTime.Now.Year + 1, DateTime.Now.Month, DateTime.Now.Day),
                             StreetNumber = "412",
                             StreetName = "Lakeshore Dr.",
-                            PostalCode = "p2f8k2",
-                            ProvinceID = 9,
+                            PostalCode = "P2F8K2",
                             CityID = 3
                         },
                         new Household
                         {
                             MembershipNumber = 4,
+                            Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
                             LICOVerified = true,
                             LICOVerifiedDate = DateTime.Now,
                             IncomeTotal = 15000,
-                            RenewalDate = DateTime.Now,
+                            RenewalDate = new DateTime(DateTime.Now.Year + 1, DateTime.Now.Month, DateTime.Now.Day),
                             StreetNumber = "743",
                             StreetName = "Queen St.",
-                            PostalCode = "2n42i4",
-                            ProvinceID = 9,
+                            PostalCode = "2N42I4",
                             CityID = 4,
                         },
                         new Household
                         {
                             MembershipNumber = 5,
+                            Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
                             LICOVerified = false,
-                            LICOVerifiedDate = DateTime.Now,
                             IncomeTotal = 10000,
-                            RenewalDate = DateTime.Now,
+                            RenewalDate = new DateTime(DateTime.Now.Year + 1, DateTime.Now.Month, DateTime.Now.Day),
                             StreetNumber = "321",
                             StreetName = "West Ave.",
-                            PostalCode = "l4n1y3",
-                            ProvinceID = 9,
+                            PostalCode = "L4N1Y3",
                             CityID = 5
                         }
                     );
@@ -311,7 +332,6 @@ namespace Grow.Data
                         new Member
                         {
                             HouseholdID = 1,
-                            ConsentVerified = true,
                             FirstName = "Barry",
                             LastName = "Bonds",
                             DOB = Convert.ToDateTime("1966-05-04"),
@@ -325,7 +345,6 @@ namespace Grow.Data
                         new Member
                         {
                             HouseholdID = 2,
-                            ConsentVerified = true,
                             FirstName = "Larry",
                             LastName = "Walker",
                             DOB = Convert.ToDateTime("1939-09-18"),
@@ -339,7 +358,6 @@ namespace Grow.Data
                         new Member
                         {
                             HouseholdID = 3,
-                            ConsentVerified = true,
                             FirstName = "Ty",
                             LastName = "Cob",
                             DOB = Convert.ToDateTime("1949-12-20"),
@@ -353,7 +371,6 @@ namespace Grow.Data
                         new Member
                         {
                             HouseholdID = 4,
-                            ConsentVerified = true,
                             FirstName = "David",
                             LastName = "Ortiz",
                             DOB = Convert.ToDateTime("1960-10-27"),
@@ -367,7 +384,6 @@ namespace Grow.Data
                         new Member
                         {
                             HouseholdID = 5,
-                            ConsentVerified = true,
                             FirstName = "Roger",
                             LastName = "Clemens",
                             DOB = Convert.ToDateTime("1991-07-15"),
@@ -382,31 +398,31 @@ namespace Grow.Data
                 }
                 #endregion
 
-                #region Member Status
-                if (!context.MemberStatuses.Any())
+                #region Member Income
+                if (!context.MemberIncomes.Any())
                 {
-                    context.MemberStatuses.AddRange(
-                        new MemberStatus
+                    context.MemberIncomes.AddRange(
+                        new MemberIncome
                         {
-                            FinancialStatusID = 7,
+                            IncomeSourceID = 7,
                             MemberID = 4,
                             IncomeAmount = 15000
                         },
-                        new MemberStatus
+                        new MemberIncome
                         {
-                            FinancialStatusID = 7,
+                            IncomeSourceID = 7,
                             MemberID = 3,
                             IncomeAmount = 20000
                         },
-                        new MemberStatus
+                        new MemberIncome
                         {
-                            FinancialStatusID = 2,
+                            IncomeSourceID = 2,
                             MemberID = 3,
                             IncomeAmount = 0
                         },
-                        new MemberStatus
+                        new MemberIncome
                         {
-                            FinancialStatusID = 3,
+                            IncomeSourceID = 3,
                             MemberID = 2,
                             IncomeAmount = 5000
                         });
@@ -429,7 +445,6 @@ namespace Grow.Data
                             StreetName = "Cresent Ave.",
                             StreetNum = "72",
                             PostalCode = "p2k2p2",
-                            ProvinceID = 1,
                             CityID = 1
                         },
                         new Volunteer
@@ -443,7 +458,6 @@ namespace Grow.Data
                             StreetName = "Lakeport Bvld.",
                             StreetNum = "123",
                             PostalCode = "n1n2j3",
-                            ProvinceID = 2,
                             CityID = 2
                         },
                         new Volunteer
@@ -457,7 +471,6 @@ namespace Grow.Data
                             StreetName = "Queenstone Stn.",
                             StreetNum = "42",
                             PostalCode = "L4n 3kp",
-                            ProvinceID = 3,
                             CityID = 3
                         },
                         new Volunteer
@@ -471,7 +484,6 @@ namespace Grow.Data
                             StreetName = "Niagara St.",
                             StreetNum = "625",
                             PostalCode = "t9n3h4",
-                            ProvinceID = 4,
                             CityID = 4
                         },
                         new Volunteer
@@ -485,7 +497,6 @@ namespace Grow.Data
                             StreetName = "Terrance Lane",
                             StreetNum = "36",
                             PostalCode = "d8d2n4",
-                            ProvinceID = 5,
                             CityID = 5
                         }
                     );
@@ -497,25 +508,185 @@ namespace Grow.Data
                 if (!context.MemberRestrictions.Any())
                 {
                     context.MemberRestrictions.AddRange(
-                        new MemberRestrictions
+                        new MemberRestriction
                         {
                             MemberID = 1,
-                            DietaryRestrictionsID = 8
+                            DietaryRestrictionID = 1
                         },
-                        new MemberRestrictions
+                        new MemberRestriction
                         {
                             MemberID = 2,
-                            DietaryRestrictionsID = 6
+                            DietaryRestrictionID = 4
                         },
-                        new MemberRestrictions
+                        new MemberRestriction
                         {
                             MemberID = 3,
-                            DietaryRestrictionsID = 5
+                            DietaryRestrictionID = 5
                         },
-                        new MemberRestrictions
+                        new MemberRestriction
                         {
                             MemberID = 4,
-                            DietaryRestrictionsID = 9
+                            DietaryRestrictionID = 3
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                #region Member Concerns
+                if (!context.MemberConcerns.Any())
+                {
+                    context.MemberConcerns.AddRange(
+                        new MemberConcern
+                        {
+                            MemberID = 1,
+                            HealthConcernID = 1
+                        },
+                        new MemberConcern
+                        {
+                            MemberID = 2,
+                            HealthConcernID = 2
+                        },
+                        new MemberConcern
+                        {
+                            MemberID = 3,
+                            HealthConcernID = 3
+                        },
+                        new MemberConcern
+                        {
+                            MemberID = 4,
+                            HealthConcernID = 4
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                #region Membership Changes
+                if (!context.MembershipChanges.Any())
+                {
+                    context.MembershipChanges.AddRange(
+                        new MembershipChange
+                        {
+                            HouseholdID = 1,
+                            ChangeType = "Create",
+                            ChangeDescription = "Membership Created",
+                            ChangeDate = DateTime.Now
+                        },
+                        new MembershipChange
+                        {
+                            HouseholdID = 2,
+                            ChangeType = "Create",
+                            ChangeDescription = "Membership Created",
+                            ChangeDate = DateTime.Now
+                        },
+                        new MembershipChange
+                        {
+                            HouseholdID = 3,
+                            ChangeType = "Create",
+                            ChangeDescription = "Membership Created",
+                            ChangeDate = DateTime.Now
+                        },
+                        new MembershipChange
+                        {
+                            HouseholdID = 4,
+                            ChangeType = "Create",
+                            ChangeDescription = "Membership Created",
+                            ChangeDate = DateTime.Now
+                        },
+                        new MembershipChange
+                        {
+                            HouseholdID = 5,
+                            ChangeType = "Create",
+                            ChangeDescription = "Membership Created",
+                            ChangeDate = DateTime.Now
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                #region Transaction
+                if (!context.Transactions.Any())
+                {
+                    context.Transactions.AddRange(
+                        new Transaction
+                        {
+                            HouseholdID = 1,
+                            TransactionDate = DateTime.Now,
+                            TransactionTotal = 6.00,
+                            VolunteerID = 1
+                        },
+                        new Transaction
+                        {
+                            HouseholdID = 2,
+                            TransactionDate = DateTime.Now,
+                            TransactionTotal = 2.75,
+                            VolunteerID = 2
+                        },
+                        new Transaction
+                        {
+                            HouseholdID = 3,
+                            TransactionDate = DateTime.Now,
+                            TransactionTotal = 4.50,
+                            VolunteerID = 3
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                #region Transaction Details
+                if (!context.TransactionDetails.Any())
+                {
+                    context.TransactionDetails.AddRange(
+                        new TransactionDetail
+                        {
+                            TransactionID = 1,
+                            ItemID = 1,
+                            Quantity = 10,
+                            UnitCost = 0.10,
+                            ExtendedCost = 1.00
+                        },
+                        new TransactionDetail
+                        {
+                            TransactionID = 1,
+                            ItemID = 2,
+                            Quantity = 10,
+                            UnitCost = 0.10,
+                            ExtendedCost = 1.00
+                        },
+                        new TransactionDetail
+                        {
+                            TransactionID = 1,
+                            ItemID = 4,
+                            Quantity = 1,
+                            UnitCost = 4.00,
+                            ExtendedCost = 4.00
+                        },
+                        new TransactionDetail
+                        {
+                            TransactionID = 2,
+                            ItemID = 3,
+                            Quantity = 1,
+                            UnitCost = 2.75,
+                            ExtendedCost = 2.75
+                        },
+                        new TransactionDetail
+                        {
+                            TransactionID = 3,
+                            ItemID = 4,
+                            Quantity = 1,
+                            UnitCost = 4.00,
+                            ExtendedCost = 4.00
+                        },
+                        new TransactionDetail
+                        {
+                            TransactionID = 3,
+                            ItemID = 2,
+                            Quantity = 5,
+                            UnitCost = 0.10,
+                            ExtendedCost = 0.50
                         }
                     );
                     context.SaveChanges();

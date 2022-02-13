@@ -64,7 +64,7 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Gender.GenderType)
         </dd>
-        @if (Model.MemberStatus.Count >= 1)
+        @*@if (Model.MemberStatus.Count >= 1)
         {
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.MemberStatus)
@@ -75,14 +75,14 @@
                     @ms.FinancialStatus.Status <br />
                 }
             </dd>
-        }
+        }*@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.MemberRestrictions)
         </dt>
         <dd class="col-sm-10">
             @foreach (var mr in Model.MemberRestrictions)
             {
-                @mr.DietaryRestrictions.Restriction <br />
+                @mr.DietaryRestriction.Restriction <br />
             }
         </dd>
     </dl>
