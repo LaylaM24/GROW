@@ -9,13 +9,10 @@ namespace Grow.Models
         public Member()
         {
             this.MemberDocuments = new HashSet<MemberDocument>();
-            this.MemberRestrictions = new HashSet<MemberRestrictions>();
-            this.MemberStatus = new HashSet<MemberStatus>();
+            this.MemberRestrictions = new HashSet<MemberRestriction>();
+            this.MemberConcerns = new HashSet<MemberConcern>();
+            this.MemberIncomes = new HashSet<MemberIncome>();
         }
-
-        [Display(Name = "I agree to allow GROW to use my personal data")]
-        [Required(ErrorMessage = "Consent is a required field.")]
-        public bool ConsentVerified { get; set; }
 
         [Display(Name = "Member")]
         public string FullName
@@ -40,7 +37,7 @@ namespace Grow.Models
             get
             {
                 DateTime today = DateTime.Today;
-                int? a = today.Year - DOB?.Year - ((today.Month < DOB?.Month || (today.Month == DOB?.Month && today.Day < DOB?.Day) ? 1 : 0));
+                int? a = today.Year - DOB.Year - ((today.Month < DOB.Month || (today.Month == DOB.Month && today.Day < DOB.Day) ? 1 : 0));
                 return a?.ToString();
             }
         }
@@ -70,11 +67,10 @@ namespace Grow.Models
         [Display(Name = "Date of Birth")]
         [Required(ErrorMessage = "Date of Birth is a required field.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? DOB { get; set; }
+        public DateTime DOB { get; set; }
 
         [Display(Name = "Phone Number")]
         [Required(ErrorMessage = "Phone Number is a required field.")]
-        [StringLength(15, ErrorMessage = "First name cannot be more than 75 characters long.")]
         [RegularExpression("^\\d{10}$", ErrorMessage = "Please enter a valid 10-digit phone number (no spaces).")]
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
@@ -97,6 +93,10 @@ namespace Grow.Models
         [Required(ErrorMessage = "Data Consent is a required field.")]
         public bool DataConsent { get; set; }
 
+        [Display(Name = "Notes")]
+        [StringLength(500, ErrorMessage = "Notes cannot exceed 500 characters.")]
+        public string Notes { get; set; }
+
         //Foreign Keys
         [Display(Name = "Household")]
         [Required(ErrorMessage = "Household is a required field.")]
@@ -108,18 +108,21 @@ namespace Grow.Models
         public int GenderID { get; set; }
         public Gender Gender { get; set; }
 
-        [Display(Name = "Financial Status")]
-        public ICollection<MemberStatus> MemberStatus { get; set; }
+        [Display(Name = "Income Source")]
+        public ICollection<MemberIncome> MemberIncomes { get; set; }
 
         [Display(Name = "Dietary Restrictions")]
-        public ICollection<MemberRestrictions> MemberRestrictions { get; set; }
+        public ICollection<MemberRestriction> MemberRestrictions { get; set; }
+
+        [Display(Name = "Health Concerns")]
+        public ICollection<MemberConcern> MemberConcerns { get; set; }
 
         [Display(Name = "Documents")]
         public ICollection<MemberDocument> MemberDocuments { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (DOB.GetValueOrDefault() > DateTime.Today)
+            if (DOB > DateTime.Today)
             {
                 yield return new ValidationResult("Date of Birth cannot be set in the future.", new[] { "DOB" });
             }

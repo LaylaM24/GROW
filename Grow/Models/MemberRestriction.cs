@@ -2,12 +2,14 @@
 
 namespace Grow.Models
 {
-    public class MemberRestrictions
+    public class MemberRestriction
     {
-        [Display(Name = "Dietary Restrictions")]
+        public int ID { get; set; }
+
+        [Display(Name = "Dietary Restriction")]
         [Required(ErrorMessage = "Dietary Restriction is a required field.")]
-        public int DietaryRestrictionsID { get; set; }
-        public DietaryRestrictions DietaryRestrictions { get; set; }
+        public int DietaryRestrictionID { get; set; }
+        public DietaryRestriction DietaryRestriction { get; set; }
 
         [Display(Name = "Member")]
         [Required(ErrorMessage = "Member is a required field.")]

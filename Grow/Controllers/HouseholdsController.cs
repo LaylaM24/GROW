@@ -32,7 +32,6 @@ namespace Grow.Controllers
 
             var households = from h in _context.Households
                              .Include(h => h.City)
-                             .Include(h => h.Province)
                              .AsNoTracking()
                              select h;
 
@@ -124,7 +123,6 @@ namespace Grow.Controllers
 
             var household = await _context.Households
                 .Include(h => h.City)
-                .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (household == null)
             {
@@ -138,7 +136,6 @@ namespace Grow.Controllers
         public IActionResult Create()
         {
             ViewData["CityID"] = new SelectList(_context.Cities, "ID", "CityName");
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ProvinceName");
 
             PopulateDropDownLists();
             return View();
@@ -158,7 +155,6 @@ namespace Grow.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CityID"] = new SelectList(_context.Cities, "ID", "CityName", household.CityID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ProvinceName", household.ProvinceID);
 
             PopulateDropDownLists(household);
             return View(household);
@@ -178,7 +174,6 @@ namespace Grow.Controllers
                 return NotFound();
             }
             ViewData["CityID"] = new SelectList(_context.Cities, "ID", "CityName", household.CityID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ProvinceName", household.ProvinceID);
 
             PopulateDropDownLists(household);
             return View(household);
@@ -217,7 +212,6 @@ namespace Grow.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CityID"] = new SelectList(_context.Cities, "ID", "CityName", household.CityID);
-            ViewData["ProvinceID"] = new SelectList(_context.Provinces, "ID", "ProvinceName", household.ProvinceID);
 
             PopulateDropDownLists(household);
             return View(household);
@@ -233,7 +227,6 @@ namespace Grow.Controllers
 
             var household = await _context.Households
                 .Include(h => h.City)
-                .Include(h => h.Province)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (household == null)
@@ -262,12 +255,7 @@ namespace Grow.Controllers
                          orderby c.CityName
                          select c;
 
-            var pQuery = from p in _context.Provinces
-                         orderby p.ProvinceName
-                         select p;
-            
             ViewData["CityID"] = new SelectList(cQuery, "ID", "CityName", household?.CityID);
-            ViewData["ProvinceID"] = new SelectList(pQuery, "ID", "ProvinceName", household?.ProvinceID);
         }
 
         private bool HouseholdExists(int id)

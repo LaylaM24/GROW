@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grow.Data.GrowMigrations
 {
     [DbContext(typeof(GrowContext))]
-    [Migration("20220207031123_Initial")]
+    [Migration("20220213033910_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,7 @@ namespace Grow.Data.GrowMigrations
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("Grow.Models.DietaryRestrictions", b =>
+            modelBuilder.Entity("Grow.Models.DietaryRestriction", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -47,38 +47,6 @@ namespace Grow.Data.GrowMigrations
                     b.HasKey("ID");
 
                     b.ToTable("DietaryRestrictions");
-                });
-
-            modelBuilder.Entity("Grow.Models.FileContent", b =>
-                {
-                    b.Property<int>("FileContentID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("BLOB");
-
-                    b.Property<string>("MimeType")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(255);
-
-                    b.HasKey("FileContentID");
-
-                    b.ToTable("FileContent");
-                });
-
-            modelBuilder.Entity("Grow.Models.FinancialStatus", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("FinancialStatuses");
                 });
 
             modelBuilder.Entity("Grow.Models.Gender", b =>
@@ -96,10 +64,28 @@ namespace Grow.Data.GrowMigrations
                     b.ToTable("Genders");
                 });
 
+            modelBuilder.Entity("Grow.Models.HealthConcern", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Concern")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("HealthConcerns");
+                });
+
             modelBuilder.Entity("Grow.Models.Household", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ApartmentNumber")
@@ -118,7 +104,10 @@ namespace Grow.Data.GrowMigrations
                     b.Property<bool>("LICOVerified")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LICOVerifiedDate")
+                    b.Property<string>("LICOVerifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LICOVerifiedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("MembershipNumber")
@@ -130,9 +119,6 @@ namespace Grow.Data.GrowMigrations
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("ProvinceID")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("RenewalDate")
                         .HasColumnType("TEXT");
@@ -151,9 +137,68 @@ namespace Grow.Data.GrowMigrations
 
                     b.HasIndex("CityID");
 
-                    b.HasIndex("ProvinceID");
+                    b.HasIndex("MembershipNumber")
+                        .IsUnique();
 
                     b.ToTable("Households");
+                });
+
+            modelBuilder.Entity("Grow.Models.IncomeSource", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("IncomeSources");
+                });
+
+            modelBuilder.Entity("Grow.Models.Item", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ItemCategoryID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("ItemNo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ItemCategoryID");
+
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("Grow.Models.ItemCategory", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ItemCategories");
                 });
 
             modelBuilder.Entity("Grow.Models.Member", b =>
@@ -162,11 +207,7 @@ namespace Grow.Data.GrowMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ConsentVerified")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("DOB")
-                        .IsRequired()
+                    b.Property<DateTime>("DOB")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("DataConsent")
@@ -198,10 +239,13 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(75);
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
+
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(15);
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 
@@ -212,9 +256,13 @@ namespace Grow.Data.GrowMigrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("Grow.Models.MemberRestrictions", b =>
+            modelBuilder.Entity("Grow.Models.MemberConcern", b =>
                 {
-                    b.Property<int>("DietaryRestrictionsID")
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("HealthConcernID")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MemberID")
@@ -224,41 +272,92 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("TEXT")
                         .HasMaxLength(500);
 
-                    b.HasKey("DietaryRestrictionsID", "MemberID");
+                    b.HasKey("ID");
+
+                    b.HasIndex("HealthConcernID");
+
+                    b.HasIndex("MemberID");
+
+                    b.ToTable("MemberConcerns");
+                });
+
+            modelBuilder.Entity("Grow.Models.MemberDocument", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("MemberID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MimeType")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("MemberID");
+
+                    b.ToTable("MemberDocuments");
+                });
+
+            modelBuilder.Entity("Grow.Models.MemberIncome", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("IncomeAmount")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("IncomeSourceID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MemberID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("IncomeSourceID");
+
+                    b.HasIndex("MemberID");
+
+                    b.ToTable("MemberIncomes");
+                });
+
+            modelBuilder.Entity("Grow.Models.MemberRestriction", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DietaryRestrictionID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MemberID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DietaryRestrictionID");
 
                     b.HasIndex("MemberID");
 
                     b.ToTable("MemberRestrictions");
                 });
 
-            modelBuilder.Entity("Grow.Models.MemberStatus", b =>
-                {
-                    b.Property<int>("FinancialStatusID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MemberID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("IncomeAmount")
-                        .HasColumnType("REAL");
-
-                    b.Property<int?>("MemberDocumentsID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(500);
-
-                    b.HasKey("FinancialStatusID", "MemberID");
-
-                    b.HasIndex("MemberDocumentsID");
-
-                    b.HasIndex("MemberID");
-
-                    b.ToTable("MemberStatuses");
-                });
-
-            modelBuilder.Entity("Grow.Models.MembershipChanges", b =>
+            modelBuilder.Entity("Grow.Models.MembershipChange", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -284,54 +383,7 @@ namespace Grow.Data.GrowMigrations
                     b.ToTable("MembershipChanges");
                 });
 
-            modelBuilder.Entity("Grow.Models.Province", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ProvinceName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Provinces");
-                });
-
-            modelBuilder.Entity("Grow.Models.TransactionDetails", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("ExtendedCost")
-                        .HasColumnType("REAL");
-
-                    b.Property<string>("Item")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TransactionID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("TransactionsID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("UnitCost")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("TransactionsID");
-
-                    b.ToTable("TransactionDetails");
-                });
-
-            modelBuilder.Entity("Grow.Models.Transactions", b =>
+            modelBuilder.Entity("Grow.Models.Transaction", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -346,32 +398,46 @@ namespace Grow.Data.GrowMigrations
                     b.Property<double>("TransactionTotal")
                         .HasColumnType("REAL");
 
+                    b.Property<int>("VolunteerID")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
 
                     b.HasIndex("HouseholdID");
 
+                    b.HasIndex("VolunteerID");
+
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("Grow.Models.UploadedFile", b =>
+            modelBuilder.Entity("Grow.Models.TransactionDetail", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<double>("ExtendedCost")
+                        .HasColumnType("REAL");
 
-                    b.Property<string>("FileName")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(255);
+                    b.Property<int>("ItemID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TransactionID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("UnitCost")
+                        .HasColumnType("REAL");
 
                     b.HasKey("ID");
 
-                    b.ToTable("UploadedFiles");
+                    b.HasIndex("ItemID");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("UploadedFile");
+                    b.HasIndex("TransactionID");
+
+                    b.ToTable("TransactionDetails");
                 });
 
             modelBuilder.Entity("Grow.Models.Volunteer", b =>
@@ -409,9 +475,6 @@ namespace Grow.Data.GrowMigrations
                     b.Property<string>("PostalCode")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProvinceID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
@@ -432,30 +495,7 @@ namespace Grow.Data.GrowMigrations
 
                     b.HasIndex("CityID");
 
-                    b.HasIndex("ProvinceID");
-
                     b.ToTable("Volunteers");
-                });
-
-            modelBuilder.Entity("Grow.Models.MemberDocument", b =>
-                {
-                    b.HasBaseType("Grow.Models.UploadedFile");
-
-                    b.Property<int>("MemberID")
-                        .HasColumnType("INTEGER");
-
-                    b.HasIndex("MemberID");
-
-                    b.HasDiscriminator().HasValue("MemberDocument");
-                });
-
-            modelBuilder.Entity("Grow.Models.FileContent", b =>
-                {
-                    b.HasOne("Grow.Models.UploadedFile", "UploadedFile")
-                        .WithOne("FileContent")
-                        .HasForeignKey("Grow.Models.FileContent", "FileContentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Grow.Models.Household", b =>
@@ -463,13 +503,16 @@ namespace Grow.Data.GrowMigrations
                     b.HasOne("Grow.Models.City", "City")
                         .WithMany("Households")
                         .HasForeignKey("CityID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
 
-                    b.HasOne("Grow.Models.Province", "Province")
-                        .WithMany("Households")
-                        .HasForeignKey("ProvinceID")
-                        .OnDelete(DeleteBehavior.Cascade)
+            modelBuilder.Entity("Grow.Models.Item", b =>
+                {
+                    b.HasOne("Grow.Models.ItemCategory", "ItemCategory")
+                        .WithMany("Items")
+                        .HasForeignKey("ItemCategoryID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -478,7 +521,7 @@ namespace Grow.Data.GrowMigrations
                     b.HasOne("Grow.Models.Gender", "Gender")
                         .WithMany("Members")
                         .HasForeignKey("GenderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Grow.Models.Household", "Household")
@@ -488,76 +531,17 @@ namespace Grow.Data.GrowMigrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Grow.Models.MemberRestrictions", b =>
+            modelBuilder.Entity("Grow.Models.MemberConcern", b =>
                 {
-                    b.HasOne("Grow.Models.DietaryRestrictions", "DietaryRestrictions")
-                        .WithMany("MemberRestrictions")
-                        .HasForeignKey("DietaryRestrictionsID")
+                    b.HasOne("Grow.Models.HealthConcern", "HealthConcern")
+                        .WithMany("MemberConcerns")
+                        .HasForeignKey("HealthConcernID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Grow.Models.Member", "Member")
-                        .WithMany("MemberRestrictions")
+                        .WithMany("MemberConcerns")
                         .HasForeignKey("MemberID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Grow.Models.MemberStatus", b =>
-                {
-                    b.HasOne("Grow.Models.FinancialStatus", "FinancialStatus")
-                        .WithMany("MemberStatus")
-                        .HasForeignKey("FinancialStatusID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Grow.Models.MemberDocument", "MemberDocuments")
-                        .WithMany()
-                        .HasForeignKey("MemberDocumentsID");
-
-                    b.HasOne("Grow.Models.Member", "Member")
-                        .WithMany("MemberStatus")
-                        .HasForeignKey("MemberID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Grow.Models.MembershipChanges", b =>
-                {
-                    b.HasOne("Grow.Models.Household", "Household")
-                        .WithMany("MembershipChanges")
-                        .HasForeignKey("HouseholdID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Grow.Models.TransactionDetails", b =>
-                {
-                    b.HasOne("Grow.Models.Transactions", "Transactions")
-                        .WithMany("TransactionDetails")
-                        .HasForeignKey("TransactionsID");
-                });
-
-            modelBuilder.Entity("Grow.Models.Transactions", b =>
-                {
-                    b.HasOne("Grow.Models.Household", "Household")
-                        .WithMany("Transactions")
-                        .HasForeignKey("HouseholdID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Grow.Models.Volunteer", b =>
-                {
-                    b.HasOne("Grow.Models.City", "City")
-                        .WithMany("Volunteers")
-                        .HasForeignKey("CityID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Grow.Models.Province", "Province")
-                        .WithMany("Volunteers")
-                        .HasForeignKey("ProvinceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -568,6 +552,84 @@ namespace Grow.Data.GrowMigrations
                         .WithMany("MemberDocuments")
                         .HasForeignKey("MemberID")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Grow.Models.MemberIncome", b =>
+                {
+                    b.HasOne("Grow.Models.IncomeSource", "IncomeSource")
+                        .WithMany("MemberIncomes")
+                        .HasForeignKey("IncomeSourceID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Grow.Models.Member", "Member")
+                        .WithMany("MemberIncomes")
+                        .HasForeignKey("MemberID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Grow.Models.MemberRestriction", b =>
+                {
+                    b.HasOne("Grow.Models.DietaryRestriction", "DietaryRestriction")
+                        .WithMany("MemberRestrictions")
+                        .HasForeignKey("DietaryRestrictionID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Grow.Models.Member", "Member")
+                        .WithMany("MemberRestrictions")
+                        .HasForeignKey("MemberID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Grow.Models.MembershipChange", b =>
+                {
+                    b.HasOne("Grow.Models.Household", "Household")
+                        .WithMany("MembershipChanges")
+                        .HasForeignKey("HouseholdID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Grow.Models.Transaction", b =>
+                {
+                    b.HasOne("Grow.Models.Household", "Household")
+                        .WithMany("Transactions")
+                        .HasForeignKey("HouseholdID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Grow.Models.Volunteer", "Volunteer")
+                        .WithMany()
+                        .HasForeignKey("VolunteerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Grow.Models.TransactionDetail", b =>
+                {
+                    b.HasOne("Grow.Models.Item", "Item")
+                        .WithMany("TransactionDetails")
+                        .HasForeignKey("ItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Grow.Models.Transaction", "Transactions")
+                        .WithMany("TransactionDetails")
+                        .HasForeignKey("TransactionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Grow.Models.Volunteer", b =>
+                {
+                    b.HasOne("Grow.Models.City", "City")
+                        .WithMany("Volunteers")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

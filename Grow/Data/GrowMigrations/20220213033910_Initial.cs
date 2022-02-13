@@ -34,19 +34,6 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FinancialStatuses",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Status = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FinancialStatuses", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Genders",
                 columns: table => new
                 {
@@ -60,16 +47,42 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Provinces",
+                name: "HealthConcerns",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ProvinceName = table.Column<string>(nullable: false)
+                    Concern = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Provinces", x => x.ID);
+                    table.PrimaryKey("PK_HealthConcerns", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IncomeSources",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Source = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncomeSources", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ItemCategories",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CategoryName = table.Column<string>(maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemCategories", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,17 +92,18 @@ namespace Grow.Data.GrowMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     MembershipNumber = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
                     NumOfMembers = table.Column<byte>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     LICOVerified = table.Column<bool>(nullable: false),
-                    LICOVerifiedDate = table.Column<DateTime>(nullable: false),
+                    LICOVerifiedDate = table.Column<DateTime>(nullable: true),
+                    LICOVerifiedBy = table.Column<string>(nullable: true),
                     IncomeTotal = table.Column<double>(nullable: false),
                     RenewalDate = table.Column<DateTime>(nullable: false),
                     StreetNumber = table.Column<string>(maxLength: 10, nullable: false),
                     StreetName = table.Column<string>(maxLength: 100, nullable: false),
                     ApartmentNumber = table.Column<string>(maxLength: 10, nullable: true),
                     PostalCode = table.Column<string>(nullable: false),
-                    ProvinceID = table.Column<int>(nullable: false),
                     CityID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -100,13 +114,7 @@ namespace Grow.Data.GrowMigrations
                         column: x => x.CityID,
                         principalTable: "Cities",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Households_Provinces_ProvinceID",
-                        column: x => x.ProvinceID,
-                        principalTable: "Provinces",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,7 +133,6 @@ namespace Grow.Data.GrowMigrations
                     StreetName = table.Column<string>(maxLength: 100, nullable: false),
                     ApartmentNum = table.Column<string>(maxLength: 10, nullable: true),
                     PostalCode = table.Column<string>(nullable: true),
-                    ProvinceID = table.Column<int>(nullable: false),
                     CityID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -136,13 +143,29 @@ namespace Grow.Data.GrowMigrations
                         column: x => x.CityID,
                         principalTable: "Cities",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ItemNo = table.Column<int>(nullable: false),
+                    ItemName = table.Column<string>(maxLength: 50, nullable: false),
+                    Price = table.Column<double>(nullable: false),
+                    ItemCategoryID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Volunteers_Provinces_ProvinceID",
-                        column: x => x.ProvinceID,
-                        principalTable: "Provinces",
+                        name: "FK_Items_ItemCategories_ItemCategoryID",
+                        column: x => x.ItemCategoryID,
+                        principalTable: "ItemCategories",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,15 +174,15 @@ namespace Grow.Data.GrowMigrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ConsentVerified = table.Column<bool>(nullable: false),
                     FirstName = table.Column<string>(maxLength: 75, nullable: false),
                     LastName = table.Column<string>(maxLength: 75, nullable: false),
                     DOB = table.Column<DateTime>(nullable: false),
-                    Phone = table.Column<string>(maxLength: 15, nullable: false),
+                    Phone = table.Column<string>(nullable: false),
                     Email = table.Column<string>(maxLength: 255, nullable: true),
                     IncomeVerified = table.Column<bool>(nullable: false),
                     IncomeAmount = table.Column<double>(nullable: false),
                     DataConsent = table.Column<bool>(nullable: false),
+                    Notes = table.Column<string>(maxLength: 500, nullable: true),
                     HouseholdID = table.Column<int>(nullable: false),
                     GenderID = table.Column<int>(nullable: false)
                 },
@@ -171,7 +194,7 @@ namespace Grow.Data.GrowMigrations
                         column: x => x.GenderID,
                         principalTable: "Genders",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Members_Households_HouseholdID",
                         column: x => x.HouseholdID,
@@ -210,7 +233,8 @@ namespace Grow.Data.GrowMigrations
                         .Annotation("Sqlite:Autoincrement", true),
                     TransactionDate = table.Column<DateTime>(nullable: false),
                     TransactionTotal = table.Column<double>(nullable: false),
-                    HouseholdID = table.Column<int>(nullable: false)
+                    HouseholdID = table.Column<int>(nullable: false),
+                    VolunteerID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -221,27 +245,35 @@ namespace Grow.Data.GrowMigrations
                         principalTable: "Households",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Volunteers_VolunteerID",
+                        column: x => x.VolunteerID,
+                        principalTable: "Volunteers",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "MemberRestrictions",
+                name: "MemberConcerns",
                 columns: table => new
                 {
-                    DietaryRestrictionsID = table.Column<int>(nullable: false),
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    HealthConcernID = table.Column<int>(nullable: false),
                     MemberID = table.Column<int>(nullable: false),
                     Notes = table.Column<string>(maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MemberRestrictions", x => new { x.DietaryRestrictionsID, x.MemberID });
+                    table.PrimaryKey("PK_MemberConcerns", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_MemberRestrictions_DietaryRestrictions_DietaryRestrictionsID",
-                        column: x => x.DietaryRestrictionsID,
-                        principalTable: "DietaryRestrictions",
+                        name: "FK_MemberConcerns_HealthConcerns_HealthConcernID",
+                        column: x => x.HealthConcernID,
+                        principalTable: "HealthConcerns",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_MemberRestrictions_Members_MemberID",
+                        name: "FK_MemberConcerns_Members_MemberID",
                         column: x => x.MemberID,
                         principalTable: "Members",
                         principalColumn: "ID",
@@ -249,20 +281,75 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UploadedFiles",
+                name: "MemberDocuments",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    MemberID = table.Column<int>(nullable: false),
                     FileName = table.Column<string>(maxLength: 255, nullable: true),
-                    Discriminator = table.Column<string>(nullable: false),
-                    MemberID = table.Column<int>(nullable: true)
+                    Content = table.Column<byte[]>(nullable: true),
+                    MimeType = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UploadedFiles", x => x.ID);
+                    table.PrimaryKey("PK_MemberDocuments", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_UploadedFiles_Members_MemberID",
+                        name: "FK_MemberDocuments_Members_MemberID",
+                        column: x => x.MemberID,
+                        principalTable: "Members",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MemberIncomes",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    IncomeSourceID = table.Column<int>(nullable: false),
+                    MemberID = table.Column<int>(nullable: false),
+                    IncomeAmount = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberIncomes", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_MemberIncomes_IncomeSources_IncomeSourceID",
+                        column: x => x.IncomeSourceID,
+                        principalTable: "IncomeSources",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MemberIncomes_Members_MemberID",
+                        column: x => x.MemberID,
+                        principalTable: "Members",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MemberRestrictions",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DietaryRestrictionID = table.Column<int>(nullable: false),
+                    MemberID = table.Column<int>(nullable: false),
+                    Notes = table.Column<string>(maxLength: 500, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberRestrictions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_MemberRestrictions_DietaryRestrictions_DietaryRestrictionID",
+                        column: x => x.DietaryRestrictionID,
+                        principalTable: "DietaryRestrictions",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MemberRestrictions_Members_MemberID",
                         column: x => x.MemberID,
                         principalTable: "Members",
                         principalColumn: "ID",
@@ -276,8 +363,7 @@ namespace Grow.Data.GrowMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     TransactionID = table.Column<int>(nullable: false),
-                    TransactionsID = table.Column<int>(nullable: true),
-                    Item = table.Column<string>(nullable: false),
+                    ItemID = table.Column<int>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
                     UnitCost = table.Column<double>(nullable: false),
                     ExtendedCost = table.Column<double>(nullable: false)
@@ -286,61 +372,15 @@ namespace Grow.Data.GrowMigrations
                 {
                     table.PrimaryKey("PK_TransactionDetails", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_TransactionDetails_Transactions_TransactionsID",
-                        column: x => x.TransactionsID,
-                        principalTable: "Transactions",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FileContent",
-                columns: table => new
-                {
-                    FileContentID = table.Column<int>(nullable: false),
-                    Content = table.Column<byte[]>(nullable: true),
-                    MimeType = table.Column<string>(maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FileContent", x => x.FileContentID);
-                    table.ForeignKey(
-                        name: "FK_FileContent_UploadedFiles_FileContentID",
-                        column: x => x.FileContentID,
-                        principalTable: "UploadedFiles",
+                        name: "FK_TransactionDetails_Items_ItemID",
+                        column: x => x.ItemID,
+                        principalTable: "Items",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MemberStatuses",
-                columns: table => new
-                {
-                    FinancialStatusID = table.Column<int>(nullable: false),
-                    MemberID = table.Column<int>(nullable: false),
-                    MemberDocumentsID = table.Column<int>(nullable: true),
-                    IncomeAmount = table.Column<double>(nullable: false),
-                    Notes = table.Column<string>(maxLength: 500, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MemberStatuses", x => new { x.FinancialStatusID, x.MemberID });
                     table.ForeignKey(
-                        name: "FK_MemberStatuses_FinancialStatuses_FinancialStatusID",
-                        column: x => x.FinancialStatusID,
-                        principalTable: "FinancialStatuses",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MemberStatuses_UploadedFiles_MemberDocumentsID",
-                        column: x => x.MemberDocumentsID,
-                        principalTable: "UploadedFiles",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MemberStatuses_Members_MemberID",
-                        column: x => x.MemberID,
-                        principalTable: "Members",
+                        name: "FK_TransactionDetails_Transactions_TransactionID",
+                        column: x => x.TransactionID,
+                        principalTable: "Transactions",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -351,9 +391,45 @@ namespace Grow.Data.GrowMigrations
                 column: "CityID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Households_ProvinceID",
+                name: "IX_Households_MembershipNumber",
                 table: "Households",
-                column: "ProvinceID");
+                column: "MembershipNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_ItemCategoryID",
+                table: "Items",
+                column: "ItemCategoryID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberConcerns_HealthConcernID",
+                table: "MemberConcerns",
+                column: "HealthConcernID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberConcerns_MemberID",
+                table: "MemberConcerns",
+                column: "MemberID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberDocuments_MemberID",
+                table: "MemberDocuments",
+                column: "MemberID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberIncomes_IncomeSourceID",
+                table: "MemberIncomes",
+                column: "IncomeSourceID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberIncomes_MemberID",
+                table: "MemberIncomes",
+                column: "MemberID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberRestrictions_DietaryRestrictionID",
+                table: "MemberRestrictions",
+                column: "DietaryRestrictionID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MemberRestrictions_MemberID",
@@ -376,19 +452,14 @@ namespace Grow.Data.GrowMigrations
                 column: "HouseholdID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MemberStatuses_MemberDocumentsID",
-                table: "MemberStatuses",
-                column: "MemberDocumentsID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MemberStatuses_MemberID",
-                table: "MemberStatuses",
-                column: "MemberID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TransactionDetails_TransactionsID",
+                name: "IX_TransactionDetails_ItemID",
                 table: "TransactionDetails",
-                column: "TransactionsID");
+                column: "ItemID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionDetails_TransactionID",
+                table: "TransactionDetails",
+                column: "TransactionID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_HouseholdID",
@@ -396,25 +467,26 @@ namespace Grow.Data.GrowMigrations
                 column: "HouseholdID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UploadedFiles_MemberID",
-                table: "UploadedFiles",
-                column: "MemberID");
+                name: "IX_Transactions_VolunteerID",
+                table: "Transactions",
+                column: "VolunteerID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Volunteers_CityID",
                 table: "Volunteers",
                 column: "CityID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Volunteers_ProvinceID",
-                table: "Volunteers",
-                column: "ProvinceID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FileContent");
+                name: "MemberConcerns");
+
+            migrationBuilder.DropTable(
+                name: "MemberDocuments");
+
+            migrationBuilder.DropTable(
+                name: "MemberIncomes");
 
             migrationBuilder.DropTable(
                 name: "MemberRestrictions");
@@ -423,40 +495,40 @@ namespace Grow.Data.GrowMigrations
                 name: "MembershipChanges");
 
             migrationBuilder.DropTable(
-                name: "MemberStatuses");
-
-            migrationBuilder.DropTable(
                 name: "TransactionDetails");
 
             migrationBuilder.DropTable(
-                name: "Volunteers");
+                name: "HealthConcerns");
+
+            migrationBuilder.DropTable(
+                name: "IncomeSources");
 
             migrationBuilder.DropTable(
                 name: "DietaryRestrictions");
 
             migrationBuilder.DropTable(
-                name: "FinancialStatuses");
+                name: "Members");
 
             migrationBuilder.DropTable(
-                name: "UploadedFiles");
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Members");
+                name: "Genders");
 
             migrationBuilder.DropTable(
-                name: "Genders");
+                name: "ItemCategories");
 
             migrationBuilder.DropTable(
                 name: "Households");
 
             migrationBuilder.DropTable(
-                name: "Cities");
+                name: "Volunteers");
 
             migrationBuilder.DropTable(
-                name: "Provinces");
+                name: "Cities");
         }
     }
 }

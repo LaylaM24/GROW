@@ -35,8 +35,8 @@ namespace Grow.Controllers
             string[] sortOptions = new[] { "Membership No.", "Member", "Age", "Annual Income" };
 
             var members = from m in _context.Members
-                          .Include(m => m.MemberStatus)
-                          .ThenInclude(m => m.FinancialStatus)
+                          .Include(m => m.MemberIncomes)
+                          .ThenInclude(m => m.IncomeSource)
                           .Include(m => m.Gender)
                           .Include(m => m.Household)
                           select m;
@@ -124,14 +124,13 @@ namespace Grow.Controllers
             }
 
             var member = await _context.Members
-                .Include(m => m.MemberStatus)
-                .ThenInclude(m => m.FinancialStatus)
-                .Include(m => m.MemberStatus)
-                .ThenInclude(m => m.MemberDocuments)
+                .Include(m => m.MemberIncomes)
+                .ThenInclude(m => m.IncomeSource)
+                .Include(m => m.MemberDocuments)
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(mr => mr.DietaryRestrictions)
+                    .ThenInclude(mr => mr.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (member == null)
@@ -160,7 +159,7 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member, 
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles/*, int FinancialStatus, IFormFile file*/)
         {
             ViewDataReturnURL();
@@ -171,14 +170,14 @@ namespace Grow.Controllers
                 {
                     foreach (var restriction in selectedOptions)
                     {
-                        var restrictionToAdd = new MemberRestrictions { MemberID = member.ID, DietaryRestrictionsID = int.Parse(restriction) };
+                        var restrictionToAdd = new MemberRestriction { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
                         member.MemberRestrictions.Add(restrictionToAdd);
                     }
 
                     foreach (var status in selectedOptions)
                     {
-                        var statusToAdd = new MemberStatus { MemberID = member.ID, FinancialStatusID = int.Parse(status) };
-                        member.MemberStatus.Add(statusToAdd);
+                        var statusToAdd = new MemberIncome { MemberID = member.ID, IncomeSourceID = int.Parse(status) };
+                        member.MemberIncomes.Add(statusToAdd);
                     }
                 }
                 if (ModelState.IsValid)
@@ -211,11 +210,11 @@ namespace Grow.Controllers
             }
 
             var member = await _context.Members
-                .Include(m => m.MemberStatus)
-                    .ThenInclude(m => m.FinancialStatus)
+                .Include(m => m.MemberIncomes)
+                    .ThenInclude(m => m.IncomeSource)
                 .Include(m => m.MemberDocuments)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(m => m.DietaryRestrictions)
+                    .ThenInclude(m => m.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (member == null)
@@ -234,17 +233,17 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member, 
+        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles/*, int FinancialStatus, IFormFile file*/)
         {
             ViewDataReturnURL();
 
             var memberToUpdate = await _context.Members
-                .Include(m => m.MemberStatus)
-                    .ThenInclude(m => m.FinancialStatus)
+                .Include(m => m.MemberIncomes)
+                    .ThenInclude(m => m.IncomeSource)
                 .Include(m => m.MemberDocuments)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(m => m.DietaryRestrictions)
+                    .ThenInclude(m => m.DietaryRestriction)
                 .FirstOrDefaultAsync(p => p.ID == id);
 
             if (memberToUpdate == null)
@@ -298,12 +297,12 @@ namespace Grow.Controllers
             }
 
             var member = await _context.Members
-                .Include(m => m.MemberStatus)
-                .ThenInclude(m => m.FinancialStatus)
+                .Include(m => m.MemberIncomes)
+                .ThenInclude(m => m.IncomeSource)
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(mr => mr.DietaryRestrictions)
+                    .ThenInclude(mr => mr.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (member == null)
@@ -322,12 +321,12 @@ namespace Grow.Controllers
             ViewDataReturnURL();
 
             var member = await _context.Members
-                .Include(m => m.MemberStatus)
-                .ThenInclude(m => m.FinancialStatus)
+                .Include(m => m.MemberIncomes)
+                .ThenInclude(m => m.IncomeSource)
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(mr => mr.DietaryRestrictions)
+                    .ThenInclude(mr => mr.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             _context.Members.Remove(member);
@@ -338,7 +337,7 @@ namespace Grow.Controllers
         private void PopulateAssignedRestrictionData(Member member)
         {
             var allOptions = _context.DietaryRestrictions;
-            var currentOptionIDs = new HashSet<int>(member.MemberRestrictions.Select(mr => mr.DietaryRestrictionsID));
+            var currentOptionIDs = new HashSet<int>(member.MemberRestrictions.Select(mr => mr.DietaryRestrictionID));
             var checkBoxes = new List<CheckOptionVM>();
 
             foreach (var option in allOptions)
@@ -355,8 +354,8 @@ namespace Grow.Controllers
 
         private void PopulateAssignedStatusData(Member member)
         {
-            var allOptions = _context.FinancialStatuses;
-            var currentOptionIDs = new HashSet<int>(member.MemberStatus.Select(m => m.FinancialStatusID));
+            var allOptions = _context.IncomeSources;
+            var currentOptionIDs = new HashSet<int>(member.MemberIncomes.Select(m => m.IncomeSourceID));
             var checkBoxes = new List<CheckOptionVM>();
 
             foreach (var option in allOptions)
@@ -364,7 +363,7 @@ namespace Grow.Controllers
                 checkBoxes.Add(new CheckOptionVM
                 {
                     ID = option.ID,
-                    DisplayText = option.Status,
+                    DisplayText = option.Source,
                     Assigned = currentOptionIDs.Contains(option.ID)
                 });
             }
@@ -375,28 +374,28 @@ namespace Grow.Controllers
         {
             if (selectedOptions == null)
             {
-                memberToUpdate.MemberStatus = new List<MemberStatus>();
+                memberToUpdate.MemberIncomes = new List<MemberIncome>();
                 return;
             }
 
             var selectedOptionsHS = new HashSet<string>(selectedOptions);
             var memberOptionsHS = new HashSet<int>
-                (memberToUpdate.MemberStatus.Select(m => m.FinancialStatusID));
-            
-            foreach (var option in _context.FinancialStatuses)
+                (memberToUpdate.MemberIncomes.Select(m => m.IncomeSourceID));
+
+            foreach (var option in _context.IncomeSources)
             {
                 if (selectedOptionsHS.Contains(option.ID.ToString()))
                 {
                     if (!memberOptionsHS.Contains(option.ID))
                     {
-                        memberToUpdate.MemberStatus.Add(new MemberStatus { MemberID = memberToUpdate.ID, FinancialStatusID = option.ID });
+                        memberToUpdate.MemberIncomes.Add(new MemberIncome { MemberID = memberToUpdate.ID, IncomeSourceID = option.ID });
                     }
                 }
                 else
                 {
                     if (memberOptionsHS.Contains(option.ID))
                     {
-                        MemberStatus statusToRemove = memberToUpdate.MemberStatus.SingleOrDefault(m => m.FinancialStatusID == option.ID);
+                        MemberIncome statusToRemove = memberToUpdate.MemberIncomes.SingleOrDefault(m => m.IncomeSourceID == option.ID);
                         _context.Remove(statusToRemove);
                     }
                 }
@@ -407,13 +406,13 @@ namespace Grow.Controllers
         {
             if (selectedOptions == null)
             {
-                memberToUpdate.MemberRestrictions = new List<MemberRestrictions>();
+                memberToUpdate.MemberRestrictions = new List<MemberRestriction>();
                 return;
             }
 
             var selectedOptionsHS = new HashSet<string>(selectedOptions);
             var memberOptionsHS = new HashSet<int>
-                (memberToUpdate.MemberRestrictions.Select(mr => mr.DietaryRestrictionsID));
+                (memberToUpdate.MemberRestrictions.Select(mr => mr.DietaryRestrictionID));
 
             foreach (var option in _context.DietaryRestrictions)
             {
@@ -421,14 +420,14 @@ namespace Grow.Controllers
                 {
                     if (!memberOptionsHS.Contains(option.ID))
                     {
-                        memberToUpdate.MemberRestrictions.Add(new MemberRestrictions { MemberID = memberToUpdate.ID, DietaryRestrictionsID = option.ID });
+                        memberToUpdate.MemberRestrictions.Add(new MemberRestriction { MemberID = memberToUpdate.ID, DietaryRestrictionID = option.ID });
                     }
                 }
                 else
                 {
                     if (memberOptionsHS.Contains(option.ID))
                     {
-                        MemberRestrictions restrictionToRemove = memberToUpdate.MemberRestrictions.SingleOrDefault(mr => mr.DietaryRestrictionsID == option.ID);
+                        MemberRestriction restrictionToRemove = memberToUpdate.MemberRestrictions.SingleOrDefault(mr => mr.DietaryRestrictionID == option.ID);
                         _context.Remove(restrictionToRemove);
                     }
                 }
@@ -437,15 +436,15 @@ namespace Grow.Controllers
 
         private void PopulateDropDownLists(Member member = null)
         {
-            MemberStatus memberStatus = null;
+            MemberIncome memberStatus = null;
             if (member != null)
             {
-                memberStatus = _context.MemberStatuses
+                memberStatus = _context.MemberIncomes
                 .FirstOrDefault(m => m.MemberID == member.ID);
             }
 
-            var fsQuery = from fs in _context.FinancialStatuses
-                          orderby fs.Status
+            var fsQuery = from fs in _context.IncomeSources
+                          orderby fs.Source
                           select fs;
 
             var gQuery = from g in _context.Genders
@@ -455,7 +454,7 @@ namespace Grow.Controllers
                          orderby m.StreetName
                          select m;
 
-            ViewData["FinancialSituationID"] = new SelectList(fsQuery, "ID", "Status", memberStatus?.FinancialStatusID);
+            ViewData["FinancialSituationID"] = new SelectList(fsQuery, "ID", "Status", memberStatus?.IncomeSourceID);
             ViewData["GenderID"] = new SelectList(gQuery, "ID", "GenderType", member?.GenderID);
             ViewData["MembershipID"] = new SelectList(mQuery, "ID", "StreetName", member?.HouseholdID);
         }
@@ -476,9 +475,9 @@ namespace Grow.Controllers
                         using (var memoryStream = new MemoryStream())
                         {
                             await f.CopyToAsync(memoryStream);
-                            m.FileContent.Content = memoryStream.ToArray();
+                            m.Content = memoryStream.ToArray();
                         }
-                        m.FileContent.MimeType = mimeType;
+                        m.MimeType = mimeType;
                         m.FileName = fileName;
                         member.MemberDocuments.Add(m);
                     };
@@ -487,11 +486,10 @@ namespace Grow.Controllers
         }
         public async Task<FileContentResult> Download(int id)
         {
-            var theFile = await _context.UploadedFiles
-                .Include(m => m.FileContent)
+            var theFile = await _context.MemberDocuments
                 .Where(f => f.ID == id)
                 .FirstOrDefaultAsync();
-            return File(theFile.FileContent.Content, theFile.FileContent.MimeType, theFile.FileName);
+            return File(theFile.Content, theFile.MimeType, theFile.FileName);
         }
         private string ControllerName()
         {

@@ -2,17 +2,19 @@
 
 namespace Grow.Models
 {
-    public class TransactionDetails
+    public class TransactionDetail
     {
         public int ID { get; set; }
 
         [Display(Name = "Transaction")]
         [Required(ErrorMessage = "Transaction is required.")]
         public int TransactionID { get; set; }
-        public Transactions Transactions { get; set; }
+        public Transaction Transactions { get; set; }
 
+        [Display(Name = "Item")]
         [Required(ErrorMessage = "Item is required.")]
-        public string Item { get; set; }
+        public int ItemID { get; set; }
+        public Item Item { get; set; }
 
         [Required(ErrorMessage = "Quantity is required.")]
         public int Quantity { get; set; }
