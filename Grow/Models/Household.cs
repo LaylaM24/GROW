@@ -13,6 +13,13 @@ namespace Grow.Models
             this.MembershipChanges = new HashSet<MembershipChange>();
         }
 
+        public string UpperPostalCode
+        {
+            get
+            {
+                return PostalCode.ToUpper();
+            }
+        }
         public string Address
         {
             get
