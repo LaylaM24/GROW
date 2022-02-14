@@ -86,6 +86,21 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LowIncomeCutOffs",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    NumberOfMembers = table.Column<byte>(nullable: false),
+                    YearlyIncome = table.Column<double>(nullable: false),
+                    MonthlyIncome = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LowIncomeCutOffs", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Households",
                 columns: table => new
                 {
@@ -479,6 +494,9 @@ namespace Grow.Data.GrowMigrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "LowIncomeCutOffs");
+
             migrationBuilder.DropTable(
                 name: "MemberConcerns");
 

@@ -199,6 +199,26 @@ namespace Grow.Data.GrowMigrations
                     b.ToTable("ItemCategories");
                 });
 
+            modelBuilder.Entity("Grow.Models.LowIncomeCutOff", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("MonthlyIncome")
+                        .HasColumnType("REAL");
+
+                    b.Property<byte>("NumberOfMembers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("YearlyIncome")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("LowIncomeCutOffs");
+                });
+
             modelBuilder.Entity("Grow.Models.Member", b =>
                 {
                     b.Property<int>("ID")
