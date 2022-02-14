@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grow.Data.GrowMigrations
 {
     [DbContext(typeof(GrowContext))]
-    [Migration("20220213033910_Initial")]
+    [Migration("20220214012834_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,26 @@ namespace Grow.Data.GrowMigrations
                     b.HasKey("ID");
 
                     b.ToTable("ItemCategories");
+                });
+
+            modelBuilder.Entity("Grow.Models.LowIncomeCutOff", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("MonthlyIncome")
+                        .HasColumnType("REAL");
+
+                    b.Property<byte>("NumberOfMembers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("YearlyIncome")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("LowIncomeCutOffs");
                 });
 
             modelBuilder.Entity("Grow.Models.Member", b =>

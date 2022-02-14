@@ -205,6 +205,57 @@ namespace Grow.Data
                 }
                 #endregion
 
+                #region Low Income Cut Offs
+                if (!context.LowIncomeCutOffs.Any())
+                {
+                    context.LowIncomeCutOffs.AddRange(
+                        new LowIncomeCutOff
+                        {
+                            NumberOfMembers = 1,
+                            YearlyIncome = 22186,
+                            MonthlyIncome = 1849
+                        },
+                        new LowIncomeCutOff
+                        {
+                            NumberOfMembers = 2,
+                            YearlyIncome = 27619,
+                            MonthlyIncome = 2302
+                        },
+                        new LowIncomeCutOff
+                        {
+                            NumberOfMembers = 3,
+                            YearlyIncome = 33953,
+                            MonthlyIncome = 2830
+                        },
+                        new LowIncomeCutOff
+                        {
+                            NumberOfMembers = 4,
+                            YearlyIncome = 41225,
+                            MonthlyIncome = 3435
+                        },
+                        new LowIncomeCutOff
+                        {
+                            NumberOfMembers = 5,
+                            YearlyIncome = 46757,
+                            MonthlyIncome = 3896
+                        },
+                        new LowIncomeCutOff
+                        {
+                            NumberOfMembers = 6,
+                            YearlyIncome = 52734,
+                            MonthlyIncome = 4395
+                        },
+                        new LowIncomeCutOff
+                        {
+                            NumberOfMembers = 7,
+                            YearlyIncome = 58712,
+                            MonthlyIncome = 4893
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
                 // Test data
                 #region Items
                 if (!context.Items.Any())
