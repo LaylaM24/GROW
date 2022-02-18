@@ -1,0 +1,159 @@
+﻿@model IEnumerable<Grow.Models.Member>
+
+@{
+    ViewData["Title"] = "Member Ages Report";
+}
+
+<a asp-action="Index">Back to Reports</a>
+<br />
+
+<h1>Member Ages Report</h1> <br />
+
+<form id="agesForm" asp-action="MemberAges" method="get">
+    <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
+    <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
+
+    <div class="form-group row">
+        <div class="form-group col-md-5">
+            <label id="lblError" style="color: red;"></label> <br/>
+            <label class="control-label">Filter by Age:</label> <br />
+            @Html.TextBox("LowRange", null, new { @id = "txtLow", @class = "form-control", @style = "display: inline; width: 100px;" })
+            <label>&nbsp;&nbsp; to &nbsp;&nbsp;</label>
+            @Html.TextBox("HighRange", null, new { @id = "txtHigh", @class = "form-control", @style = "display: inline; width: 100px;" })&emsp;
+            <input id="btnFilter" value="Filter" class="btn btn-outline-primary" style="width: 62px;" />
+            <a asp-action="MemberAges" class="btn btn-outline-dark" style="display: inline;">Clear</a>
+        </div>
+        <div class="col form-check float-right align-baseline">
+            <p>
+                <a asp-action="DownloadMemberAges" asp-route-exclInactive="@ViewData["ExclInactive"]" asp-route-lowRange="@ViewData["lowRange"]" asp-route-highRange="@ViewData["highRange"]" class="btn btn-info float-right">Download Report</a> <br />
+                <br />
+            </p>
+            <label class="form-check-label float-right">
+                <input class="form-check-input" type="checkbox" checked="@ViewData["ExclInactive"]" name="cbInactive" id="cbInactive" /> Exclude inactive Members
+            </label>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <input type="submit" name="actionButton" value="Name" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Gender" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Income" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Income Verified" class="btn btn-link" />
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Age)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Gender.GenderType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IncomeAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IncomeVerified)
+                    </td>
+                    <td>
+                        <a asp-controller="Members" asp-action="Details" asp-route-id="@item.ID">View Member</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <partial name="_PagingNavBar" />
+</form>
+
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+
+        var exclInactive = JSON.parse('@Html.Raw(Json.Serialize(ViewData["ExclInactive"]))');
+
+        if (exclInactive == true) {
+            $("#cbInactive").val(true);
+        }
+
+        $("#cbInactive").click(function () {
+
+            if ($("#cbInactive").prop("checked") == true) {
+                $("#cbInactive").val(true);
+            }
+            else {
+                $("#cbInactive").val(false);
+            }
+            $("#agesForm").submit();
+        });
+
+        $("#btnFilter").click(function () {
+            var low = $("#txtLow").val();
+            var high = $("#txtHigh").val();
+
+            if (high != "") {
+
+                if ((low == "" || $.isNumeric(low)) && $.isNumeric(high)) {
+
+                    if (low == "") {
+                        low = 0;
+                        $("#txtLow").val(0);
+                    }
+
+                    if (Number.isInteger(low * 1) && Number.isInteger(high * 1)) {
+
+                        if ((low * 1) < (high * 1)) {
+                            $("#txtLow").val(low * 1);
+                            $("#txtHigh").val(high * 1);
+                            $("#agesForm").submit();
+                        }
+                        else {
+                            $("#lblError").empty();
+                            $("#lblError").append("Low range must be less than high range.");
+                        }
+                    }
+                    else {
+                        $("#lblError").empty();
+                        $("#lblError").append("Values must be integers.");
+                    }
+                }
+                else {
+                    $("#lblError").empty();
+                    $("#lblError").append("Values must be numeric.");
+                }
+            }
+            else {
+                $("#lblError").empty();
+                $("#lblError").append("You must enter a high range to filter by income.");
+            }
+        });
+
+        $("#txtLow").focus(function () {
+            $("#lblError").empty();
+        });
+
+        $("#txtHigh").focus(function () {
+            $("#lblError").empty();
+        });
+
+    });
+    </script>
+}
