@@ -32,13 +32,13 @@ namespace Grow.Models
             }
         }
 
-        public string Age
+        public int Age
         {
             get
             {
                 DateTime today = DateTime.Today;
-                int? a = today.Year - DOB.Year - ((today.Month < DOB.Month || (today.Month == DOB.Month && today.Day < DOB.Day) ? 1 : 0));
-                return a?.ToString();
+                int a = today.Year - DOB.Year - ((today.Month < DOB.Month || (today.Month == DOB.Month && today.Day < DOB.Day) ? 1 : 0));
+                return a;
             }
         }
 

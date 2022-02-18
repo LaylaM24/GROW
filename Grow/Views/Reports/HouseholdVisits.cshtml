@@ -1,26 +1,23 @@
 ﻿@model IEnumerable<Grow.Models.Household>
 
 @{
-    ViewData["Title"] = "Membership Renewal Report";
+    ViewData["Title"] = "Household Monthly Visits Report";
 }
 
 <a asp-action="Index">Back to Reports</a>
 <br />
 
-<h1>Membership Renewal Report</h1> <br />
+<h1>Household Monthly Visits Report</h1>
+<br />
 
-<form id="renewalForm" asp-action="MembershipRenewal" method="get">
+<form id="visitsForm" asp-action="HouseholdVisits" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
 
     <div class="form-group row">
-        <div class="col-6">
-            <label class="control-label">Select a Date to view Memberships that will expire by then.</label>
-            <input name="date" id="datePicker" type="date" value="@ViewData["Date"]" class="form-control" style="width: 150px;" />
-        </div>
         <div class="col form-check float-right">
             <p>
-                <a asp-action="DownloadMembershipRenewal" asp-route-date="@ViewData["Date"]" asp-route-exclInactive="@ViewData["ExclInactive"]" class="btn btn-info float-right">Download Report</a> <br />
+                <a asp-action="DownloadHouseholdVisits" asp-route-exclInactive="@ViewData["ExclInactive"]" class="btn btn-info float-right">Download Report</a> <br />
                 <br />
             </p>
             <label class="form-check-label float-right">
@@ -39,19 +36,13 @@
                     <input type="submit" name="actionButton" value="No. Members" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Created Date" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Total Income" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="LICO Verified" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="City" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="LICO Verified Date" class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Income Total" class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Renewal Date" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="No. Visits" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -67,19 +58,13 @@
                         @Html.DisplayFor(modelItem => item.NumOfMembers)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CreatedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LICOVerified)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LICOVerifiedDate)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.IncomeTotal)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.RenewalDate)
+                        @Html.DisplayFor(modelItem => item.City.CityName)
+                    </td>
+                    <td>
+                        @(item.Transactions.Where(x => x.TransactionDate >= new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day)).Count())
                     </td>
                     <td>
                         <a asp-controller="Households" asp-action="Details" asp-route-id="@item.ID">View Household</a>
@@ -91,13 +76,9 @@
     <partial name="_PagingNavBar" />
 </form>
 
-@section Scripts{ 
+@section Scripts{
     <script>
     $(document).ready(function () {
-
-        $("#datePicker").change(function () {
-            $("#renewalForm").submit();
-        });
 
         var exclInactive = JSON.parse('@Html.Raw(Json.Serialize(ViewData["ExclInactive"]))');
 
@@ -113,7 +94,7 @@
             else {
                 $("#cbInactive").val(false);
             }
-            $("#renewalForm").submit();
+            $("#visitsForm").submit();
         });
 
     });

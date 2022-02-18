@@ -2,25 +2,31 @@
 
 @{
     ViewData["Title"] = "Household Location Report";
-    int? cityID = Model.First().CityID;
 }
 
 <a asp-action="Index">Back to Reports</a>
 <br />
 
-<h1>Household Location Report</h1>
+<h1>Household Location Report</h1> <br />
 
-<p>
-    <a asp-action="DownloadHouseholdLocations" asp-route-cityID="@cityID" class="btn btn-info float-right">Download Report</a>
-</p>
-
-<form asp-action="HouseholdLocations" method="get">
+<form id="locationsForm" asp-action="HouseholdLocations" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
 
-    <div class="form-group col-md-4">
-        <label class="control-label">Filter by City:</label>
-        @Html.DropDownList("City", null, htmlAttributes: new { @id = "ddlCity", @class = "form-control", @onchange = "this.form.submit()" })
+    <div class="form-group row">
+        <div class="col-4">
+            <label class="control-label">Filter by City:</label>
+            @Html.DropDownList("City", null, htmlAttributes: new { @id = "ddlCity", @class = "form-control", @onchange = "this.form.submit()" })
+        </div>
+        <div class="col form-check float-right">
+            <p>
+                <a asp-action="DownloadHouseholdLocations" asp-route-cityID="@ViewData["SelectedCity"]" asp-route-exclInactive="@ViewData["ExclInactive"]" class="btn btn-info float-right">Download Report</a> <br />
+                <br />
+            </p>
+            <label class="form-check-label float-right">
+                <input class="form-check-input" type="checkbox" checked="@ViewData["ExclInactive"]" name="cbInactive" id="cbInactive" /> Exclude inactive Households
+            </label>
+        </div>
     </div>
 
     <table class="table">
@@ -42,7 +48,10 @@
                     <input type="submit" name="actionButton" value="Street Name" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Apartment No." class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Apt No." class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="City" class="btn btn-link" />
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Postal Code" class="btn btn-link" />
@@ -73,6 +82,9 @@
                         @Html.DisplayFor(modelItem => item.ApartmentNumber)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.City.CityName)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.PostalCode)
                     </td>
                     <td>
@@ -84,3 +96,28 @@
     </table>
     <partial name="_PagingNavBar" />
 </form>
+
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+
+        var exclInactive = JSON.parse('@Html.Raw(Json.Serialize(ViewData["ExclInactive"]))');
+
+        if (exclInactive == true) {
+            $("#cbInactive").val(true);
+        }
+
+        $("#cbInactive").click(function () {
+
+            if ($("#cbInactive").prop("checked") == true) {
+                $("#cbInactive").val(true);
+            }
+            else {
+                $("#cbInactive").val(false);
+            }
+            $("#locationsForm").submit();
+        });
+
+    });
+    </script>
+}
