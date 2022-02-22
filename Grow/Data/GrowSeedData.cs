@@ -301,6 +301,7 @@ namespace Grow.Data
                         new Household
                         {
                             MembershipNumber = 1,
+                            HouseholdName = "Bonds",
                             Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
@@ -316,6 +317,7 @@ namespace Grow.Data
                         new Household
                         {
                             MembershipNumber = 2,
+                            HouseholdName = "Walker",
                             Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
@@ -330,6 +332,7 @@ namespace Grow.Data
                         new Household
                         {
                             MembershipNumber = 3,
+                            HouseholdName = "Cob",
                             Active = false,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
@@ -345,6 +348,7 @@ namespace Grow.Data
                         new Household
                         {
                             MembershipNumber = 4,
+                            HouseholdName = "Ortiz",
                             Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
@@ -360,6 +364,7 @@ namespace Grow.Data
                         new Household
                         {
                             MembershipNumber = 5,
+                            HouseholdName = "Clemens",
                             Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,

@@ -96,14 +96,14 @@ namespace Grow.Data.GrowMigrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("HouseholdName")
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("IncomeTotal")
                         .HasColumnType("REAL");
 
                     b.Property<bool>("LICOVerified")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("LICOVerifiedBy")
-                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("LICOVerifiedDate")
                         .HasColumnType("TEXT");
@@ -251,6 +251,9 @@ namespace Grow.Data.GrowMigrations
 
                     b.Property<bool>("IncomeVerified")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("IncomeVerifiedBy")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
                         .IsRequired()

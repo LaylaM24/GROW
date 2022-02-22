@@ -106,13 +106,13 @@ namespace Grow.Data.GrowMigrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    HouseholdName = table.Column<string>(nullable: true),
                     MembershipNumber = table.Column<int>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     NumOfMembers = table.Column<byte>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     LICOVerified = table.Column<bool>(nullable: false),
                     LICOVerifiedDate = table.Column<DateTime>(nullable: true),
-                    LICOVerifiedBy = table.Column<string>(nullable: true),
                     IncomeTotal = table.Column<double>(nullable: false),
                     RenewalDate = table.Column<DateTime>(nullable: false),
                     StreetNumber = table.Column<string>(maxLength: 10, nullable: false),
@@ -196,6 +196,7 @@ namespace Grow.Data.GrowMigrations
                     Email = table.Column<string>(maxLength: 255, nullable: true),
                     IncomeVerified = table.Column<bool>(nullable: false),
                     IncomeAmount = table.Column<double>(nullable: false),
+                    IncomeVerifiedBy = table.Column<string>(nullable: true),
                     DataConsent = table.Column<bool>(nullable: false),
                     Notes = table.Column<string>(maxLength: 500, nullable: true),
                     HouseholdID = table.Column<int>(nullable: false),
