@@ -30,6 +30,9 @@ namespace Grow.Models
 
         public int ID { get; set; }
 
+        [Display(Name = "Household")]
+        public string HouseholdName { get; set; }
+
         [Display(Name = "Membership No.")]
         [Required(ErrorMessage = "Membership number is required to create a membership.")]
         public int MembershipNumber { get; set; }
