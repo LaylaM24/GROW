@@ -13,7 +13,7 @@ namespace Grow.Models
             this.MembershipChanges = new HashSet<MembershipChange>();
         }
 
-        public string UpperPostalCode
+        public string FormattedPostalCode
         {
             get
             {
@@ -24,7 +24,7 @@ namespace Grow.Models
         {
             get
             {
-                return StreetNumber + " " + StreetName;
+                return StreetNumber + " " + StreetName + (ApartmentNumber != null ? $" Apt. {ApartmentNumber}" : "");
             }
         }
 
@@ -89,7 +89,7 @@ namespace Grow.Models
 
         [Display(Name = "Postal Code")]
         [Required(ErrorMessage = "Postal Code is a required field.")]
-        [RegularExpression("^[A-Za-z]\\d[A-Za-z](| |-)\\d[A-Za-z]\\d$", ErrorMessage = "Please enter a valid Postal Code.")]
+        [RegularExpression("^[A-Za-z]\\d[A-Za-z]\\d[A-Za-z]\\d$", ErrorMessage = "Please enter a valid Postal Code.")]
         public string PostalCode { get; set; }
 
         // Foreign Keys

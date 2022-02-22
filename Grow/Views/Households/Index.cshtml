@@ -39,7 +39,10 @@
         <thead>
             <tr>
                 <th>
-                    <input type="submit" name="actionButton" value="Household No." class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Household" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Membership No." class="btn btn-link" />
                 </th>
                 <th>
                     <input type="submit" name="actionButton" value="Address" class="btn btn-link" />
@@ -48,13 +51,10 @@
                     <input type="submit" name="actionButton" value="City" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" disabled="disabled" value="Postal Code" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Postal Code" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" disabled="disabled" value="Total Income" class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" disabled="disabled" value="LICO Verified" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Total Income" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -63,6 +63,9 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HouseholdName)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.MembershipNumber)
                     </td>
@@ -73,13 +76,10 @@
                         @Html.DisplayFor(modelItem => item.City.CityName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UpperPostalCode)
+                        @Html.DisplayFor(modelItem => item.FormattedPostalCode)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.IncomeTotal)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LICOVerified)
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

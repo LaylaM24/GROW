@@ -22,13 +22,13 @@ namespace Grow.Controllers
 
         // GET: Households
         public async Task<IActionResult> Index(string SearchString, int? CityID, int? page, int? pageSizeID,
-            string actionButton, string sortDirection = "asc", string sortField = "Household No.")
+            string actionButton, string sortDirection = "asc", string sortField = "Household")
         {
             ViewData["Filtering"] = "";
 
             PopulateDropDownLists();
 
-            string[] sortOptions = new[] { "Household No.", "Address", "City" };
+            string[] sortOptions = new[] { "Household", "Membership No.", "Address", "City", "Postal Code", "Total Income" };
 
             var households = from h in _context.Households
                              .Include(h => h.City)
@@ -62,7 +62,7 @@ namespace Grow.Controllers
                 }
             }
 
-            if (sortField == "Household No.")
+            if (sortField == "Membership No.")
             {
                 if (sortDirection == "asc")
                 {
@@ -73,6 +73,21 @@ namespace Grow.Controllers
                 {
                     households = households
                         .OrderByDescending(h => h.MembershipNumber);
+                }
+            }
+            else if (sortField == "Address")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                        .OrderBy(h => h.StreetName)
+                        .ThenBy(h => h.StreetNumber);
+                }
+                else
+                {
+                    households = households
+                        .OrderByDescending(h => h.StreetName)
+                        .ThenByDescending(h => h.StreetNumber);
                 }
             }
             else if (sortField == "City")
@@ -88,21 +103,46 @@ namespace Grow.Controllers
                         .OrderByDescending(h => h.City.CityName);
                 }
             }
+            else if (sortField == "Postal Code")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                        .OrderBy(h => h.PostalCode);
+                }
+                else
+                {
+                    households = households
+                        .OrderByDescending(h => h.PostalCode);
+                }
+            }
+            else if (sortField == "Total Income")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                        .OrderBy(h => h.IncomeTotal);
+                }
+                else
+                {
+                    households = households
+                        .OrderByDescending(h => h.IncomeTotal);
+                }
+            }
             else
             {
                 if (sortDirection == "asc")
                 {
                     households = households
-                        .OrderBy(h => h.StreetNumber)
-                        .ThenBy(h => h.StreetName);
+                        .OrderBy(h => h.HouseholdName);
                 }
                 else
                 {
                     households = households
-                        .OrderByDescending(h => h.StreetNumber)
-                        .ThenByDescending(h => h.StreetName);
+                        .OrderByDescending(h => h.HouseholdName);
                 }
             }
+
             ViewData["sortField"] = sortField;
             ViewData["sortDirection"] = sortDirection;
 
