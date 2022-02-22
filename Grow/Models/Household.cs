@@ -30,7 +30,7 @@ namespace Grow.Models
 
         public int ID { get; set; }
 
-        [Display(Name = "Household")]
+        [Display(Name = "Household Name")]
         public string HouseholdName { get; set; }
 
         [Display(Name = "Membership No.")]
@@ -80,7 +80,7 @@ namespace Grow.Models
         [Required(ErrorMessage = "Street Name is a required field.")]
         public string StreetName { get; set; }
 
-        [Display(Name = "Apartment No.")]
+        [Display(Name = "Apt No.")]
         [StringLength(10, ErrorMessage = "Apartment number cannot exceed 10 characters.")]
         public string ApartmentNumber { get; set; }
 
