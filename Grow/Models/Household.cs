@@ -59,9 +59,6 @@ namespace Grow.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? LICOVerifiedDate { get; set; }
 
-        [Display(Name = "LICO Verified By")]
-        public string LICOVerifiedBy { get; set; }
-
         [Display(Name = "Total Income")]
         [DataType(DataType.Currency)]
         [Required(ErrorMessage = "Total Income is a required field.")]

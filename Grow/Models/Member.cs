@@ -89,6 +89,9 @@ namespace Grow.Models
         [DataType(DataType.Currency)]
         public double IncomeAmount { get; set; }
 
+        [Display(Name = "Income Verified By")]
+        public string IncomeVerifiedBy { get; set; }
+
         [Display(Name = "Data Consent")]
         [Required(ErrorMessage = "Data Consent is a required field.")]
         public bool DataConsent { get; set; }

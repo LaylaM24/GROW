@@ -163,7 +163,10 @@ namespace Grow.Controllers
 
             var household = await _context.Households
                 .Include(h => h.City)
+                .Include(h => h.Members)
+                .ThenInclude(m => m.Gender)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
             if (household == null)
             {
                 return NotFound();
