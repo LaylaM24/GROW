@@ -129,6 +129,10 @@ namespace Grow.Data
                         new Gender
                         {
                             GenderType = "Male"
+                        },
+                        new Gender
+                        {
+                            GenderType = "Non-Binary"
                         }
                     );
                     context.SaveChanges();

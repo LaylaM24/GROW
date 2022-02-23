@@ -11,7 +11,6 @@
     <div class="row">
         <div class="col-md-6">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -23,45 +22,40 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IncomeAmount" class="control-label"></label>
-                <input asp-for="IncomeAmount" class="form-control" />
-                <span asp-validation-for="IncomeAmount" class="text-danger"></span>
+                <label asp-for="DOB" class="control-label"></label>
+                <input asp-for="DOB" class="form-control" />
+                <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.MemberStatus)</label>
-                <div class="col-md-offset-1">
-                    <table>
-                        <tr>
-                            @{
-                                int statusCount = 0;
-                                List<Grow.ViewModels.CheckOptionVM> statusCheckboxes = ViewBag.StatusOptions;
-                                foreach (var checkbox in statusCheckboxes)
-                                {
-                                    if (statusCount++ % 3 == 0)
-                                    {
-                                    @:</tr><tr>
-                                    }
-                                    @:<td>
-                                        <input type="checkbox"
-                                               name="selectedOptions"
-                                               value="@checkbox.ID"
-                                               @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
-                                        @checkbox.DisplayText @:&nbsp;&nbsp;
-                                    @:</td>
-                                }
-                            }
-                        </tr>
-                    </table>
-                </div>
-            </div>*@
+            <div class="form-group">
+                <label asp-for="GenderID" class="control-label"></label>
+                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
+                    <option value="">Select a Gender</option>
+                </select>
+                <span asp-validation-for="GenderID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                <textarea asp-for="Notes" class="form-control" style="max-height: 200px;"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IncomeVerified" /> @Html.DisplayNameFor(model => model.IncomeVerified)
+                    <input class="form-check-input" asp-for="DataConsent" /> @Html.DisplayNameFor(model => model.DataConsent)
                 </label>
             </div>
             <div class="form-group">
-                <label class="control-label"> Current Documents:</label>
-                @*<div class="ml-md-3">
+                <label class="control-label">Current Documents:</label>
+                <div class="ml-md-3">
                     @{
                         int fileCount = Model.MemberDocuments.Count;
                         if (fileCount > 0)
@@ -87,65 +81,99 @@
                             }
                         }
                     }
-                </div>*@
+                </div>
             </div>
             <div class="form-group">
-                <label class="control-label">Upload Income Verification Documents:</label><br />
+                <label class="control-label">Income Verification Documents:</label><br />
                 <input type="file" class="" name="theFiles" multiple="multiple" />
-            </div>
+            </div><br />
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label asp-for="DOB" class="control-label"></label>
-                <input asp-for="DOB" class="form-control" />
-                <span asp-validation-for="DOB" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HouseholdID" class="control-label"></label>
-                <select asp-for="HouseholdID" class="form-control" asp-items="ViewBag.MembershipID"></select>
-                <span asp-validation-for="HouseholdID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GenderID" class="control-label"></label>
-                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID"></select>
-                <span asp-validation-for="GenderID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label class="control-label">@Html.DisplayNameFor(model => model.MemberRestrictions)</label>
-                <div class="col-md-offset-1">
-                    <table>
-                        <tr>
-                            @{
-                                int restrictionCount = 0;
-                                List<Grow.ViewModels.CheckOptionVM> restrictionCheckboxes = ViewBag.RestrictionOptions;
-                                foreach (var checkbox in restrictionCheckboxes)
-                                {
-                                    if (restrictionCount++ % 3 == 0)
-                                    {
-                                    @:</tr><tr>
-                                    }
-                                    @:<td>
-                                        <input type="checkbox"
-                                               name="selectedOptions"
-                                               value="@checkbox.ID"
-                                               @(Html.Raw(checkbox.Assigned ? "checked=\"checked\"" : "")) />
-                                        @checkbox.DisplayText @:&nbsp;&nbsp;
-                                    @:</td>
-                                }
-                            }
-                        </tr>
-                    </table>
-                </div>
+                @*Add Member restrictions list boxes*@
+            </div>
+            <div class="form-group">
+                <label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>
+                @*Add Member concerns list boxes*@
+            </div>
+            <div class="form-group">
+                <label class="control-label">Income Source(s)</label>
+                <hr />
+                @foreach (var i in Model.MemberIncomes)
+                {
+                    <label class="control-label">@i.IncomeSource.Source  -  @i.IncomeAmount</label>
+                }
+                <div>
+                    <div id="IncomeSource1" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl1" class="form-control" asp-items="ViewBag.IncomeSourceID">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-5">
+                                <label class="control-label">Income Amount</label>
+                                <input id="txt1" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="1" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <div id="IncomeSource2" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl2" class="form-control" asp-items="ViewBag.IncomeSourceID">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-5">
+                                <label class="control-label">Income Amount</label>
+                                <input id="txt2" name="IncomeAmount2" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="2" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <div id="IncomeSource3" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl3" class="form-control" asp-items="ViewBag.IncomeSourceID">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-5">
+                                <label class="control-label">Income Amount</label>
+                                <input id="txt3" name="IncomeAmount3" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="3" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div><br />
+                <a>
+                    <span id="btnAddIncome" class="btn btn-success"><strong>&#x271A; Add Income Source</strong></span>
+                </a>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IncomeVerified" /> @Html.DisplayNameFor(model => model.IncomeVerified)
+                </label>
             </div>
         </div>
     </div>
@@ -164,4 +192,53 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+    $(document).ready(function () {
+
+        $("#btnAddIncome").click(function () {
+            if (!$("#IncomeSource1").is(":visible")) {
+                $("#IncomeSource1").css("display", "inline");
+                $("#ddl1").attr("name", "IncomeSource1");
+                $("#txt1").attr("name", "IncomeAmount1");
+            }
+            else if (!$("#IncomeSource2").is(":visible")) {
+                $("#IncomeSource2").css("display", "inline");
+                $("#ddl2").attr("name", "IncomeSource2");
+                $("#txt2").attr("name", "IncomeAmount2");
+            }
+            else if (!$("#IncomeSource3").is(":visible")) {
+                $("#IncomeSource3").css("display", "inline");
+                $("#ddl3").attr("name", "IncomeSource3");
+                $("#txt3").attr("name", "IncomeAmount3");
+            }
+
+            if ($("#IncomeSource1").is(":visible") && $("#IncomeSource2").is(":visible") && $("#IncomeSource3").is(":visible")) {
+                $("#btnAddIncome").css("display", "none");
+            }
+        });
+
+        $(".rmIncome").click(function () {
+            var num = $(this).attr("data-number");
+
+            if (num == 1) {
+                $("#IncomeSource1").css("display", "none");
+                $("#ddl1").removeAttr("name");
+                $("#txt1").removeAttr("name");
+            }
+            else if (num == 2) {
+                $("#IncomeSource2").css("display", "none");
+                $("#ddl2").removeAttr("name");
+                $("#txt2").removeAttr("name");
+            }
+            else if (num == 3) {
+                $("#IncomeSource3").css("display", "none");
+                $("#ddl3").removeAttr("name");
+                $("#txt3").removeAttr("name");
+            }
+
+            $("#btnAddIncome").css("display", "inline");
+        });
+
+    });
+</script>
 }
