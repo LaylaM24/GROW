@@ -148,7 +148,6 @@ namespace Grow.Controllers
 
             var member = new Member();
             PopulateAssignedRestrictionData(member);
-            PopulateAssignedStatusData(member);
 
             PopulateDropDownLists();
             return View();
@@ -160,7 +159,8 @@ namespace Grow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member,
-            string[] selectedOptions, List<IFormFile> theFiles/*, int FinancialStatus, IFormFile file*/)
+            string[] selectedOptions, List<IFormFile> theFiles, string IncomeSource1, double IncomeAmount1, string IncomeSource2, double IncomeAmount2, 
+            string IncomeSource3, double IncomeAmount3)
         {
             ViewDataReturnURL();
 
@@ -173,17 +173,11 @@ namespace Grow.Controllers
                         var restrictionToAdd = new MemberRestriction { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
                         member.MemberRestrictions.Add(restrictionToAdd);
                     }
-
-                    foreach (var status in selectedOptions)
-                    {
-                        var statusToAdd = new MemberIncome { MemberID = member.ID, IncomeSourceID = int.Parse(status) };
-                        member.MemberIncomes.Add(statusToAdd);
-                    }
                 }
                 if (ModelState.IsValid)
                 {
-                    await AddDocumentsAsync(member, theFiles);
                     _context.Add(member);
+                    await AddDocumentsAsync(member, theFiles);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Details", new { member.ID });
                 }
@@ -194,7 +188,6 @@ namespace Grow.Controllers
             }
 
             PopulateAssignedRestrictionData(member);
-            PopulateAssignedStatusData(member);
             PopulateDropDownLists(member);
             return View(member);
         }
@@ -223,7 +216,6 @@ namespace Grow.Controllers
             }
 
             PopulateAssignedRestrictionData(member);
-            PopulateAssignedStatusData(member);
             PopulateDropDownLists(member);
             return View(member);
         }
@@ -234,7 +226,8 @@ namespace Grow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member,
-            string[] selectedOptions, List<IFormFile> theFiles/*, int FinancialStatus, IFormFile file*/)
+            string[] selectedOptions, List<IFormFile> theFiles, string IncomeSource1, double IncomeAmount1, string IncomeSource2, double IncomeAmount2,
+            string IncomeSource3, double IncomeAmount3)
         {
             ViewDataReturnURL();
 
@@ -281,7 +274,6 @@ namespace Grow.Controllers
             }
 
             PopulateAssignedRestrictionData(memberToUpdate);
-            PopulateAssignedStatusData(memberToUpdate);
             PopulateDropDownLists(memberToUpdate);
             return View(memberToUpdate);
         }
@@ -350,24 +342,6 @@ namespace Grow.Controllers
                 });
             }
             ViewData["RestrictionOptions"] = checkBoxes;
-        }
-
-        private void PopulateAssignedStatusData(Member member)
-        {
-            var allOptions = _context.IncomeSources;
-            var currentOptionIDs = new HashSet<int>(member.MemberIncomes.Select(m => m.IncomeSourceID));
-            var checkBoxes = new List<CheckOptionVM>();
-
-            foreach (var option in allOptions)
-            {
-                checkBoxes.Add(new CheckOptionVM
-                {
-                    ID = option.ID,
-                    DisplayText = option.Source,
-                    Assigned = currentOptionIDs.Contains(option.ID)
-                });
-            }
-            ViewData["StatusOptions"] = checkBoxes;
         }
 
         private void UpdateMemberStatus(string[] selectedOptions, Member memberToUpdate)
@@ -443,7 +417,7 @@ namespace Grow.Controllers
                 .FirstOrDefault(m => m.MemberID == member.ID);
             }
 
-            var fsQuery = from fs in _context.IncomeSources
+            var isQuery = from fs in _context.IncomeSources
                           orderby fs.Source
                           select fs;
 
@@ -454,7 +428,7 @@ namespace Grow.Controllers
                          orderby m.StreetName
                          select m;
 
-            ViewData["FinancialSituationID"] = new SelectList(fsQuery, "ID", "Status", memberStatus?.IncomeSourceID);
+            ViewData["IncomeSourceID"] = new SelectList(isQuery, "ID", "Source", memberStatus?.IncomeSourceID);
             ViewData["GenderID"] = new SelectList(gQuery, "ID", "GenderType", member?.GenderID);
             ViewData["MembershipID"] = new SelectList(mQuery, "ID", "StreetName", member?.HouseholdID);
         }
