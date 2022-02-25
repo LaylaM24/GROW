@@ -17,7 +17,7 @@ namespace Grow.Models
         {
             get
             {
-                return PostalCode.ToUpper();
+                return PostalCode?.ToUpper();
             }
         }
         public string Address
@@ -31,6 +31,8 @@ namespace Grow.Models
         public int ID { get; set; }
 
         [Display(Name = "Household Name")]
+        [Required(ErrorMessage = "Household Name is a required field.")]
+        [StringLength(75, ErrorMessage = "Street number cannot exceed 75 characters.")]
         public string HouseholdName { get; set; }
 
         [Display(Name = "Membership No.")]
@@ -86,7 +88,7 @@ namespace Grow.Models
 
         [Display(Name = "Postal Code")]
         [Required(ErrorMessage = "Postal Code is a required field.")]
-        [RegularExpression("^[A-Za-z]\\d[A-Za-z]\\d[A-Za-z]\\d$", ErrorMessage = "Please enter a valid Postal Code.")]
+        [RegularExpression("^[A-Za-z]\\d[A-Za-z]\\d[A-Za-z]\\d$", ErrorMessage = "Please enter a valid Postal Code with no spaces.")]
         public string PostalCode { get; set; }
 
         // Foreign Keys

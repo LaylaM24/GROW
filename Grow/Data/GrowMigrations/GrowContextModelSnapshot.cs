@@ -97,7 +97,9 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("HouseholdName")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(75);
 
                     b.Property<double>("IncomeTotal")
                         .HasColumnType("REAL");

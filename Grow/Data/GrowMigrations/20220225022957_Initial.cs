@@ -106,7 +106,7 @@ namespace Grow.Data.GrowMigrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    HouseholdName = table.Column<string>(nullable: true),
+                    HouseholdName = table.Column<string>(maxLength: 75, nullable: false),
                     MembershipNumber = table.Column<int>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     NumOfMembers = table.Column<byte>(nullable: false),
