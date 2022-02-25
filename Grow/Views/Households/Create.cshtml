@@ -4,30 +4,30 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create Household</h1>
 
 <hr />
-<form asp-action="Create">
+<form id="createForm" asp-action="Create">
     <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="col-md-6">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="MembershipNumber" class="control-label"></label>
-                <input asp-for="MembershipNumber" class="form-control" />
+                <label asp-for="MembershipNumber" class="control-label"></label>*
+                <input asp-for="MembershipNumber" value="@ViewBag.NextMembershipNo" class="form-control" />
                 <span asp-validation-for="MembershipNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HouseholdName" class="control-label"></label>
+                <label asp-for="HouseholdName" class="control-label"></label>*
                 <input asp-for="HouseholdName" class="form-control" />
                 <span asp-validation-for="HouseholdName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StreetNumber" class="control-label"></label>
+                <label asp-for="StreetNumber" class="control-label"></label>*
                 <input asp-for="StreetNumber" class="form-control" />
                 <span asp-validation-for="StreetNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StreetName" class="control-label"></label>
+                <label asp-for="StreetName" class="control-label"></label>*
                 <input asp-for="StreetName" class="form-control" />
                 <span asp-validation-for="StreetName" class="text-danger"></span>
             </div>
@@ -37,16 +37,16 @@
                 <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>
+                <label asp-for="PostalCode" class="control-label"></label>*
                 <input asp-for="PostalCode" class="form-control" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CityID" class="control-label"></label>
-                <select asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
-                    <option value="">Select a City</option>
+                <label asp-for="CityID" class="control-label"></label>*
+                <select id="ddlCity" asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
+                    <option value="-1">Select a City</option>
                 </select>
-                <span asp-validation-for="CityID" class="text-danger"></span>
+                <span id="valCity" asp-validation-for="CityID" class="text-danger"></span>
             </div>
         </div>
         <div class="col-md-6">
@@ -56,7 +56,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input id="btnCreate" type="button" value="Create" class="btn btn-primary" />
             </div>
         </div>
     </div>
@@ -66,3 +66,21 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts{ 
+<script>
+    $(document).ready(function () {
+
+        $("#btnCreate").click(function () {
+
+            // Validate City
+            if ($("#ddlCity :selected").val() == "-1") {
+                $("#valCity").text("You must select a City.");
+            }
+            else {
+                $("#createForm").submit();
+            }
+        });
+
+    });
+</script>
+}

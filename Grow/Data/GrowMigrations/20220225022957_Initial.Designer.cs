@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grow.Data.GrowMigrations
 {
     [DbContext(typeof(GrowContext))]
-    [Migration("20220222034932_Initial")]
+    [Migration("20220225022957_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,7 +99,9 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("HouseholdName")
-                        .HasColumnType("TEXT");
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(75);
 
                     b.Property<double>("IncomeTotal")
                         .HasColumnType("REAL");

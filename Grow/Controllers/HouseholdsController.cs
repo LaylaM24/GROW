@@ -178,7 +178,8 @@ namespace Grow.Controllers
         // GET: Households/Create
         public IActionResult Create()
         {
-            ViewData["CityID"] = new SelectList(_context.Cities, "ID", "CityName");
+            // Get next available Membership No.
+            ViewData["NextMembershipNo"] = _context.Households.OrderByDescending(x => x.MembershipNumber).FirstOrDefault().MembershipNumber + 1;
 
             PopulateDropDownLists();
             return View();
@@ -189,15 +190,57 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,MembershipNumber,NumOfMembers,CreatedDate,LICOVerified,LICOVerifiedDate,IncomeTotal,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,ProvinceID,CityID")] Household household)
+        public async Task<IActionResult> Create([Bind("ID,MembershipNumber,Active,NumOfMembers,CreatedDate,LICOVerified,LICOVerifiedDate,IncomeTotal,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,CityID")] Household household)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(household);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    // Set calculated fields to defaults
+                    household.Active = false;
+                    household.NumOfMembers = 0;
+                    household.CreatedDate = DateTime.Today;
+                    household.LICOVerified = false;
+                    household.LICOVerifiedDate = null;
+                    household.IncomeTotal = 0.00;
+                    household.RenewalDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
+
+                    // Add Household
+                    _context.Add(household);
+                    await _context.SaveChangesAsync();
+
+                    // Add entry to Membership Changes
+                    _context.Add(new MembershipChange
+                    {
+                        HouseholdID = household.ID,
+                        ChangeType = "Create",
+                        ChangeDescription = "Household Created",
+                        ChangeDate = DateTime.Today
+                    });
+                    await _context.SaveChangesAsync();
+
+                    // Add Members
+                    // TO DO
+
+                    // Now update calculated fields
+                    UpdateCalculatedFields(household);
+                    return RedirectToAction("Details", "Households", new { id = household.ID });
+                }
+                catch(Exception e) 
+                {
+                    if (e.GetBaseException().Message.Contains("UNIQUE constraint failed"))
+                    {
+                        ModelState.AddModelError("MembershipNumber", "Unable to save changes. Duplicate Membership Numbers are not allowed.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                    }
+                }
             }
-            ViewData["CityID"] = new SelectList(_context.Cities, "ID", "CityName", household.CityID);
+
+            // Get next available Membership No.
+            ViewData["NextMembershipNo"] = _context.Households.OrderByDescending(x => x.MembershipNumber).FirstOrDefault().MembershipNumber + 1;
 
             PopulateDropDownLists(household);
             return View(household);
@@ -211,12 +254,14 @@ namespace Grow.Controllers
                 return NotFound();
             }
 
-            var household = await _context.Households.FindAsync(id);
+            var household = await _context.Households
+                .Include(x => x.Members)
+                .FirstOrDefaultAsync(x => x.ID == id);
+
             if (household == null)
             {
                 return NotFound();
             }
-            ViewData["CityID"] = new SelectList(_context.Cities, "ID", "CityName", household.CityID);
 
             PopulateDropDownLists(household);
             return View(household);
@@ -227,7 +272,7 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,MembershipNumber,NumOfMembers,CreatedDate,LICOVerified,LICOVerifiedDate,IncomeTotal,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,ProvinceID,CityID")] Household household)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,MembershipNumber,Active,NumOfMembers,CreatedDate,LICOVerified,LICOVerifiedDate,IncomeTotal,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,CityID,City,Members")] Household household)
         {
             if (id != household.ID)
             {
@@ -238,23 +283,90 @@ namespace Grow.Controllers
             {
                 try
                 {
+                    // Get Household before update
+                    var originalHousehold = _context.Households
+                        .Include(x => x.City)
+                        .AsNoTracking()
+                        .FirstOrDefault(x => x.ID == id);
+
+                    // Get Household Members before update
+                    List<Member> originalMembers = _context.Members
+                        .Where(x => x.HouseholdID == id)
+                        .AsNoTracking()
+                        .ToList();
+
+                    // Get update City for comparison
+                    household.City = _context.Cities.FirstOrDefault(x => x.ID == household.CityID);
+
+                    // Update Household
                     _context.Update(household);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!HouseholdExists(household.ID))
+
+                    // Add entry to Membership Changes
+                    string changes = "";
+                    if(household.MembershipNumber != originalHousehold.MembershipNumber)
                     {
-                        return NotFound();
+                        changes += $"- Membership No. changed from {originalHousehold.MembershipNumber} to {household.MembershipNumber}. \n";
+                    }
+                    if (household.Address != originalHousehold.Address)
+                    {
+                        changes += $"- Address changed from {originalHousehold.Address} to {household.Address}. \n";
+                    }
+                    if (household.CityID != originalHousehold.CityID)
+                    {
+                        changes += $"- City changed from {originalHousehold.City.CityName} to {household.City.CityName}. \n";
+                    }
+                    if (household.PostalCode != originalHousehold.PostalCode)
+                    {
+                        changes += $"- Postal Code changed from {originalHousehold.PostalCode} to {household.PostalCode}. \n";
+                    }
+
+                    _context.Add(new MembershipChange
+                    {
+                        HouseholdID = household.ID,
+                        ChangeType = "Edit",
+                        ChangeDescription = changes,
+                        ChangeDate = DateTime.Today
+                    });
+
+                    await _context.SaveChangesAsync();
+
+                    // Check if any Members have changed, been added, or removed
+                    bool membersChanged = false;
+                    if(household.Members.Count() != originalMembers.Count())
+                    {
+                        membersChanged = true;
                     }
                     else
                     {
-                        throw;
+
+                    }
+
+                    if(membersChanged == true)
+                    {
+                        // Update Members
+                        // TO DO
+
+                        // Now update calculated fields
+                        UpdateCalculatedFields(household);
+                    }
+                    return RedirectToAction("Details", "Households", new { id = household.ID });
+                }
+                catch (Exception e)
+                {
+                    if (e.GetBaseException().Message.Contains("UNIQUE constraint failed"))
+                    {
+                        ModelState.AddModelError("MembershipNumber", "Unable to save changes. Duplicate Membership Numbers are not allowed.");
+                    }
+                    else if (!HouseholdExists(household.ID))
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Household does not exist.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["CityID"] = new SelectList(_context.Cities, "ID", "CityName", household.CityID);
 
             PopulateDropDownLists(household);
             return View(household);
@@ -269,6 +381,8 @@ namespace Grow.Controllers
             }
 
             var household = await _context.Households
+                .Include(x => x.Members)
+                .ThenInclude(x => x.Gender)
                 .Include(h => h.City)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
@@ -286,10 +400,60 @@ namespace Grow.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var household = await _context.Households.FindAsync(id);
-            _context.Households.Remove(household);
 
+            try
+            {
+                _context.Households.Remove(household);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Unable to delete Household. Households cannot be deleted if they contain any Members.");
+            }
+
+            return View(household);
+        }
+
+        private async void UpdateCalculatedFields(Household household)
+        {
+            // Get household again (value being passed may not have all values)
+            household = _context.Households.FirstOrDefault(x => x.ID == household.ID);
+
+            List<Member> members = _context.Members.Where(x => x.HouseholdID == household.ID).ToList();
+
+            // Reset calculated fields
+            household.NumOfMembers = 0;
+            household.IncomeTotal = 0.00;
+
+            if (members != null)
+            {
+                // Get Total Income and Number of Members
+                foreach (var member in members)
+                {
+                    household.NumOfMembers += 1;
+                    household.IncomeTotal += member.IncomeAmount;
+                }
+
+                // Now check for LICO Verification
+                if (household.NumOfMembers > 0)
+                {
+                    var cutOff = _context.LowIncomeCutOffs.Where(x => x.NumberOfMembers == household.NumOfMembers).FirstOrDefault();
+
+                    if (household.IncomeTotal <= cutOff.YearlyIncome)
+                    {
+                        household.LICOVerified = true;
+                        household.LICOVerifiedDate = DateTime.Today;
+
+                        // If LICO is verified, set household to Active
+                        household.Active = true;
+                    }
+                }
+            }
+
+            // Update Household
+            _context.Update(household);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private void PopulateDropDownLists(Household household = null)
