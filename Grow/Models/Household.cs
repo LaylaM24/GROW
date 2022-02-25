@@ -113,9 +113,9 @@ namespace Grow.Models
                 yield return new ValidationResult("LICO Verification Date cannot be set in the future.", new[] { "LICOVerifiedDate" });
             }
 
-            if (RenewalDate > DateTime.Today)
+            if (RenewalDate < DateTime.Today)
             {
-                yield return new ValidationResult("Renewal Date cannot be set in the future.", new[] { "RenewalDate" });
+                yield return new ValidationResult("Renewal Date cannot be set in the past.", new[] { "RenewalDate" });
             }
         }
     }

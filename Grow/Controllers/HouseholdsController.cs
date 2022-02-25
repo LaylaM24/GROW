@@ -203,7 +203,7 @@ namespace Grow.Controllers
                     household.LICOVerified = false;
                     household.LICOVerifiedDate = null;
                     household.IncomeTotal = 0.00;
-                    household.RenewalDate = DateTime.Today;
+                    household.RenewalDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
 
                     // Add Household
                     _context.Add(household);
@@ -226,9 +226,16 @@ namespace Grow.Controllers
                     UpdateCalculatedFields(household);
                     return RedirectToAction("Details", "Households", new { id = household.ID });
                 }
-                catch 
+                catch(Exception e) 
                 {
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                    if (e.GetBaseException().Message.Contains("UNIQUE constraint failed"))
+                    {
+                        ModelState.AddModelError("MembershipNumber", "Unable to save changes. Duplicate Membership Numbers are not allowed.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                    }
                 }
             }
 
@@ -344,9 +351,13 @@ namespace Grow.Controllers
                     }
                     return RedirectToAction("Details", "Households", new { id = household.ID });
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    if (!HouseholdExists(household.ID))
+                    if (e.GetBaseException().Message.Contains("UNIQUE constraint failed"))
+                    {
+                        ModelState.AddModelError("MembershipNumber", "Unable to save changes. Duplicate Membership Numbers are not allowed.");
+                    }
+                    else if (!HouseholdExists(household.ID))
                     {
                         ModelState.AddModelError("", "Unable to save changes. Household does not exist.");
                     }
@@ -406,15 +417,14 @@ namespace Grow.Controllers
 
         private async void UpdateCalculatedFields(Household household)
         {
+            // Get household again (value being passed may not have all values)
+            household = _context.Households.FirstOrDefault(x => x.ID == household.ID);
+
             List<Member> members = _context.Members.Where(x => x.HouseholdID == household.ID).ToList();
 
             // Reset calculated fields
             household.NumOfMembers = 0;
             household.IncomeTotal = 0.00;
-            household.LICOVerified = false;
-            household.LICOVerifiedDate = null;
-            household.Active = false;
-            household.RenewalDate = DateTime.Today;
 
             if (members != null)
             {
@@ -435,12 +445,12 @@ namespace Grow.Controllers
                         household.LICOVerified = true;
                         household.LICOVerifiedDate = DateTime.Today;
 
-                        // If LICO is verified, set household to Active and set Renewal Date
+                        // If LICO is verified, set household to Active
                         household.Active = true;
-                        household.RenewalDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
                     }
                 }
             }
+
             // Update Household
             _context.Update(household);
             await _context.SaveChangesAsync();
