@@ -255,6 +255,7 @@ namespace Grow.Controllers
 
             var household = await _context.Households
                 .Include(x => x.Members)
+                .ThenInclude(x => x.Gender)
                 .FirstOrDefaultAsync(x => x.ID == id);
 
             if (household == null)

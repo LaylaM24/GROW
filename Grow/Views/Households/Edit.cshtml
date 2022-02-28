@@ -91,12 +91,89 @@
             </div>
         </div>
     </div>
-    <hr />
+    <br />
     <div class="row">
         <div class="col">
-            <div class="form-group">
-                <label asp-for="Members" class="control-label"></label>
+            <div class="form-group" id="ListMembers">
+                <h4>Members</h4>
+                <dl class="dl-horizontal">
+                    <dt>
+                    </dt>
+                    <dd>
+                        <div>
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        <input type="submit" disabled="disabled" value="Name" class="btn btn-link" />
+                                    </th>
+                                    <th>
+                                        <input type="submit" disabled="disabled" value="Age" class="btn btn-link" />
+                                    </th>
+                                    <th>
+                                        <input type="submit" disabled="disabled" value="Gender" class="btn btn-link" />
+                                    </th>
+                                    <th>
+                                        <input type="submit" disabled="disabled" value="Income" class="btn btn-link" />
+                                    </th>
+                                    <th>
+                                        <input type="submit" disabled="disabled" value="Income Verified" class="btn btn-link" />
+                                    </th>
+                                    <th>
+                                        <button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberModal" title="Add Member" type="button">&#x271A;</button>
+                                    </th>
+                                </tr>
+
+                                @foreach (var member in Model.Members)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => member.FullName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => member.Age)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => member.Gender.GenderType)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => member.IncomeAmount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => member.IncomeVerified)
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm modal-link" tag="@member.ID" name="EditForm" data-toggle="modal" data-target="#theMemberModal" title="Edit @member.FullName" type="button">&#x270D;</button>
+                                            <button class="btn btn-sm modal-link" tag="@member.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberModal" title="Delete @member.FullName" type="button">&#x274C;</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </dd>
+                </dl>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group" id="ListMembers">
+                    <label class="control-label"><strong>Members</strong> &nbsp; &nbsp;</label>
+                    <div class="col-md-offset-1" id="MemberList">
+                        <table>
+                            @{
+                                foreach (var item in Model.Members.OrderBy(x => x.FullName))
+                                {
+                                    @:<tr><td>
+                                        @item.FullName 
+                                    @:</td><td>
+                                        @:&nbsp; &nbsp;
+                                        
+		                            @:</td></tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
         </div>
     </div>
     <br />
