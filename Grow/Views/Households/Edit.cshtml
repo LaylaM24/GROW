@@ -61,14 +61,14 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label asp-for="StreetNumber" class="control-label"></label>*
-                        <input asp-for="StreetNumber" class="form-control" />
+                        <input id="txtStreetNo" asp-for="StreetNumber" class="form-control" />
                         <span asp-validation-for="StreetNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-8">
                     <div class="form-group">
                         <label asp-for="StreetName" class="control-label"></label>*
-                        <input asp-for="StreetName" class="form-control" />
+                        <input id="txtStreetName" asp-for="StreetName" class="form-control" />
                         <span asp-validation-for="StreetName" class="text-danger"></span>
                     </div>
                 </div>
@@ -77,14 +77,14 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label asp-for="ApartmentNumber" class="control-label"></label>
-                        <input asp-for="ApartmentNumber" class="form-control" />
+                        <input id="txtAptNo" asp-for="ApartmentNumber" class="form-control" />
                         <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-8">
                     <div class="form-group">
                         <label asp-for="PostalCode" class="control-label"></label>*
-                        <input asp-for="PostalCode" class="form-control" />
+                        <input id="txtPostalCode" asp-for="PostalCode" class="form-control" />
                         <span asp-validation-for="PostalCode" class="text-danger"></span>
                     </div>
                 </div>
@@ -119,19 +119,61 @@
 
 @section Scripts{
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        $("#btnSave").click(function () {
+            var cityID = @Html.Raw(Json.Serialize(Model.CityID));
+            var streetNo = @Html.Raw(Json.Serialize(Model.StreetNumber));
+            var streetName = @Html.Raw(Json.Serialize(Model.StreetName));
+            var aptNo = @Html.Raw(Json.Serialize(Model.ApartmentNumber));
+            var postalCode = @Html.Raw(Json.Serialize(Model.PostalCode));
 
-            // Validate City
-            if ($("#ddlCity :selected").val() == "-1") {
-                $("#valCity").text("You must select a City.");
-            }
-            else {
-                $("#editForm").submit();
-            }
+            $("#btnSave").click(function () {
+
+                // Validate City
+                if ($("#ddlCity :selected").val() == "-1") {
+                    $("#valCity").text("You must select a City.");
+                }
+                else {
+                    $("#editForm").submit();
+                }
+            });
+
+            // Event for "No fixed address"
+            $("#cbNoFixedAddress").change(function () {
+                if (this.checked) {
+                    // city
+                    $("#ddlCity").val("2");
+
+                    // street no
+                    $("#txtStreetNo").val("4377");
+
+                    // street name
+                    $("#txtStreetName").val("Fourth Ave.");
+
+                    // apt no
+                    $("#txtAptNo").val("");
+
+                    // postal code
+                    $("#txtPostalCode").val("L2E4N1");
+                }
+                else {
+                    // city
+                    $("#ddlCity").val(cityID);
+
+                    // street no
+                    $("#txtStreetNo").val(streetNo);
+
+                    // street name
+                    $("#txtStreetName").val(streetName);
+
+                    // apt no
+                    $("#txtAptNo").val(aptNo);
+
+                    // postal code
+                    $("#txtPostalCode").val(postalCode);
+                }
+            });
+
         });
-
-    });
     </script>
 }

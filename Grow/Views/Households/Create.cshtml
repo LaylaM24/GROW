@@ -41,14 +41,14 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label asp-for="StreetNumber" class="control-label"></label>*
-                        <input asp-for="StreetNumber" class="form-control" />
+                        <input id="txtStreetNo" asp-for="StreetNumber" class="form-control" />
                         <span asp-validation-for="StreetNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-8">
                     <div class="form-group">
                         <label asp-for="StreetName" class="control-label"></label>*
-                        <input asp-for="StreetName" class="form-control" />
+                        <input id="txtStreetName" asp-for="StreetName" class="form-control" />
                         <span asp-validation-for="StreetName" class="text-danger"></span>
                     </div>
                 </div>
@@ -57,14 +57,14 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label asp-for="ApartmentNumber" class="control-label"></label>
-                        <input asp-for="ApartmentNumber" class="form-control" />
+                        <input id="txtAptNo" asp-for="ApartmentNumber" class="form-control" />
                         <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-8">
                     <div class="form-group">
                         <label asp-for="PostalCode" class="control-label"></label>*
-                        <input asp-for="PostalCode" class="form-control" />
+                        <input id="txtPostalCode" asp-for="PostalCode" class="form-control" />
                         <span asp-validation-for="PostalCode" class="text-danger"></span>
                     </div>
                 </div>
@@ -103,6 +103,42 @@
             }
         });
 
+        // Event for "No fixed address"
+        $("#cbNoFixedAddress").change(function () {
+            if (this.checked) {
+                // city
+                $("#ddlCity").val("2");
+
+                // street no
+                $("#txtStreetNo").val("4377");
+
+                // street name
+                $("#txtStreetName").val("Fourth Ave.");
+
+                // apt no
+                $("#txtAptNo").val("");
+
+                // postal code
+                $("#txtPostalCode").val("L2E4N1");
+            }
+            else
+            {
+                // city
+                $("#ddlCity").val("-1");
+
+                // street no
+                $("#txtStreetNo").val("");
+
+                // street name
+                $("#txtStreetName").val("");
+
+                // apt no
+                $("#txtAptNo").val("");
+
+                // postal code
+                $("#txtPostalCode").val("");
+            }
+        });
     });
 </script>
 }
