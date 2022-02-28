@@ -4,17 +4,25 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit Household</h1>
-
+<div class="row">
+    <div class="col-6">
+        <h1>Edit Household</h1>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Delete" asp-route-id="@Model.ID">
+            <span class="btn btn-danger"><strong>Delete</strong></span>
+        </a>
+    </div>
+</div>
 <hr />
 <form id="editForm" asp-action="Edit">
     <input type="hidden" asp-for="ID" />
+    <input type="hidden" asp-for="CreatedDate" />
     <input type="hidden" asp-for="Active" />
     <input type="hidden" asp-for="NumOfMembers" />
     <input type="hidden" asp-for="LICOVerified" />
-    @*<input type="hidden" asp-for="LICOVerifiedDate" />*@
+    <input type="hidden" asp-for="LICOVerifiedDate" />
     <input type="hidden" asp-for="IncomeTotal" />
-    @*<input type="hidden" asp-for="RenewalDate" />*@
     <input type="hidden" asp-for="City" />
     <div class="row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -30,54 +38,84 @@
                 <span asp-validation-for="HouseholdName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StreetNumber" class="control-label"></label>*
-                <input asp-for="StreetNumber" class="form-control" />
-                <span asp-validation-for="StreetNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StreetName" class="control-label"></label>*
-                <input asp-for="StreetName" class="form-control" />
-                <span asp-validation-for="StreetName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApartmentNumber" class="control-label"></label>
-                <input asp-for="ApartmentNumber" class="form-control" />
-                <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>*
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityID" class="control-label"></label>*
-                <select id="ddlCity" asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
-                    <option value="">Select a City</option>
-                </select>
-                <span id="valCity" asp-validation-for="CityID" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
                 <label asp-for="RenewalDate" class="control-label"></label>*
                 <input asp-for="RenewalDate" class="form-control" />
                 <span asp-validation-for="RenewalDate" class="text-danger"></span>
             </div>
-            <label asp-for="Members" class="control-label"></label>
+            <div class="form-check form-group">
+                <input id="cbNoFixedAddress" class="form-check-input" type="checkbox" value="">
+                <label class="form-check-label" for="cbNoFixedAddress">
+                    No Fixed Address
+                </label>
+            </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <input id="btnSave" type="button" value="Save" class="btn btn-primary" />
+                <label asp-for="CityID" class="control-label"></label>*
+                <select id="ddlCity" asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
+                    <option value="-1" selected disabled>Select a City</option>
+                </select>
+                <span id="valCity" asp-validation-for="CityID" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="StreetNumber" class="control-label"></label>*
+                        <input asp-for="StreetNumber" class="form-control" />
+                        <span asp-validation-for="StreetNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-group">
+                        <label asp-for="StreetName" class="control-label"></label>*
+                        <input asp-for="StreetName" class="form-control" />
+                        <span asp-validation-for="StreetName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="ApartmentNumber" class="control-label"></label>
+                        <input asp-for="ApartmentNumber" class="form-control" />
+                        <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-group">
+                        <label asp-for="PostalCode" class="control-label"></label>*
+                        <input asp-for="PostalCode" class="form-control" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label asp-for="Members" class="control-label"></label>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row ml-1">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="form-group">
+                    <a asp-action="Details" asp-route-id="@Model.ID">
+                        <input type="button" value="Cancel" class="btn btn-secondary" style="width: 75px;" />
+                    </a>
+                </div>
+                <div class="ml-2"></div>
+                <div class="form-group">
+                    <input id="btnSave" type="button" value="Save" class="btn btn-primary" style="width: 75px;" />
+                </div>
             </div>
         </div>
     </div>
 </form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts{
     <script>

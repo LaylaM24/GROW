@@ -190,7 +190,7 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,MembershipNumber,Active,NumOfMembers,CreatedDate,LICOVerified,LICOVerifiedDate,IncomeTotal,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,CityID")] Household household)
+        public async Task<IActionResult> Create([Bind("MembershipNumber,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,RenewalDate,CityID")] Household household)
         {
             if (ModelState.IsValid)
             {
@@ -203,7 +203,6 @@ namespace Grow.Controllers
                     household.LICOVerified = false;
                     household.LICOVerifiedDate = null;
                     household.IncomeTotal = 0.00;
-                    household.RenewalDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
 
                     // Add Household
                     _context.Add(household);
@@ -307,6 +306,10 @@ namespace Grow.Controllers
                     {
                         changes += $"- Membership No. changed from {originalHousehold.MembershipNumber} to {household.MembershipNumber}. \n";
                     }
+                    if (household.HouseholdName != originalHousehold.HouseholdName)
+                    {
+                        changes += $"- Household Name changed from {originalHousehold.HouseholdName} to {household.HouseholdName}. \n";
+                    }
                     if (household.Address != originalHousehold.Address)
                     {
                         changes += $"- Address changed from {originalHousehold.Address} to {household.Address}. \n";
@@ -318,6 +321,10 @@ namespace Grow.Controllers
                     if (household.PostalCode != originalHousehold.PostalCode)
                     {
                         changes += $"- Postal Code changed from {originalHousehold.PostalCode} to {household.PostalCode}. \n";
+                    }
+                    if (household.RenewalDate != originalHousehold.RenewalDate)
+                    {
+                        changes += $"- Renewal Date changed from {originalHousehold.RenewalDate} to {household.RenewalDate}. \n";
                     }
 
                     _context.Add(new MembershipChange
