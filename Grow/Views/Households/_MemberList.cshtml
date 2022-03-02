@@ -1,0 +1,49 @@
+﻿@model Grow.Models.Household;
+
+<table class="table">
+    <tr>
+        <th>
+            <input type="submit" disabled="disabled" value="Name" class="btn btn-link" />
+        </th>
+        <th>
+            <input type="submit" disabled="disabled" value="Age" class="btn btn-link" />
+        </th>
+        <th>
+            <input type="submit" disabled="disabled" value="Gender" class="btn btn-link" />
+        </th>
+        <th>
+            <input type="submit" disabled="disabled" value="Income" class="btn btn-link" />
+        </th>
+        <th>
+            <input type="submit" disabled="disabled" value="Income Verified" class="btn btn-link" />
+        </th>
+        <th>
+            <button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberModal" title="Add Member" type="button">&#x271A;</button>
+        </th>
+    </tr>
+
+    @foreach (var member in Model.Members)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => member.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => member.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => member.Gender.GenderType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => member.IncomeAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => member.IncomeVerified)
+            </td>
+            <td>
+                <button class="btn btn-sm modal-link" tag="@member.ID" name="EditForm" data-toggle="modal" data-target="#theMemberModal" title="Edit @member.FullName" type="button">&#x270D;</button>
+                <button class="btn btn-sm modal-link" tag="@member.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberModal" title="Delete @member.FullName" type="button">&#x274C;</button>
+            </td>
+        </tr>
+    }
+</table>

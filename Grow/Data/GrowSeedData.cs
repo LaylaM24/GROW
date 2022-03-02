@@ -630,35 +630,35 @@ namespace Grow.Data
                         {
                             HouseholdID = 1,
                             ChangeType = "Create",
-                            ChangeDescription = "Membership Created",
+                            ChangeDescription = "Household Created",
                             ChangeDate = DateTime.Now
                         },
                         new MembershipChange
                         {
                             HouseholdID = 2,
                             ChangeType = "Create",
-                            ChangeDescription = "Membership Created",
+                            ChangeDescription = "Household Created",
                             ChangeDate = DateTime.Now
                         },
                         new MembershipChange
                         {
                             HouseholdID = 3,
                             ChangeType = "Create",
-                            ChangeDescription = "Membership Created",
+                            ChangeDescription = "Household Created",
                             ChangeDate = DateTime.Now
                         },
                         new MembershipChange
                         {
                             HouseholdID = 4,
                             ChangeType = "Create",
-                            ChangeDescription = "Membership Created",
+                            ChangeDescription = "Household Created",
                             ChangeDate = DateTime.Now
                         },
                         new MembershipChange
                         {
                             HouseholdID = 5,
                             ChangeType = "Create",
-                            ChangeDescription = "Membership Created",
+                            ChangeDescription = "Household Created",
                             ChangeDate = DateTime.Now
                         }
                     );
