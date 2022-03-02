@@ -90,12 +90,40 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.MemberRestrictions)</label>
-                @*Add Member restrictions list boxes*@
+                @*<label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>*@
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Dietary Restrictions</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedRestrictionOptions", (MultiSelectList)ViewBag.selOptsR, new { @size = 10, @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Choose Dietary Restrictions</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availRestrictionOptions", (MultiSelectList)ViewBag.availOptsR, new { @size = 10, @class = "form-control" })
+                    </div>
+                </div>
             </div>
             <div class="form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>
-                @*Add Member concerns list boxes*@
+                @*<label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>*@
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Health Concerns</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedHealthOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Choose Health Concerns</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label class="control-label">Income Source(s)</label>
@@ -192,6 +220,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/multiselectRestriction.js"></script>
+<script src="~/js/multiselect.js"></script>
 <script>
     $(document).ready(function () {
 
