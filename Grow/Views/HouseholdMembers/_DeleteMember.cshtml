@@ -1,97 +1,115 @@
 ﻿@model Grow.Models.Member
 
 <h2>Delete Member</h2>
-
 <h4>Are you sure you want to delete this member?</h4>
-<div>
+<div class="media-body ml-3">
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DOB)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DOB)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Age)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IncomeAmount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IncomeAmount)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IncomeVerified)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IncomeVerified)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Household)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Household.StreetName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Gender.GenderType)
-        </dd>
-        @*@if (Model.MemberStatus.Count >= 1)
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.MemberStatus)
+    <div class="row">
+        <div class="col-sm-6">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.FirstName)
                 </dt>
-                <dd class="col-sm-10">
-                    @foreach (var ms in Model.MemberStatus)
-                    {
-                        @ms.FinancialStatus.Status <br />
-                    }
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.FirstName)
                 </dd>
-            }*@
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MemberRestrictions)
-        </dt>
-        <dd class="col-sm-10">
-            @foreach (var mr in Model.MemberRestrictions)
-            {
-                @mr.DietaryRestriction.Restriction <br />
-            }
-        </dd>
-    </dl>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Gender)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Gender.GenderType)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DOB)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.DOB)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Age)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Age)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Phone)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.PhoneFormatted)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-sm-6">
+            <dl class="row">
 
-    <form asp-controller="HouseholdMembers" asp-action="Delete" id="theMemberForm">
-        <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" id="submitMemberForm" /> |
-        <a href='@ViewData["returnURL"]'>Back to List</a>
-    </form>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.IncomeAmount)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.IncomeAmount)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.IncomeVerified)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.IncomeVerified)
+                </dd>
+                @if (Model.MemberIncomes.Count() > 0)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.MemberIncomes)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @foreach (var i in Model.MemberIncomes)
+                        {
+                            <text>@(i.IncomeSource.Source) - @(i.IncomeAmount.ToString("C")) </text>
+                        }
+                    </dd>
+                }
+                @if (Model.MemberRestrictions.Count() > 0)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.MemberRestrictions)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @foreach (var i in Model.MemberRestrictions)
+                        {
+                            @i.DietaryRestriction.Restriction
+                        }
+                    </dd>
+                }
+                @if (Model.MemberConcerns.Count() > 0)
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.MemberConcerns)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @foreach (var i in Model.MemberConcerns)
+                        {
+                            @i.HealthConcern.Concern
+                        }
+                    </dd>
+                }
+            </dl>
+        </div>
+    </div>
+
+    <div class="row">
+        <form asp-controller="HouseholdMembers" asp-action="Delete" id="theMemberForm">
+            <input type="hidden" asp-for="ID" />
+            <input type="submit" value="Delete" class="btn btn-danger" id="submitMemberForm" />
+        </form>
+    </div>
 </div>

@@ -111,7 +111,7 @@ namespace Grow.Models
         public int GenderID { get; set; }
         public Gender Gender { get; set; }
 
-        [Display(Name = "Income Source")]
+        [Display(Name = "Income Sources")]
         public ICollection<MemberIncome> MemberIncomes { get; set; }
 
         [Display(Name = "Dietary Restrictions")]
