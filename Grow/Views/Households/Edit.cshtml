@@ -4,17 +4,26 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit Household</h1>
-
+<div class="row">
+    <div class="col-6">
+        <h1>Edit Household</h1>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-action="Delete" asp-route-id="@Model.ID">
+            <span class="btn btn-danger"><strong>Delete</strong></span>
+        </a>
+    </div>
+</div>
 <hr />
+<partial name="_MemberModal" />
 <form id="editForm" asp-action="Edit">
     <input type="hidden" asp-for="ID" />
+    <input type="hidden" asp-for="CreatedDate" />
     <input type="hidden" asp-for="Active" />
     <input type="hidden" asp-for="NumOfMembers" />
     <input type="hidden" asp-for="LICOVerified" />
-    @*<input type="hidden" asp-for="LICOVerifiedDate" />*@
+    <input type="hidden" asp-for="LICOVerifiedDate" />
     <input type="hidden" asp-for="IncomeTotal" />
-    @*<input type="hidden" asp-for="RenewalDate" />*@
     <input type="hidden" asp-for="City" />
     <div class="row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -30,70 +39,237 @@
                 <span asp-validation-for="HouseholdName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StreetNumber" class="control-label"></label>*
-                <input asp-for="StreetNumber" class="form-control" />
-                <span asp-validation-for="StreetNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StreetName" class="control-label"></label>*
-                <input asp-for="StreetName" class="form-control" />
-                <span asp-validation-for="StreetName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApartmentNumber" class="control-label"></label>
-                <input asp-for="ApartmentNumber" class="form-control" />
-                <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>*
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityID" class="control-label"></label>*
-                <select id="ddlCity" asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
-                    <option value="">Select a City</option>
-                </select>
-                <span id="valCity" asp-validation-for="CityID" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
                 <label asp-for="RenewalDate" class="control-label"></label>*
                 <input asp-for="RenewalDate" class="form-control" />
                 <span asp-validation-for="RenewalDate" class="text-danger"></span>
             </div>
-            <label asp-for="Members" class="control-label"></label>
+            <div class="form-check form-group">
+                <input id="cbNoFixedAddress" class="form-check-input" type="checkbox" value="">
+                <label class="form-check-label" for="cbNoFixedAddress">
+                    No Fixed Address
+                </label>
+            </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <input id="btnSave" type="button" value="Save" class="btn btn-primary" />
+                <label asp-for="CityID" class="control-label"></label>*
+                <select id="ddlCity" asp-for="CityID" class="form-control" asp-items="ViewBag.CityID">
+                    <option value="-1" selected disabled>Select a City</option>
+                </select>
+                <span id="valCity" asp-validation-for="CityID" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="StreetNumber" class="control-label"></label>*
+                        <input id="txtStreetNo" asp-for="StreetNumber" class="form-control" />
+                        <span asp-validation-for="StreetNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-group">
+                        <label asp-for="StreetName" class="control-label"></label>*
+                        <input id="txtStreetName" asp-for="StreetName" class="form-control" />
+                        <span asp-validation-for="StreetName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label asp-for="ApartmentNumber" class="control-label"></label>
+                        <input id="txtAptNo" asp-for="ApartmentNumber" class="form-control" />
+                        <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-group">
+                        <label asp-for="PostalCode" class="control-label"></label>*
+                        <input id="txtPostalCode" asp-for="PostalCode" class="form-control" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="form-group" id="ListMembers">
+        <h4>Members</h4>
+        <dl class="dl-horizontal">
+            <dt>
+            </dt>
+            <dd>
+                <div id="MemberList">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Name" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Age" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Gender" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Income" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Income Verified" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberModal" title="Add Member" type="button">&#x271A;</button>
+                            </th>
+                        </tr>
+
+                        @foreach (var member in Model.Members)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => member.FullName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => member.Age)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => member.Gender.GenderType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => member.IncomeAmount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => member.IncomeVerified)
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm modal-link" tag="@member.ID" name="EditForm" data-toggle="modal" data-target="#theMemberModal" title="Edit @member.FullName" type="button">&#x270D;</button>
+                                    <button class="btn btn-sm modal-link" tag="@member.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberModal" title="Delete @member.FullName" type="button">&#x274C;</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <br />
+    <div class="row ml-1">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="form-group">
+                    <a asp-action="Details" asp-route-id="@Model.ID">
+                        <input type="button" value="Cancel" class="btn btn-secondary" style="width: 75px;" />
+                    </a>
+                </div>
+                <div class="ml-2"></div>
+                <div class="form-group">
+                    <input id="btnSave" type="button" value="Save" class="btn btn-primary" style="width: 75px;" />
+                </div>
             </div>
         </div>
     </div>
 </form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts{
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        $("#btnSave").click(function () {
+            var cityID = @Html.Raw(Json.Serialize(Model.CityID));
+            var streetNo = @Html.Raw(Json.Serialize(Model.StreetNumber));
+            var streetName = @Html.Raw(Json.Serialize(Model.StreetName));
+            var aptNo = @Html.Raw(Json.Serialize(Model.ApartmentNumber));
+            var postalCode = @Html.Raw(Json.Serialize(Model.PostalCode));
 
-            // Validate City
-            if ($("#ddlCity :selected").val() == "-1") {
-                $("#valCity").text("You must select a City.");
-            }
-            else {
-                $("#editForm").submit();
-            }
+            $("#btnSave").click(function () {
+
+                // Validate City
+                if ($("#ddlCity :selected").val() == "-1") {
+                    $("#valCity").text("You must select a City.");
+                }
+                else {
+                    $("#editForm").submit();
+                }
+            });
+
+            // Event for "No fixed address"
+            $("#cbNoFixedAddress").change(function () {
+                if (this.checked) {
+                    // city
+                    $("#ddlCity").val("2");
+
+                    // street no
+                    $("#txtStreetNo").val("4377");
+
+                    // street name
+                    $("#txtStreetName").val("Fourth Ave.");
+
+                    // apt no
+                    $("#txtAptNo").val("");
+
+                    // postal code
+                    $("#txtPostalCode").val("L2E4N1");
+                }
+                else {
+                    // city
+                    $("#ddlCity").val(cityID);
+
+                    // street no
+                    $("#txtStreetNo").val(streetNo);
+
+                    // street name
+                    $("#txtStreetName").val(streetName);
+
+                    // apt no
+                    $("#txtAptNo").val(aptNo);
+
+                    // postal code
+                    $("#txtPostalCode").val(postalCode);
+                }
+            });
+
+            // Member Modal Scripts
+            function refreshModal(actionForm, memberID) {
+              switch (actionForm) {
+                case 'CreateForm': $('#formMemberBody').load('/HouseholdMembers/CreateMember/' + @Model.ID);
+                    break;
+                  case 'EditForm': $('#formMemberBody').load('/HouseholdMembers/EditMember/' + memberID);
+                    break;
+                  case 'DeleteForm': $('#formMemberBody').load('/HouseholdMembers/DeleteMember/' + memberID)
+                    break;
+                default: break;
+              };
+            return;
+            };
+
+            $(document).on("click", ".modal-link", function () {
+                var actionForm = $(this).attr("name");
+                var memberID = $(this).attr("tag");
+                refreshModal(actionForm, memberID);
+            });
+
+            $(document).on("click", "#submitMemberForm", function (event) {
+                event.preventDefault();
+                var form = $('#theMemberForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            $('#theMemberModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Operation Failed. Please make sure all required fields are filled correctly.");
+                        }
+                    });
+                }
+                return false;
+            });
+
+            $('#theMemberModal').on('hide.bs.modal', function () {
+                $('#MemberList').load('/Households/MemberList/@Model.ID');
+            });
+
         });
-
-    });
     </script>
 }

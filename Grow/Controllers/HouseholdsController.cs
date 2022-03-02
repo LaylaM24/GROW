@@ -190,7 +190,7 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,MembershipNumber,Active,NumOfMembers,CreatedDate,LICOVerified,LICOVerifiedDate,IncomeTotal,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,CityID")] Household household)
+        public async Task<IActionResult> Create([Bind("MembershipNumber,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,RenewalDate,CityID")] Household household)
         {
             if (ModelState.IsValid)
             {
@@ -203,7 +203,6 @@ namespace Grow.Controllers
                     household.LICOVerified = false;
                     household.LICOVerifiedDate = null;
                     household.IncomeTotal = 0.00;
-                    household.RenewalDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
 
                     // Add Household
                     _context.Add(household);
@@ -219,11 +218,6 @@ namespace Grow.Controllers
                     });
                     await _context.SaveChangesAsync();
 
-                    // Add Members
-                    // TO DO
-
-                    // Now update calculated fields
-                    UpdateCalculatedFields(household);
                     return RedirectToAction("Details", "Households", new { id = household.ID });
                 }
                 catch(Exception e) 
@@ -256,6 +250,7 @@ namespace Grow.Controllers
 
             var household = await _context.Households
                 .Include(x => x.Members)
+                .ThenInclude(x => x.Gender)
                 .FirstOrDefaultAsync(x => x.ID == id);
 
             if (household == null)
@@ -295,7 +290,7 @@ namespace Grow.Controllers
                         .AsNoTracking()
                         .ToList();
 
-                    // Get update City for comparison
+                    // Get updated City for comparison
                     household.City = _context.Cities.FirstOrDefault(x => x.ID == household.CityID);
 
                     // Update Household
@@ -306,6 +301,10 @@ namespace Grow.Controllers
                     if(household.MembershipNumber != originalHousehold.MembershipNumber)
                     {
                         changes += $"- Membership No. changed from {originalHousehold.MembershipNumber} to {household.MembershipNumber}. \n";
+                    }
+                    if (household.HouseholdName != originalHousehold.HouseholdName)
+                    {
+                        changes += $"- Household Name changed from {originalHousehold.HouseholdName} to {household.HouseholdName}. \n";
                     }
                     if (household.Address != originalHousehold.Address)
                     {
@@ -319,6 +318,10 @@ namespace Grow.Controllers
                     {
                         changes += $"- Postal Code changed from {originalHousehold.PostalCode} to {household.PostalCode}. \n";
                     }
+                    if (household.RenewalDate != originalHousehold.RenewalDate)
+                    {
+                        changes += $"- Renewal Date changed from {originalHousehold.RenewalDate} to {household.RenewalDate}. \n";
+                    }
 
                     _context.Add(new MembershipChange
                     {
@@ -330,25 +333,6 @@ namespace Grow.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    // Check if any Members have changed, been added, or removed
-                    bool membersChanged = false;
-                    if(household.Members.Count() != originalMembers.Count())
-                    {
-                        membersChanged = true;
-                    }
-                    else
-                    {
-
-                    }
-
-                    if(membersChanged == true)
-                    {
-                        // Update Members
-                        // TO DO
-
-                        // Now update calculated fields
-                        UpdateCalculatedFields(household);
-                    }
                     return RedirectToAction("Details", "Households", new { id = household.ID });
                 }
                 catch (Exception e)
@@ -415,45 +399,15 @@ namespace Grow.Controllers
             return View(household);
         }
 
-        private async void UpdateCalculatedFields(Household household)
+        public PartialViewResult MemberList(int id)
         {
-            // Get household again (value being passed may not have all values)
-            household = _context.Households.FirstOrDefault(x => x.ID == household.ID);
+            var household = _context.Households
+                .Include(x => x.Members)
+                .ThenInclude(x => x.Gender)
+                .Where(x => x.ID == id)
+                .FirstOrDefault();
 
-            List<Member> members = _context.Members.Where(x => x.HouseholdID == household.ID).ToList();
-
-            // Reset calculated fields
-            household.NumOfMembers = 0;
-            household.IncomeTotal = 0.00;
-
-            if (members != null)
-            {
-                // Get Total Income and Number of Members
-                foreach (var member in members)
-                {
-                    household.NumOfMembers += 1;
-                    household.IncomeTotal += member.IncomeAmount;
-                }
-
-                // Now check for LICO Verification
-                if (household.NumOfMembers > 0)
-                {
-                    var cutOff = _context.LowIncomeCutOffs.Where(x => x.NumberOfMembers == household.NumOfMembers).FirstOrDefault();
-
-                    if (household.IncomeTotal <= cutOff.YearlyIncome)
-                    {
-                        household.LICOVerified = true;
-                        household.LICOVerifiedDate = DateTime.Today;
-
-                        // If LICO is verified, set household to Active
-                        household.Active = true;
-                    }
-                }
-            }
-
-            // Update Household
-            _context.Update(household);
-            await _context.SaveChangesAsync();
+            return PartialView("_MemberList", household);
         }
 
         private void PopulateDropDownLists(Household household = null)

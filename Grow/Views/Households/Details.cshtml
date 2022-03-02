@@ -6,7 +6,7 @@
 
 <div class="media">
     <div class="media-body ml-3">
-        <h2>@Model.HouseholdName Household</h2> <br/>
+        <h2>@Model.HouseholdName Household</h2> <br />
         <div class="row">
             <div class="col-sm-6">
                 <dl class="row">
@@ -110,11 +110,7 @@
                         <th>
                             <input type="submit" disabled="disabled" value="Income Verified" class="btn btn-link" />
                         </th>
-                        <th>
-                            <a asp-controller="Households" asp-route-id="@Model.ID" asp-action="Edit">
-                                <span class="btn btn-success"><strong>&#x271A; Add</strong></span>
-                            </a>
-                        </th>
+                        <th></th>
                     </tr>
 
                     @foreach (var member in Model.Members)
@@ -148,6 +144,14 @@
     </dl>
 </div> <br />
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <a asp-action="Edit" asp-route-id="@Model.ID">
+                    <input type="button" value="Edit" class="btn btn-primary" style="width: 75px;" />
+                </a>
+            </div>
+        </div>
+    </div>
     <a asp-action="Index">Back to List</a>
 </div>
