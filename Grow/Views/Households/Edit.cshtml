@@ -249,6 +249,16 @@
 
             $(document).on("click", "#submitMemberForm", function (event) {
                 event.preventDefault();
+
+                // Select all restrictions and concerns before post
+                $("#selectedRestrictionOptions option").each(function (index) {
+                    $(this).prop('selected', true);
+                });
+
+                $("#selectedHealthOptions option").each(function (index) {
+                    $(this).prop('selected', true);
+                });
+
                 var form = $('#theMemberForm');
                 if (form.valid()) {
                     $.ajax({

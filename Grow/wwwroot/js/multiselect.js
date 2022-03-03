@@ -1,32 +1,45 @@
-﻿let DDLforChosen = document.getElementById("selectedHealthOptions");
-let DDLforAvail = document.getElementById("availOptions");
+﻿$(document).ready(function () {
 
-/*function to switch list items from one ddl to another
-use the sender param for the DDL from which the user is multi-selecting
-use the receiver param for the DDL that gets the options*/
-function switchOptions(event, senderDDL, receiverDDL) {
-    //find all selected option tags - selectedOptions becomes a nodelist 
-    let senderID = senderDDL.id;
-    let selectedHealthOptions = document.querySelectorAll(`#${senderID} option:checked`);
-    event.preventDefault();
+    $("#btnAddR").click(function (event) {
+        if ($("#availRestrictionOptions").val() != null) {
+            var SelectData = $("#availRestrictionOptions :selected").toArray();
+            $("#selectedRestrictionOptions").append(SelectData);
+            SelectData.remove;
+        }
+    });
 
-    if (selectedHealthOptions.length === 0) {
-        alert("Nothing to move.");
-    }
-    else {
-        selectedHealthOptions.forEach(function (o, idx) {
-            senderDDL.remove(o.index);
-            receiverDDL.appendChild(o);
-        });
-    }
-}
-//create closures so that we can access the event & the 2 parameters
-let addOptions = (event) => switchOptions(event, DDLforAvail, DDLforChosen);
-let removeOptions = (event) => switchOptions(event, DDLforChosen, DDLforAvail);
-//assign the closures as the event handlers for each button
-document.getElementById("btnLeft").addEventListener("click", addOptions);
-document.getElementById("btnRight").addEventListener("click", removeOptions);
+    $("#btnRemoveR").click(function (event) {
+        if ($("#selectedRestrictionOptions").val() != null) {
+            var SelectData = $("#selectedRestrictionOptions :selected").toArray();
+            $("#availRestrictionOptions").append(SelectData);
+            SelectData.remove;
+        }
+    });
 
-document.getElementById("btnSubmit").addEventListener("click", function () {
-    DDLforChosen.childNodes.forEach(opt => opt.selected = "selected");
-})
+    $("#btnAddC").click(function (event) {
+        if ($("#availOptions").val() != null) {
+            var SelectData = $("#availOptions :selected").toArray();
+            $("#selectedHealthOptions").append(SelectData);
+            SelectData.remove;
+        }
+    });
+
+    $("#btnRemoveC").click(function (event) {
+        if ($("#selectedHealthOptions").val() != null) {
+            var SelectData = $("#selectedHealthOptions :selected").toArray();
+            $("#availOptions").append(SelectData);
+            SelectData.remove;
+        }
+    });
+
+    //$("#submitMemberForm").click(function () {
+    //    $("#selectedRestrictionOptions option").each(function (index) {
+    //        $(this).prop('selected', true);
+    //    });
+
+    //    $("#selectedHealthOptions option").each(function (index) {
+    //        $(this).prop('selected', true);
+    //    });
+    //});
+
+});
