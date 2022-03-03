@@ -60,88 +60,115 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.MemberRestrictions)</label>
-                @*Add Member restrictions list boxes*@
-            </div>
-            <div class="form-group">
-                <label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>
-                @*Add Member concerns list boxes*@
-            </div>
-            <div class="form-group">
-                <label class="control-label">Income Source(s)</label>
-                <hr />
-                <div>
-                    <div id="IncomeSource1" style="display: none;">
-                        <div class="row">
-                            <div class="col-6">
-                                <label class="control-label">Source</label>
-                                <select id="ddl1" class="form-control" asp-items="ViewBag.IncomeSourceID">
-                                    <option value="-1">Select an Income Source</option>
-                                </select>
-                            </div>
-                            <div class="col-5">
-                                <label class="control-label">Income Amount</label>
-                                <input id="txt1" class="form-control" />
-                            </div>
-                            <div class="col-1">
-                                <a>
-                                    <span data-number="1" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
-                                </a>
-                            </div>
-                        </div>
-                        <br />
+                @*<label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>*@
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Dietary Restrictions</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
+                            <strong>-</strong>
+                        </button>
+                        @Html.ListBox("selectedRestrictionOptions", (MultiSelectList)ViewBag.selOptsR, new { @size = 10, @class = "form-control" })
                     </div>
-                    <div id="IncomeSource2" style="display: none;">
-                        <div class="row">
-                            <div class="col-6">
-                                <label class="control-label">Source</label>
-                                <select id="ddl2" class="form-control" asp-items="ViewBag.IncomeSourceID">
-                                    <option value="-1">Select an Income Source</option>
-                                </select>
-                            </div>
-                            <div class="col-5">
-                                <label class="control-label">Income Amount</label>
-                                <input id="txt2" name="IncomeAmount2" class="form-control" />
-                            </div>
-                            <div class="col-1">
-                                <a>
-                                    <span data-number="2" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
-                                </a>
-                            </div>
-                        </div>
-                        <br />
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Choose Dietary Restrictions</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
+                            <strong>+</strong>
+                        </button>
+                        @Html.ListBox("availRestrictionOptions", (MultiSelectList)ViewBag.availOptsR, new { @size = 10, @class = "form-control" })
                     </div>
-                    <div id="IncomeSource3" style="display: none;">
-                        <div class="row">
-                            <div class="col-6">
-                                <label class="control-label">Source</label>
-                                <select id="ddl3" class="form-control" asp-items="ViewBag.IncomeSourceID">
-                                    <option value="-1">Select an Income Source</option>
-                                </select>
-                            </div>
-                            <div class="col-5">
-                                <label class="control-label">Income Amount</label>
-                                <input id="txt3" name="IncomeAmount3" class="form-control" />
-                            </div>
-                            <div class="col-1">
-                                <a>
-                                    <span data-number="3" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
-                                </a>
-                            </div>
+                </div>
+                <div class="form-group">
+                    @*<label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>*@
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Health Concerns</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
+                                <strong>-</strong>
+                            </button>
+                            @Html.ListBox("selectedHealthOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
                         </div>
-                        <br />
+
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Choose Health Concerns</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
+                                <strong>+</strong>
+                            </button>
+                            @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
+                        </div>
                     </div>
-                </div><br />
-                <a>
-                    <span id="btnAddIncome" class="btn btn-success"><strong>&#x271A; Add Income Source</strong></span>
-                </a>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Income Source(s)</label>
+                    <hr />
+                    <div>
+                        <div id="IncomeSource1" style="display: none;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl1" class="form-control" asp-items="ViewBag.IncomeSourceID">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-5">
+                                    <label class="control-label">Income Amount</label>
+                                    <input id="txt1" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="1" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div id="IncomeSource2" style="display: none;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl2" class="form-control" asp-items="ViewBag.IncomeSourceID">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-5">
+                                    <label class="control-label">Income Amount</label>
+                                    <input id="txt2" name="IncomeAmount2" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="2" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div id="IncomeSource3" style="display: none;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl3" class="form-control" asp-items="ViewBag.IncomeSourceID">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-5">
+                                    <label class="control-label">Income Amount</label>
+                                    <input id="txt3" name="IncomeAmount3" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="3" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                    </div><br />
+                    <a>
+                        <span id="btnAddIncome" class="btn btn-success"><strong>&#x271A; Add Income Source</strong></span>
+                    </a>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IncomeVerified" /> @Html.DisplayNameFor(model => model.IncomeVerified)
+                    </label>
+                </div>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IncomeVerified" /> @Html.DisplayNameFor(model => model.IncomeVerified)
-                </label>
-            </div>
-        </div>
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -158,6 +185,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/multiselectRestriction.js"></script>
+<script src="~/js/multiselect.js"></script>
 <script>
     $(document).ready(function () {
 

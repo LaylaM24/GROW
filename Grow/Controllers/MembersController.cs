@@ -39,6 +39,10 @@ namespace Grow.Controllers
                           .ThenInclude(m => m.IncomeSource)
                           .Include(m => m.Gender)
                           .Include(m => m.Household)
+                          .Include(m => m.MemberConcerns)
+                          .ThenInclude(m => m.HealthConcern)
+                          .Include(m => m.MemberRestrictions)
+                          .ThenInclude(m => m.DietaryRestriction)
                           select m;
 
             if (!String.IsNullOrEmpty(SearchString))
@@ -129,8 +133,10 @@ namespace Grow.Controllers
                 .Include(m => m.MemberDocuments)
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
+                .Include(m => m.MemberConcerns)
+                .ThenInclude(m => m.HealthConcern)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(mr => mr.DietaryRestriction)
+                .ThenInclude(m => m.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (member == null)
@@ -149,6 +155,9 @@ namespace Grow.Controllers
             var member = new Member();
             PopulateAssignedRestrictionData(member);
 
+            var memberHealth = new Member();
+            PopulateAssignedHealthConcernsData(memberHealth);
+
             PopulateDropDownLists();
             return View();
         }
@@ -160,20 +169,14 @@ namespace Grow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles, string IncomeSource1, double IncomeAmount1, string IncomeSource2, double IncomeAmount2, 
-            string IncomeSource3, double IncomeAmount3)
+            string IncomeSource3, double IncomeAmount3, string[] selectedHealthOptions, string[] selectedRestrictionOptions)
         {
             ViewDataReturnURL();
 
             try
             {
-                if (selectedOptions != null)
-                {
-                    foreach (var restriction in selectedOptions)
-                    {
-                        var restrictionToAdd = new MemberRestriction { MemberID = member.ID, DietaryRestrictionID = int.Parse(restriction) };
-                        member.MemberRestrictions.Add(restrictionToAdd);
-                    }
-                }
+                UpdateMemberRestriction(selectedRestrictionOptions, member);
+                UpdateMemberConcerns(selectedHealthOptions, member);
                 if (ModelState.IsValid)
                 {
                     _context.Add(member);
@@ -187,6 +190,7 @@ namespace Grow.Controllers
                 ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
             }
 
+            PopulateAssignedHealthConcernsData(member);
             PopulateAssignedRestrictionData(member);
             PopulateDropDownLists(member);
             return View(member);
@@ -208,13 +212,15 @@ namespace Grow.Controllers
                 .Include(m => m.MemberDocuments)
                 .Include(m => m.MemberRestrictions)
                     .ThenInclude(m => m.DietaryRestriction)
+                .Include(m => m.MemberConcerns)
+                    .ThenInclude(m => m.HealthConcern)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (member == null)
             {
                 return NotFound();
             }
-
+            PopulateAssignedHealthConcernsData(member);
             PopulateAssignedRestrictionData(member);
             PopulateDropDownLists(member);
             return View(member);
@@ -227,7 +233,7 @@ namespace Grow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles, string IncomeSource1, double IncomeAmount1, string IncomeSource2, double IncomeAmount2,
-            string IncomeSource3, double IncomeAmount3)
+            string IncomeSource3, double IncomeAmount3, string[] selectedHealthOptions, string[] selectedRestrictionOptions)
         {
             ViewDataReturnURL();
 
@@ -235,8 +241,10 @@ namespace Grow.Controllers
                 .Include(m => m.MemberIncomes)
                     .ThenInclude(m => m.IncomeSource)
                 .Include(m => m.MemberDocuments)
+                .Include(m => m.MemberConcerns)
+                .ThenInclude(m => m.HealthConcern)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(m => m.DietaryRestriction)
+                .ThenInclude(m => m.DietaryRestriction)
                 .FirstOrDefaultAsync(p => p.ID == id);
 
             if (memberToUpdate == null)
@@ -244,7 +252,8 @@ namespace Grow.Controllers
                 return NotFound();
             }
 
-            UpdateMemberRestriction(selectedOptions, memberToUpdate);
+            UpdateMemberConcerns(selectedHealthOptions, memberToUpdate);
+            UpdateMemberRestriction(selectedRestrictionOptions, memberToUpdate);
             UpdateMemberStatus(selectedOptions, memberToUpdate);
 
             if (ModelState.IsValid)
@@ -272,7 +281,7 @@ namespace Grow.Controllers
                 }
                 return RedirectToAction("Details", new { memberToUpdate.ID });
             }
-
+            PopulateAssignedHealthConcernsData(memberToUpdate);
             PopulateAssignedRestrictionData(memberToUpdate);
             PopulateDropDownLists(memberToUpdate);
             return View(memberToUpdate);
@@ -293,8 +302,10 @@ namespace Grow.Controllers
                 .ThenInclude(m => m.IncomeSource)
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
+                .Include(m => m.MemberConcerns)
+                .ThenInclude(m => m.HealthConcern)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(mr => mr.DietaryRestriction)
+                .ThenInclude(m => m.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (member == null)
@@ -317,33 +328,16 @@ namespace Grow.Controllers
                 .ThenInclude(m => m.IncomeSource)
                 .Include(m => m.Gender)
                 .Include(m => m.Household)
+                .Include(m => m.MemberConcerns)
+                .ThenInclude(m => m.HealthConcern)
                 .Include(m => m.MemberRestrictions)
-                    .ThenInclude(mr => mr.DietaryRestriction)
+                .ThenInclude(m => m.DietaryRestriction)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             _context.Members.Remove(member);
             await _context.SaveChangesAsync();
             return Redirect(ViewData["returnURL"].ToString());
         }
-
-        private void PopulateAssignedRestrictionData(Member member)
-        {
-            var allOptions = _context.DietaryRestrictions;
-            var currentOptionIDs = new HashSet<int>(member.MemberRestrictions.Select(mr => mr.DietaryRestrictionID));
-            var checkBoxes = new List<CheckOptionVM>();
-
-            foreach (var option in allOptions)
-            {
-                checkBoxes.Add(new CheckOptionVM
-                {
-                    ID = option.ID,
-                    DisplayText = option.Restriction,
-                    Assigned = currentOptionIDs.Contains(option.ID)
-                });
-            }
-            ViewData["RestrictionOptions"] = checkBoxes;
-        }
-
         private void UpdateMemberStatus(string[] selectedOptions, Member memberToUpdate)
         {
             if (selectedOptions == null)
@@ -375,39 +369,6 @@ namespace Grow.Controllers
                 }
             }
         }
-
-        private void UpdateMemberRestriction(string[] selectedOptions, Member memberToUpdate)
-        {
-            if (selectedOptions == null)
-            {
-                memberToUpdate.MemberRestrictions = new List<MemberRestriction>();
-                return;
-            }
-
-            var selectedOptionsHS = new HashSet<string>(selectedOptions);
-            var memberOptionsHS = new HashSet<int>
-                (memberToUpdate.MemberRestrictions.Select(mr => mr.DietaryRestrictionID));
-
-            foreach (var option in _context.DietaryRestrictions)
-            {
-                if (selectedOptionsHS.Contains(option.ID.ToString()))
-                {
-                    if (!memberOptionsHS.Contains(option.ID))
-                    {
-                        memberToUpdate.MemberRestrictions.Add(new MemberRestriction { MemberID = memberToUpdate.ID, DietaryRestrictionID = option.ID });
-                    }
-                }
-                else
-                {
-                    if (memberOptionsHS.Contains(option.ID))
-                    {
-                        MemberRestriction restrictionToRemove = memberToUpdate.MemberRestrictions.SingleOrDefault(mr => mr.DietaryRestrictionID == option.ID);
-                        _context.Remove(restrictionToRemove);
-                    }
-                }
-            }
-        }
-
         private void PopulateDropDownLists(Member member = null)
         {
             MemberIncome memberStatus = null;
@@ -432,7 +393,6 @@ namespace Grow.Controllers
             ViewData["GenderID"] = new SelectList(gQuery, "ID", "GenderType", member?.GenderID);
             ViewData["MembershipID"] = new SelectList(mQuery, "ID", "StreetName", member?.HouseholdID);
         }
-
         private async Task AddDocumentsAsync(Member member, List<IFormFile> theFiles)
         {
             foreach (var f in theFiles)
@@ -465,6 +425,135 @@ namespace Grow.Controllers
                 .FirstOrDefaultAsync();
             return File(theFile.Content, theFile.MimeType, theFile.FileName);
         }
+
+        // List boxes
+        private void PopulateAssignedHealthConcernsData(Member member)
+        {
+            var allHealthOptions = _context.HealthConcerns;
+            var currentHealthOptions = new HashSet<int>(member.MemberConcerns.Select(b => b.HealthConcernID));
+            //Instead of one list with a boolean, we will make two lists
+            var selected = new List<ListOptionVM>();
+            var available = new List<ListOptionVM>();
+            foreach (var s in allHealthOptions)
+            {
+                if (currentHealthOptions.Contains(s.ID))
+                {
+                    selected.Add(new ListOptionVM
+                    {
+                        ID = s.ID,
+                        DisplayText = s.Concern
+                    });
+                }
+                else
+                {
+                    available.Add(new ListOptionVM
+                    {
+                        ID = s.ID,
+                        DisplayText = s.Concern
+                    });
+                }
+            }
+
+            ViewData["selOpts"] = new MultiSelectList(selected.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+            ViewData["availOpts"] = new MultiSelectList(available.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+        }
+        private void UpdateMemberConcerns(string[] selectedHealthOptions, Member memberToUpdate)
+        {
+            if (selectedHealthOptions == null)
+            {
+                memberToUpdate.MemberConcerns = new List<MemberConcern>();
+                return;
+            }
+
+            var selectedOptionsHS = new HashSet<string>(selectedHealthOptions);
+            var currentOptionsHS = new HashSet<int>(memberToUpdate.MemberConcerns.Select(b => b.HealthConcernID));
+            foreach (var s in _context.HealthConcerns)
+            {
+                if (selectedOptionsHS.Contains(s.ID.ToString()))//it is selected
+                {
+                    if (!currentOptionsHS.Contains(s.ID))//but not currently in the Member's collection - Add it!
+                    {
+                        memberToUpdate.MemberConcerns.Add(new MemberConcern
+                        {
+                            HealthConcernID = s.ID,
+                            MemberID = memberToUpdate.ID
+                        });
+                    }
+                }
+                else //not selected
+                {
+                    if (currentOptionsHS.Contains(s.ID))
+                    {
+                        MemberConcern specToRemove = memberToUpdate.MemberConcerns.FirstOrDefault(d => d.HealthConcernID == s.ID);
+                        _context.Remove(specToRemove);
+                    }
+                }
+            }
+        }
+        private void PopulateAssignedRestrictionData(Member member)
+        {
+            var allRestrictionOptions = _context.DietaryRestrictions;
+            var currentRestrictionOptions = new HashSet<int>(member.MemberRestrictions.Select(b => b.DietaryRestrictionID));
+            //Instead of one list with a boolean, we will make two lists
+            var selectedR = new List<ListOptionVM>();
+            var availableR = new List<ListOptionVM>();
+            foreach (var s in allRestrictionOptions)
+            {
+                if (currentRestrictionOptions.Contains(s.ID))
+                {
+                    selectedR.Add(new ListOptionVM
+                    {
+                        ID = s.ID,
+                        DisplayText = s.Restriction
+                    });
+                }
+                else
+                {
+                    availableR.Add(new ListOptionVM
+                    {
+                        ID = s.ID,
+                        DisplayText = s.Restriction
+                    });
+                }
+            }
+
+            ViewData["selOptsR"] = new MultiSelectList(selectedR.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+            ViewData["availOptsR"] = new MultiSelectList(availableR.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+        }
+        private void UpdateMemberRestriction(string[] selectedRestrictionOptions, Member memberToUpdate)
+        {
+            if (selectedRestrictionOptions == null)
+            {
+                memberToUpdate.MemberRestrictions = new List<MemberRestriction>();
+                return;
+            }
+
+            var selectedOptionsR = new HashSet<string>(selectedRestrictionOptions);
+            var currentOptionsR = new HashSet<int>(memberToUpdate.MemberRestrictions.Select(b => b.DietaryRestrictionID));
+            foreach (var s in _context.DietaryRestrictions)
+            {
+                if (selectedOptionsR.Contains(s.ID.ToString()))//it is selected
+                {
+                    if (!currentOptionsR.Contains(s.ID))//but not currently in the Member's collection - Add it!
+                    {
+                        memberToUpdate.MemberRestrictions.Add(new MemberRestriction
+                        {
+                            DietaryRestrictionID = s.ID,
+                            MemberID = memberToUpdate.ID
+                        });
+                    }
+                }
+                else //not selected
+                {
+                    if (currentOptionsR.Contains(s.ID))
+                    {
+                        MemberRestriction specToRemove = memberToUpdate.MemberRestrictions.FirstOrDefault(d => d.DietaryRestrictionID == s.ID);
+                        _context.Remove(specToRemove);
+                    }
+                }
+            }
+        }
+        //
         private string ControllerName()
         {
             return this.ControllerContext.RouteData.Values["controller"].ToString();
