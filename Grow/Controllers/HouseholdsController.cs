@@ -203,6 +203,7 @@ namespace Grow.Controllers
                     household.LICOVerified = false;
                     household.LICOVerifiedDate = null;
                     household.IncomeTotal = 0.00;
+                    household.RenewalDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
 
                     // Add Household
                     _context.Add(household);
@@ -267,7 +268,7 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,MembershipNumber,Active,NumOfMembers,CreatedDate,LICOVerified,LICOVerifiedDate,IncomeTotal,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,CityID,City,Members")] Household household)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,MembershipNumber,CreatedDate,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,CityID,City,Members")] Household household)
         {
             if (id != household.ID)
             {
@@ -284,14 +285,11 @@ namespace Grow.Controllers
                         .AsNoTracking()
                         .FirstOrDefault(x => x.ID == id);
 
-                    // Get Household Members before update
-                    List<Member> originalMembers = _context.Members
-                        .Where(x => x.HouseholdID == id)
-                        .AsNoTracking()
-                        .ToList();
-
                     // Get updated City for comparison
                     household.City = _context.Cities.FirstOrDefault(x => x.ID == household.CityID);
+
+                    // Update calculated fields
+                    UpdateCalculatedFields(household);
 
                     // Update Household
                     _context.Update(household);
@@ -383,7 +381,11 @@ namespace Grow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var household = await _context.Households.FindAsync(id);
+            var household = await _context.Households
+                .Include(x => x.Members)
+                .ThenInclude(x => x.Gender)
+                .Include(h => h.City)
+                .FirstOrDefaultAsync(m => m.ID == id);
 
             try
             {
@@ -408,6 +410,44 @@ namespace Grow.Controllers
                 .FirstOrDefault();
 
             return PartialView("_MemberList", household);
+        }
+
+        private async void UpdateCalculatedFields(Household household)
+        {
+            // Get all members
+            List<Member> members = _context.Members.Where(x => x.HouseholdID == household.ID).ToList();
+
+            // Reset calculated fields
+            household.Active = false;
+            household.NumOfMembers = 0;
+            household.LICOVerified = false;
+            household.LICOVerifiedDate = null;
+            household.IncomeTotal = 0.00;
+
+            if (members != null)
+            {
+                // Get Total Income and Number of Members
+                foreach (var m in members)
+                {
+                    household.NumOfMembers += 1;
+                    household.IncomeTotal += m.IncomeAmount;
+                }
+
+                // Now check for LICO Verification
+                if (household.NumOfMembers > 0)
+                {
+                    var cutOff = _context.LowIncomeCutOffs.Where(x => x.NumberOfMembers == household.NumOfMembers).FirstOrDefault();
+
+                    if (household.IncomeTotal <= cutOff.YearlyIncome)
+                    {
+                        household.LICOVerified = true;
+                        household.LICOVerifiedDate = DateTime.Today;
+
+                        // If LICO is verified, set household to Active
+                        household.Active = true;
+                    }
+                }
+            }
         }
 
         private void PopulateDropDownLists(Household household = null)
