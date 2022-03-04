@@ -54,6 +54,7 @@ namespace Grow.Controllers
                     .ThenInclude(x => x.DietaryRestriction)
                 .Include(x => x.MemberConcerns)
                     .ThenInclude(x => x.HealthConcern)
+                .Include(x => x.MemberDocuments)
                 .FirstOrDefault(x => x.ID == ID);
 
             PopulateDropDownLists(member);
@@ -84,7 +85,7 @@ namespace Grow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member,
+        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,Notes,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles, string[] selectedHealthOptions, string[] selectedRestrictionOptions, string IncomeSource1, 
             double IncomeAmount1, string IncomeSource2, double IncomeAmount2, string IncomeSource3, double IncomeAmount3)
         {
@@ -151,7 +152,7 @@ namespace Grow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,HouseholdID,GenderID")] Member member,
+        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,Notes,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles, string IncomeSource1, double IncomeAmount1, string IncomeSource2, double IncomeAmount2,
             string IncomeSource3, double IncomeAmount3, string[] selectedHealthOptions, string[] selectedRestrictionOptions)
         {
@@ -163,12 +164,24 @@ namespace Grow.Controllers
                     .ThenInclude(x => x.DietaryRestriction)
                 .Include(x => x.MemberConcerns)
                     .ThenInclude(x => x.HealthConcern)
+                .Include(x => x.MemberDocuments)
                 .FirstOrDefault(x => x.ID == id);
 
             if (memberToUpdate == null)
             {
                 return NotFound();
             }
+
+            // Update Member Fields
+            memberToUpdate.FirstName = member.FirstName;
+            memberToUpdate.LastName = member.LastName;
+            memberToUpdate.DOB = member.DOB;
+            memberToUpdate.GenderID = member.GenderID;
+            memberToUpdate.Phone = member.Phone;
+            memberToUpdate.Email = member.Email;
+            memberToUpdate.Notes = member.Notes;
+            memberToUpdate.DataConsent = member.DataConsent;
+            memberToUpdate.IncomeVerified = member.IncomeVerified;
 
             if (ModelState.IsValid)
             {
@@ -291,6 +304,22 @@ namespace Grow.Controllers
                           select r;
 
             ViewData["IncomeSources"] = new SelectList(isQuery, "ID", "Source");
+
+            if(member?.MemberIncomes.Count() >= 1)
+                ViewData["IncomeSources1"] = new SelectList(isQuery, "ID", "Source", member?.MemberIncomes.ElementAt(0).IncomeSourceID);
+            else
+                ViewData["IncomeSources1"] = new SelectList(isQuery, "ID", "Source");
+
+            if(member?.MemberIncomes.Count() >= 2)
+                ViewData["IncomeSources2"] = new SelectList(isQuery, "ID", "Source", member?.MemberIncomes.ElementAt(1).IncomeSourceID);
+            else
+                ViewData["IncomeSources2"] = new SelectList(isQuery, "ID", "Source");
+
+            if(member?.MemberIncomes.Count() == 3)
+                ViewData["IncomeSources3"] = new SelectList(isQuery, "ID", "Source", member?.MemberIncomes.ElementAt(2).IncomeSourceID);
+            else
+                ViewData["IncomeSources3"] = new SelectList(isQuery, "ID", "Source");
+
             ViewData["Genders"] = new SelectList(gQuery, "ID", "GenderType", member?.GenderID);
             ViewData["HealthConcerns"] = new SelectList(hcQuery, "ID", "Concern");
             ViewData["DietaryRestrictions"] = new SelectList(drQuery, "ID", "Restriction");
@@ -545,11 +574,11 @@ namespace Grow.Controllers
             }
 
             // Remove all existing income sources
-            var sources = _context.MemberIncomes.Where(x => x.MemberID == memberToUpdate.ID);
+            List<MemberIncome> sources = _context.MemberIncomes.Where(x => x.MemberID == memberToUpdate.ID).ToList();
 
-            if(sources.Count() > 0)
+            if(sources?.Count() > 0)
             {
-                _context.Remove(sources);
+                _context.RemoveRange(sources);
             }
 
             // Add new sources
@@ -557,6 +586,7 @@ namespace Grow.Controllers
             {
                 _context.AddRange(incomesToAdd);
             }
+
             _context.SaveChanges();
         }
 

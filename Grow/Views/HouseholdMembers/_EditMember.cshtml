@@ -50,36 +50,39 @@
                     <input class="form-check-input" asp-for="DataConsent" /> @Html.DisplayNameFor(model => model.DataConsent)
                 </label>
             </div>
-            <div class="form-group">
-                <label class="control-label">Current Documents:</label>
-                <div class="ml-md-3">
-                    @{
-                        int fileCount = Model.MemberDocuments.Count;
-                        if (fileCount > 0)
-                        {
-                            var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
-                            if (fileCount > 1)
+            @if (Model.MemberDocuments.Count() > 0)
+            {
+                <div class="form-group">
+                    <label class="control-label">Current Documents:</label>
+                    <div class="ml-md-3">
+                        @{
+                            int fileCount = Model.MemberDocuments.Count();
+                            if (fileCount > 0)
                             {
-                                <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
-                                    <span class="badge badge-info">@fileCount</span> Current Documents...
-                                </a>
-                                <div class="collapse" id="collapseSum@(Model.ID)">
-                                    @{
-                                        foreach (var d in Model.MemberDocuments)
-                                        {
-                                            <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
+                                var firstFile = Model.MemberDocuments.FirstOrDefault(); ;
+                                if (fileCount > 1)
+                                {
+                                    <a class="" role="button" data-toggle="collapse" href="#collapseSum@(Model.ID)" aria-expanded="false" aria-controls="collapseSum@(Model.ID)">
+                                        <span class="badge badge-info">@fileCount</span> Current Documents...
+                                    </a>
+                                    <div class="collapse" id="collapseSum@(Model.ID)">
+                                        @{
+                                            foreach (var d in Model.MemberDocuments)
+                                            {
+                                                <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> <br />
+                                            }
                                         }
-                                    }
-                                </div>
-                            }
-                            else
-                            {
-                                <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <a asp-action="Download" asp-route-id="@firstFile.ID">@firstFile.FileName</a>
+                                }
                             }
                         }
-                    }
+                    </div>
                 </div>
-            </div>
+            }
             <div class="form-group">
                 <label class="control-label">Income Verification Documents:</label><br />
                 <input type="file" class="" name="theFiles" multiple="multiple" />
@@ -146,13 +149,13 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label class="control-label">Source</label>
-                                    <select id="ddl1" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <select id="ddl1" name="IncomeSource1" class="form-control" asp-items="ViewBag.IncomeSources1">
                                         <option value="-1">Select an Income Source</option>
                                     </select>
                                 </div>
                                 <div class="col-4">
                                     <label class="control-label">Income Amount</label>
-                                    <input type="number" id="txt1" value="@Model.MemberIncomes.ElementAt(0).IncomeAmount" min="0" class="form-control" />
+                                    <input type="number" name="IncomeAmount1" id="txt1" value="@Model.MemberIncomes.ElementAt(0).IncomeAmount" min="0" class="form-control" />
                                 </div>
                                 <div class="col-1">
                                     <a>
@@ -169,7 +172,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label class="control-label">Source</label>
-                                    <select id="ddl1" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <select id="ddl1" class="form-control" asp-items="ViewBag.IncomeSources1">
                                         <option value="-1">Select an Income Source</option>
                                     </select>
                                 </div>
@@ -188,17 +191,17 @@
                     }
                     @if (Model.MemberIncomes.Count() >= 2)
                     {
-                        <div id="IncomeSource2" style="display: none;">
+                        <div id="IncomeSource2">
                             <div class="row">
                                 <div class="col-6">
                                     <label class="control-label">Source</label>
-                                    <select id="ddl2" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <select id="ddl2" name="IncomeSource2" class="form-control" asp-items="ViewBag.IncomeSources2">
                                         <option value="-1">Select an Income Source</option>
                                     </select>
                                 </div>
                                 <div class="col-4">
                                     <label class="control-label">Income Amount</label>
-                                    <input type="number" id="txt2" value="@Model.MemberIncomes.ElementAt(1).IncomeAmount" min="0" class="form-control" />
+                                    <input type="number" name="IncomeAmount2" id="txt2" value="@Model.MemberIncomes.ElementAt(1).IncomeAmount" min="0" class="form-control" />
                                 </div>
                                 <div class="col-1">
                                     <a>
@@ -215,7 +218,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label class="control-label">Source</label>
-                                    <select id="ddl2" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <select id="ddl2" class="form-control" asp-items="ViewBag.IncomeSources2">
                                         <option value="-1">Select an Income Source</option>
                                     </select>
                                 </div>
@@ -234,17 +237,17 @@
                     }
                     @if (Model.MemberIncomes.Count() == 3)
                     {
-                        <div id="IncomeSource3" style="display: none;">
+                        <div id="IncomeSource3">
                             <div class="row">
                                 <div class="col-6">
                                     <label class="control-label">Source</label>
-                                    <select id="ddl3" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <select id="ddl3" name="IncomeSource3" class="form-control" asp-items="ViewBag.IncomeSources3">
                                         <option value="-1">Select an Income Source</option>
                                     </select>
                                 </div>
                                 <div class="col-4">
                                     <label class="control-label">Income Amount</label>
-                                    <input type="number" id="txt3" value="@Model.MemberIncomes.ElementAt(2).IncomeAmount" min="0" class="form-control" />
+                                    <input type="number" name="IncomeAmount3" id="txt3" value="@Model.MemberIncomes.ElementAt(2).IncomeAmount" min="0" class="form-control" />
                                 </div>
                                 <div class="col-1">
                                     <a>
@@ -261,7 +264,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <label class="control-label">Source</label>
-                                    <select id="ddl3" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <select id="ddl3" class="form-control" asp-items="ViewBag.IncomeSources3">
                                         <option value="-1">Select an Income Source</option>
                                     </select>
                                 </div>
@@ -283,7 +286,7 @@
                 <a>
                     @if (Model.MemberIncomes.Count() == 3)
                     {
-                        <span id="btnAddIncome" class="btn btn-success"><strong>&#x271A; Add Income Source</strong></span>
+                        <span id="btnAddIncome" class="btn btn-success" style="display: none;"><strong>&#x271A; Add Income Source</strong></span>
                     }
                     else
                     {

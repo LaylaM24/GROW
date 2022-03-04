@@ -19,11 +19,6 @@
 <form id="editForm" asp-action="Edit">
     <input type="hidden" asp-for="ID" />
     <input type="hidden" asp-for="CreatedDate" />
-    <input type="hidden" asp-for="Active" />
-    <input type="hidden" asp-for="NumOfMembers" />
-    <input type="hidden" asp-for="LICOVerified" />
-    <input type="hidden" asp-for="LICOVerifiedDate" />
-    <input type="hidden" asp-for="IncomeTotal" />
     <input type="hidden" asp-for="City" />
     <div class="row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -251,16 +246,35 @@
                 event.preventDefault();
 
                 // Select all restrictions and concerns before post
-                $("#selectedRestrictionOptions option").each(function (index) {
-                    $(this).prop('selected', true);
-                });
+                if ($("#selectedRestrictionOptions").length) {
+                    $("#selectedRestrictionOptions option").each(function (index) {
+                        $(this).prop('selected', true);
+                    });
+                }
 
-                $("#selectedHealthOptions option").each(function (index) {
-                    $(this).prop('selected', true);
-                });
+                if ($("#selectedHealthOptions").length) {
+                    $("#selectedHealthOptions option").each(function (index) {
+                        $(this).prop('selected', true);
+                    });
+                }
 
                 var form = $('#theMemberForm');
-                if (form.valid()) {
+                if (form.attr('action') != "/HouseholdMembers/Delete") {
+                    if (form.valid()) {
+                        $.ajax({
+                            type: "POST",
+                            url: form.attr('action'),
+                            data: form.serialize(),
+                            success: function () {
+                                $('#theMemberModal').modal('hide');
+                            },
+                            error: function () {
+                                alert("Operation Failed. Please make sure all required fields are filled correctly.");
+                            }
+                        });
+                    }
+                }
+                else if (form.attr('action') == "/HouseholdMembers/Delete") {
                     $.ajax({
                         type: "POST",
                         url: form.attr('action'),
@@ -269,7 +283,7 @@
                             $('#theMemberModal').modal('hide');
                         },
                         error: function () {
-                            alert("Operation Failed. Please make sure all required fields are filled correctly.");
+                            alert("Operation Failed. Cannot delete record at this time.");
                         }
                     });
                 }
