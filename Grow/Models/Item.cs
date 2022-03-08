@@ -22,11 +22,14 @@ namespace Grow.Models
         public string ItemName { get; set; }
 
         [Required(ErrorMessage = "Price is required.")]
+        [DataType(DataType.Currency)]
         public double Price { get; set; }
 
         [Display(Name = "Category")]
         [Required(ErrorMessage = "Category is required.")]
         public int ItemCategoryID { get; set; }
+
+        [Display(Name = "Category")]
         public ItemCategory ItemCategory { get; set; }
 
         public ICollection<TransactionDetail> TransactionDetails { get; set; }
