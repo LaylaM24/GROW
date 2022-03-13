@@ -16,10 +16,9 @@
 
     <div class="form-group row">
         <div class="col form-check float-right">
-            <p>
-                <a asp-action="DownloadHouseholdVisits" asp-route-exclInactive="@ViewData["ExclInactive"]" class="btn btn-info float-right">Download Report</a> <br />
-                <br />
-            </p>
+            <a asp-action="HouseholdVisits" class="btn btn-info float-right" style="margin-left: 15px">View Graph</a>
+            <a asp-action="DownloadHouseholdVisits" asp-route-exclInactive="@ViewData["ExclInactive"]" class="btn btn-info float-right">Download Report</a> <br />
+            <br />
             <label class="form-check-label float-right">
                 <input class="form-check-input" type="checkbox" checked="@ViewData["ExclInactive"]" name="cbInactive" id="cbInactive" /> Exclude inactive Households
             </label>

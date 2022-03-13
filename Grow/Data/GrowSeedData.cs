@@ -188,22 +188,30 @@ namespace Grow.Data
                 if (!context.ItemCategories.Any())
                 {
                     context.ItemCategories.AddRange(
+                         new ItemCategory
+                         {
+                             CategoryName = "Specials"
+                         },
+
                         new ItemCategory
                         {
-                            CategoryName = "Produce"
+                            CategoryName = "Dairy/Eggs/Bread"
                         },
+                        new ItemCategory
+                        {
+                            CategoryName = "Pantry"
+                        },
+                        
                         new ItemCategory
                         {
                             CategoryName = "Freezer"
                         },
                         new ItemCategory
                         {
-                            CategoryName = "Pantry"
-                        },
-                        new ItemCategory
-                        {
-                            CategoryName = "Dairy/Eggs/Bread"
+                            CategoryName = "Produce"
                         }
+
+
                     );
                     context.SaveChanges();
                 }
@@ -281,6 +289,365 @@ namespace Grow.Data
                         },
                         new Item
                         {
+                            ItemNo = 148,
+                            ItemName = "Anise / Fennel",
+                            Price = 1.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 102,
+                            ItemName = "Avocado large*",
+                            Price = 1.00,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 103,
+                            ItemName = "Avocado small*",
+                            Price = 0.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 105,
+                            ItemName = "Blueberries / Blackberries",
+                            Price = 1.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 106,
+                            ItemName = "Broccoli",
+                            Price = 2.00,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 147,
+                            ItemName = "Brussel Sprouts",
+                            Price = 1.00,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 127,
+                            ItemName = "Cabbage*",
+                            Price = 2.00,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 107,
+                            ItemName = "Cantaloupe",
+                            Price = 1.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 108,
+                            ItemName = "Carrots",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 109,
+                            ItemName = "Cauliflower*",
+                            Price = 2.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 110,
+                            ItemName = "Celery",
+                            Price = 1.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 111,
+                            ItemName = "Clementine",
+                            Price = 0.10,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 112,
+                            ItemName = "Corn",
+                            Price = 0.25,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 113,
+                            ItemName = "Cucumber",
+                            Price = 1.00,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 114,
+                            ItemName = "Cucumber Mini",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 115,
+                            ItemName = "Eggplant",
+                            Price = 0.10,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 116,
+                            ItemName = "Garlic*",
+                            Price = 0.25,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 117,
+                            ItemName = "Grapes*",
+                            Price = 1.00,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 118,
+                            ItemName = "Kale",
+                            Price = 0.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 120,
+                            ItemName = "Kiwi",
+                            Price = 0.25,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 121,
+                            ItemName = "Lemon*",
+                            Price = 0.25,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 122,
+                            ItemName = "Lettuce Romaine Hearts",
+                            Price = 0.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 123,
+                            ItemName = "Limes",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 124,
+                            ItemName = "Mango",
+                            Price = 1.00,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 125,
+                            ItemName = "Micro Greens",
+                            Price = 0.25,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 126,
+                            ItemName = "Mushrooms*",
+                            Price = 1.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 128,
+                            ItemName = "Onion",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 129,
+                            ItemName = "Oranges",
+                            Price = 0.20,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 130,
+                            ItemName = "Peaches/Nectarines",
+                            Price = 0.10,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 131,
+                            ItemName = "Pear",
+                            Price = 0.10,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 132,
+                            ItemName = "Peppers",
+                            Price = 0.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 133,
+                            ItemName = "Peppers Hot 3/0.05",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 134,
+                            ItemName = "Peppers Mini ",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 135,
+                            ItemName = "Plums",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 136,
+                            ItemName = "Potatoes",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        
+                        new Item
+                        {
+                            ItemNo = 137,
+                            ItemName = "Potatoes Baby Basket",
+                            Price = .50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 138,
+                            ItemName = "Potatoes Sweet (Yam)",
+                            Price = 0.75,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 139,
+                            ItemName = "Raspberries",
+                            Price = 1.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 140,
+                            ItemName = "Squash",
+                            Price = 0.00,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 141,
+                            ItemName = "Strawberries",
+                            Price = 1.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 142,
+                            ItemName = "Swiss Chard",
+                            Price = 0.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 143,
+                            ItemName = "Tomato Cherry / Grape Basket",
+                            Price = 0.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 144,
+                            ItemName = "Tomatoes",
+                            Price = 0.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 145,
+                            ItemName = "Watermelon",
+                            Price = 2.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 146,
+                            ItemName = "Zucchini",
+                            Price = 0.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 147,
+                            ItemName = "Shallots",
+                            Price = 0.05,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 149,
+                            ItemName = "Bag of Potatoes",
+                            Price = 1.50,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 201,
+                            ItemName = "Chicken Legs (2)",
+                            Price = 1.00,
+                            ItemCategoryID = 2
+                        },
+                        new Item
+                        {
+                            ItemNo = 202,
+                            ItemName = "Chicken Drumsticks 4lbs",
+                            Price = 3.00,
+                            ItemCategoryID = 2
+                        },
+                        new Item
+                        {
+                            ItemNo = 203,
+                            ItemName = "Chicken Thighs 4lbs",
+                            Price = 3.00,
+                            ItemCategoryID = 2
+                        },
+                        new Item
+                        {
+                            ItemNo = 204,
+                            ItemName = "Chicken Wings 2lbs",
+                            Price = 2.00,
+                            ItemCategoryID = 2
+                        },
+
+                        new Item
+                        {
                             ItemNo = 205,
                             ItemName = "Ground Beef",
                             Price = 2.75,
@@ -288,11 +655,609 @@ namespace Grow.Data
                         },
                         new Item
                         {
+                            ItemNo = 206,
+                            ItemName = "Veggie Burger 2pc",
+                            Price = 2.00,
+                            ItemCategoryID = 2
+                        },
+                        new Item
+                        {
+                            ItemNo = 207,
+                            ItemName = "Fish (Haddock / Basa)",
+                            Price = 2.75,
+                            ItemCategoryID = 2
+                        },
+
+                        new Item
+                        {
                             ItemNo = 445,
                             ItemName = "Coffee",
                             Price = 4.00,
                             ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 401,
+                            ItemName = "Apple Sauce",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 402,
+                            ItemName = "Baking Powder",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 403,
+                            ItemName = "Bars Cereal, Protein, Cookie",
+                            Price = 0.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 404,
+                            ItemName = "BBQ Sauce",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 405,
+                            ItemName = "Bleach",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 406,
+                            ItemName = "Broth",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 407,
+                            ItemName = "Canned Beans, Veggies, and Fruit",
+                            Price = 0.75,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 408,
+                            ItemName = "Canola Oil",
+                            Price = 3.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 409,
+                            ItemName = "Cereal all other",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 410,
+                            ItemName = "CofCereal Rice Krispiesfee",
+                            Price = 3.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 446,
+                            ItemName = "Coconut Milk",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 411,
+                            ItemName = "Crackers",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 412,
+                            ItemName = "Dried Legumes/Beans",
+                            Price = 1.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 413,
+                            ItemName = "Flour",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 414,
+                            ItemName = "Garden Cocktail",
+                            Price = 0.75,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 415,
+                            ItemName = "Granola Bars 6 pack",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 446,
+                            ItemName = "Gummies",
+                            Price = 0.10,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 416,
+                            ItemName = "Jam",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 417,
+                            ItemName = "Kraft Dinner",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 418,
+                            ItemName = "Laundry Soap large",
+                            Price = 6.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 419,
+                            ItemName = "Laundry Soap small",
+                            Price = 3.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 420,
+                            ItemName = "Miracle Whip",
+                            Price = 3.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 421,
+                            ItemName = "Nuts",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 422,
+                            ItemName = "Oats",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 423,
+                            ItemName = "Olive Oil",
+                            Price = 6.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 424,
+                            ItemName = "Passata",
+                            Price = 0.75,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 425,
+                            ItemName = "Pasta",
+                            Price = 0.75,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 426,
+                            ItemName = "Pasta Sauce",
+                            Price = 0.75,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 427,
+                            ItemName = "Peanut Butter",
+                            Price = 2.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 428,
+                            ItemName = "Polenta",
+                            Price = 3.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 429,
+                            ItemName = "rice",
+                            Price = 1.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 447,
+                            ItemName = "Protein Drink",
+                            Price = 0.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 448,
+                            ItemName = "Raisins",
+                            Price = 4.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 430,
+                            ItemName = "Salad Dressing",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 448,
+                            ItemName = "Salsa",
+                            Price = 1.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 431,
+                            ItemName = "Soap",
+                            Price = 0.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 432,
+                            ItemName = "Soup Small",
+                            Price = 0.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 433,
+                            ItemName = "Spices",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 434,
+                            ItemName = "Sugar White and Brown",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 435,
+                            ItemName = "Tea",
+                            Price = 2.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 436,
+                            ItemName = "Tea Green Tea",
+                            Price = 4.50,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 437,
+                            ItemName = "Tea Orange Pekoe",
+                            Price = 3.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 438,
+                            ItemName = "Tea Red Rose",
+                            Price = 5.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 439,
+                            ItemName = "Toilet Paper",
+                            Price = 5.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 440,
+                            ItemName = "Tomato Paste",
+                            Price = 0.75,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 441,
+                            ItemName = "Tooth Paste / Brush / Floss",
+                            Price = 0.75,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 442,
+                            ItemName = "Tuna",
+                            Price = 1.00,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 443,
+                            ItemName = "Wild Rice Blend",
+                            Price = 0.25,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 444,
+                            ItemName = "Yeast",
+                            Price = 0.25,
+                            ItemCategoryID = 3
+                        },
+                        new Item
+                        {
+                            ItemNo = 301,
+                            ItemName = "Almond Milk 2L",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 302,
+                            ItemName = "Bread Costco",
+                            Price = 0.50,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 303,
+                            ItemName = "Butter",
+                            Price = 1.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 304,
+                            ItemName = "Cheese Large",
+                            Price = 3.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 305,
+                            ItemName = "Cream Cheese",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 306,
+                            ItemName = "Eggs (12)",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 307,
+                            ItemName = "Goat Milk 1L",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 308,
+                            ItemName = "Hummus",
+                            Price = 2.50,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 309,
+                            ItemName = "Hummis Mini",
+                            Price = 0.25,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 310,
+                            ItemName = "Margerine",
+                            Price = 1.50,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 311,
+                            ItemName = "Milk - 1L",
+                            Price = 1.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 312,
+                            ItemName = "Milk - 4L",
+                            Price = 3.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 313,
+                            ItemName = "Oat Milk 1l",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 314,
+                            ItemName = "Orange Juice",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 315,
+                            ItemName = "Pizza Dough",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 316,
+                            ItemName = "Sour Crème",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 317,
+                            ItemName = "Soy Milk 1l",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 318,
+                            ItemName = "Tofu",
+                            Price = 2.50,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 319,
+                            ItemName = "Yogurt 4 pack",
+                            Price = 1.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 320,
+                            ItemName = "Yogurt Greek",
+                            Price = 3.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 321,
+                            ItemName = "Yogurt Tub",
+                            Price = 2.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 322,
+                            ItemName = "Yogurt 6 pack",
+                            Price = 1.50,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 323,
+                            ItemName = "Commisso's",
+                            Price = 1.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 324,
+                            ItemName = "Sliced Cheese",
+                            Price = 2.50,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 325,
+                            ItemName = "Eggs (18)",
+                            Price = 3.00,
+                            ItemCategoryID = 4
+                        },
+                        new Item
+                        {
+                            ItemNo = 600,
+                            ItemName = "Cat Food (wet)",
+                            Price = 0.50,
+                            ItemCategoryID = 5
+                        },
+                        new Item
+                        {
+                            ItemNo = 601,
+                            ItemName = "Sweets (Costco)",
+                            Price = 0.00,
+                            ItemCategoryID = 5
+                        },
+                        new Item
+                        {
+                            ItemNo = 602,
+                            ItemName = "Drinks",
+                            Price = 0.50,
+                            ItemCategoryID = 5
+                        },
+                        new Item
+                        {
+                            ItemNo = 603,
+                            ItemName = "GROW Soup",
+                            Price = 2.50,
+                            ItemCategoryID = 5
+                        },
+                        new Item
+                        {
+                            ItemNo = 604,
+                            ItemName = "Deoderant",
+                            Price = 1.00,
+                            ItemCategoryID = 5
+                        },
+                        new Item
+                        {
+                            ItemNo = 605,
+                            ItemName = "Cat Food (wet)",
+                            Price = 0.50,
+                            ItemCategoryID = 5
+                        },
+                        new Item
+                        {
+                            ItemNo = 606,
+                            ItemName = "Polenta",
+                            Price = 3.00,
+                            ItemCategoryID = 5
+                        },
+                        new Item
+                        {
+                            ItemNo = 607,
+                            ItemName = "Orzo",
+                            Price = 0.75,
+                            ItemCategoryID = 5
+                        },
+                        new Item
+                        {
+                            ItemNo = 608,
+                            ItemName = "Ramen / Rice Krispies",
+                            Price = 0.25,
+                            ItemCategoryID = 5
                         }
+
+
                     );
                     context.SaveChanges();
                 }
@@ -674,7 +1639,7 @@ namespace Grow.Data
                         {
                             HouseholdID = 1,
                             TransactionDate = DateTime.Now,
-                            TransactionTotal = 6.00,
+                            TransactionTotal = 4.50,
                             VolunteerID = 1
                         },
                         new Transaction
@@ -688,7 +1653,7 @@ namespace Grow.Data
                         {
                             HouseholdID = 3,
                             TransactionDate = DateTime.Now,
-                            TransactionTotal = 4.50,
+                            TransactionTotal = 6.00,
                             VolunteerID = 3
                         }
                     );

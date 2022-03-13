@@ -2,8 +2,30 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <br />
-    <h1 class="display-4">Welcome to the GROW Community App</h1>
-    <h5>Use the links above to visit the page you are looking for</h5>
+<div class="jumbotron">
+    <h1 class="display-4">Hello, GROW!</h1>
+    <h3 class="lead">Welcome to the GROW Community App.</h3>
+    <hr class="my-4">
+    <p>We can write something here, not sure what you guys would like.</p>
+    <p class="lead">
+        <a class="btn btn-outline-success btn-lg" href="#" role="button">Learn more</a>
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Create Example</h2>
+        <p>Create a new example and its examples.</p>
+        <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Households")'">Households</button></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Create Household</h2>
+        <p>Create a new household and its members.</p>
+        <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Households")'">Households</button></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Create Example</h2>
+        <p>Create a new example and its examples.</p>
+        <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Households")'">Households</button></p>
+    </div>
 </div>

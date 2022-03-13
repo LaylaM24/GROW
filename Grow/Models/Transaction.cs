@@ -21,18 +21,20 @@ namespace Grow.Models
 
         [Display(Name = "Transaction Total")]
         [Required(ErrorMessage = "Transaction total is required.")]
+        [DataType(DataType.Currency)]
         public double TransactionTotal { get; set; }
 
         // Foreign keys
         [Display(Name = "Household")]
         [Required(ErrorMessage = "Household is required.")]
         public int HouseholdID { get; set; }
-        public Household Household { get; set; }
 
+        public Household Household { get; set; }
 
         [Display(Name = "Volunteer")]
         [Required(ErrorMessage = "Volunteer is required.")]
         public int VolunteerID { get; set; }
+
         public Volunteer Volunteer { get; set; }
 
         [Display(Name = "Transaction Details")]

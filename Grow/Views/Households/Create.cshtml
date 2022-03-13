@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="HouseholdName" class="control-label"></label>*
-                <input asp-for="HouseholdName" class="form-control" />
+                <input asp-for="HouseholdName" class="form-control" placeholder="e.g. Thompson"/>
                 <span asp-validation-for="HouseholdName" class="text-danger"></span>
             </div>
             <div class="form-check form-group">
@@ -41,14 +41,14 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label asp-for="StreetNumber" class="control-label"></label>*
-                        <input id="txtStreetNo" asp-for="StreetNumber" class="form-control" />
+                        <input id="txtStreetNo" asp-for="StreetNumber" class="form-control" placeholder="e.g. 451"/>
                         <span asp-validation-for="StreetNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-8">
                     <div class="form-group">
                         <label asp-for="StreetName" class="control-label"></label>*
-                        <input id="txtStreetName" asp-for="StreetName" class="form-control" />
+                        <input id="txtStreetName" asp-for="StreetName" class="form-control" placeholder="e.g. Fourth Avenue"/>
                         <span asp-validation-for="StreetName" class="text-danger"></span>
                     </div>
                 </div>
@@ -57,14 +57,14 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label asp-for="ApartmentNumber" class="control-label"></label>
-                        <input id="txtAptNo" asp-for="ApartmentNumber" class="form-control" />
+                        <input id="txtAptNo" asp-for="ApartmentNumber" class="form-control" placeholder="e.g. 304"/>
                         <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-8">
                     <div class="form-group">
                         <label asp-for="PostalCode" class="control-label"></label>*
-                        <input id="txtPostalCode" asp-for="PostalCode" class="form-control" />
+                        <input id="txtPostalCode" asp-for="PostalCode" class="form-control" placeholder="e.g. L2M 4K3"/>
                         <span asp-validation-for="PostalCode" class="text-danger"></span>
                     </div>
                 </div>
