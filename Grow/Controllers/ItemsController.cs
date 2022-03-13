@@ -151,6 +151,8 @@ namespace Grow.Controllers
         public IActionResult Create()
         {
             ViewDataReturnURL();
+
+            ViewData["ItemCategoryID"] = new SelectList(_context.ItemCategories, "ID", "CategoryName");
             PopulateDropDownLists();
 
             return View();
@@ -193,7 +195,9 @@ namespace Grow.Controllers
                 return NotFound();
             }
             
+            ViewData["ItemCategoryID"] = new SelectList(_context.ItemCategories, "ID", "CategoryName", item.ItemCategoryID);
             PopulateDropDownLists();
+
             return View(item);
         }
 

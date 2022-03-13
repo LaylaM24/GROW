@@ -219,7 +219,7 @@ namespace Grow.Controllers
                     });
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Details", "Households", new { id = household.ID });
+                    return RedirectToAction("Edit", "Households", new { id = household.ID });
                 }
                 catch(Exception e) 
                 {

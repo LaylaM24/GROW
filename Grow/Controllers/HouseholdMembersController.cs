@@ -96,12 +96,6 @@ namespace Grow.Controllers
                     _context.Add(member);
                     _context.SaveChanges();
 
-                    // Add Member Documents
-                    if(theFiles.Count() > 0)
-                    {
-                        await AddDocumentsAsync(member, theFiles);
-                    }
-
                     // Add Member Income Sources
                     Dictionary<int, double> sources = new Dictionary<int, double>();
                     if (IncomeSource1 != null)
@@ -190,9 +184,6 @@ namespace Grow.Controllers
                     // Update Member
                     _context.Update(memberToUpdate);
                     await _context.SaveChangesAsync();
-
-                    // Update Member Documents
-                    await AddDocumentsAsync(memberToUpdate, theFiles);
 
                     // Update Member Income Sources
                     Dictionary<int, double> sources = new Dictionary<int, double>();
@@ -384,33 +375,36 @@ namespace Grow.Controllers
             await _context.SaveChangesAsync();
         }
 
-        private async Task AddDocumentsAsync(Member member, List<IFormFile> theFiles)
+        [HttpPost]
+        public async Task<JsonResult> AddDocumentsAsync(IFormFile formData)
         {
-            foreach (var f in theFiles)
-            {
-                if (f != null)
-                {
-                    string mimeType = f.ContentType;
-                    string fileName = Path.GetFileName(f.FileName);
-                    long fileLength = f.Length;
+            return null;
 
-                    if (!(fileName == "" || fileLength == 0))
-                    {
-                        MemberDocument m = new MemberDocument();
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await f.CopyToAsync(memoryStream);
-                            m.Content = memoryStream.ToArray();
-                        }
-                        m.MimeType = mimeType;
-                        m.FileName = fileName;
-                        m.MemberID = member.ID;
+            //foreach (var f in theFiles)
+            //{
+            //    if (f != null)
+            //    {
+            //        string mimeType = f.ContentType;
+            //        string fileName = Path.GetFileName(f.FileName);
+            //        long fileLength = f.Length;
 
-                        _context.Add(m);
-                        _context.SaveChanges();
-                    };
-                }
-            }
+            //        if (!(fileName == "" || fileLength == 0))
+            //        {
+            //            MemberDocument m = new MemberDocument();
+            //            using (var memoryStream = new MemoryStream())
+            //            {
+            //                await f.CopyToAsync(memoryStream);
+            //                m.Content = memoryStream.ToArray();
+            //            }
+            //            m.MimeType = mimeType;
+            //            m.FileName = fileName;
+            //            m.MemberID = member.ID;
+
+            //            _context.Add(m);
+            //            _context.SaveChanges();
+            //        };
+            //    }
+            //}
         }
 
         public async Task<FileContentResult> Download(int id)
