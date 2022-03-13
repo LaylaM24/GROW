@@ -138,6 +138,7 @@ namespace Grow.Controllers
             var item = await _context.Items
                 .Include(i => i.ItemCategory)
                 .FirstOrDefaultAsync(m => m.ID == id);
+
             if (item == null)
             {
                 return NotFound();
@@ -173,7 +174,7 @@ namespace Grow.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["ItemCategoryID"] = new SelectList(_context.ItemCategories, "ID", "CategoryName", item.ItemCategoryID);
+            PopulateDropDownLists();
             return RedirectToAction("Details", new { item.ID });
         }
 
@@ -234,7 +235,7 @@ namespace Grow.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemCategoryID"] = new SelectList(_context.ItemCategories, "ID", "CategoryName", item.ItemCategoryID);
+            PopulateDropDownLists();
             return RedirectToAction("Details", new { item.ID });
         }
 

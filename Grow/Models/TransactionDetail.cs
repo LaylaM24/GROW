@@ -19,12 +19,14 @@ namespace Grow.Models
         [Required(ErrorMessage = "Quantity is required.")]
         public int Quantity { get; set; }
 
-        [Display(Name = "Unit Cost")]
-        [Required(ErrorMessage = "Unit Cost is required.")]
+        [Display(Name = "Item Cost")]
+        [Required(ErrorMessage = "Item Cost is required.")]
+        [DataType(DataType.Currency)]
         public double UnitCost { get; set; }
 
-        [Display(Name = "Extended Cost")]
-        [Required(ErrorMessage = "Extended Cost is required.")]
+        [Display(Name = "Total Cost")]
+        [Required(ErrorMessage = "Total Cost is required.")]
+        [DataType(DataType.Currency)]
         public double ExtendedCost { get; set; }
     }
 }

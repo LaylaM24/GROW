@@ -5,6 +5,31 @@ namespace Grow.Models
 {
     public class Volunteer
     {
+        [Display(Name = "Volunteer")]
+        public string FullName
+        {
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
+
+        public string ShortName
+        {
+            get
+            {
+                return FirstName + " " + ((char?)LastName[0] + ". ").ToUpper();
+            }
+        }
+
+        public string FormalName
+        {
+            get
+            {
+                return LastName + ", " + FirstName;
+            }
+        }
+
         public int ID { get; set; }
 
         [Display(Name = "First Name")]
