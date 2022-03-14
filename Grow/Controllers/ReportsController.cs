@@ -370,7 +370,7 @@ namespace Grow.Controllers
         {
             ViewData["ExclInactive"] = cbInactive;
 
-            string[] sortOptions = new[] { "Membership No.", "No. Members", "Total Income", "LICO Verified", "LICO Verified Date" };
+            string[] sortOptions = new[] { "Membership No.", "Total Income" };
 
             var households = _context.Households.AsQueryable();
 
@@ -395,20 +395,7 @@ namespace Grow.Controllers
                 sortField = actionButton;
             }
 
-            if (sortField == "No. Members")
-            {
-                if (sortDirection == "asc")
-                {
-                    households = households
-                        .OrderBy(m => m.NumOfMembers);
-                }
-                else
-                {
-                    households = households
-                        .OrderByDescending(m => m.NumOfMembers);
-                }
-            }
-            else if (sortField == "Total Income")
+            if (sortField == "Total Income")
             {
                 if (sortDirection == "asc")
                 {
@@ -419,32 +406,6 @@ namespace Grow.Controllers
                 {
                     households = households
                         .OrderByDescending(m => m.IncomeTotal);
-                }
-            }
-            else if (sortField == "LICO Verified")
-            {
-                if (sortDirection == "asc")
-                {
-                    households = households
-                        .OrderBy(m => m.LICOVerified);
-                }
-                else
-                {
-                    households = households
-                        .OrderByDescending(m => m.LICOVerified);
-                }
-            }
-            else if (sortField == "LICO Verified Date")
-            {
-                if (sortDirection == "asc")
-                {
-                    households = households
-                        .OrderBy(m => m.LICOVerifiedDate);
-                }
-                else
-                {
-                    households = households
-                        .OrderByDescending(m => m.LICOVerifiedDate);
                 }
             }
             else
@@ -478,7 +439,7 @@ namespace Grow.Controllers
         {
             ViewData["ExclInactive"] = cbInactive;
 
-            string[] sortOptions = new[] { "Membership No.", "No. Members", "Total Income", "City", "No. Visits" };
+            string[] sortOptions = new[] { "Membership No.", "No. Visits" };
 
             var households = _context.Households
                 .Include(x => x.City)
@@ -501,46 +462,7 @@ namespace Grow.Controllers
                 sortField = actionButton;
             }
 
-            if (sortField == "No. Members")
-            {
-                if (sortDirection == "asc")
-                {
-                    households = households
-                        .OrderBy(m => m.NumOfMembers);
-                }
-                else
-                {
-                    households = households
-                        .OrderByDescending(m => m.NumOfMembers);
-                }
-            }
-            else if (sortField == "Total Income")
-            {
-                if (sortDirection == "asc")
-                {
-                    households = households
-                        .OrderBy(m => m.IncomeTotal);
-                }
-                else
-                {
-                    households = households
-                        .OrderByDescending(m => m.IncomeTotal);
-                }
-            }
-            else if (sortField == "City")
-            {
-                if (sortDirection == "asc")
-                {
-                    households = households
-                        .OrderBy(m => m.City.CityName);
-                }
-                else
-                {
-                    households = households
-                        .OrderByDescending(m => m.City.CityName);
-                }
-            }
-            else if (sortField == "No. Visits")
+            if (sortField == "No. Visits")
             {
                 var date = new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day);
                 if (sortDirection == "asc")
@@ -583,7 +505,7 @@ namespace Grow.Controllers
         {
             ViewData["ExclInactive"] = cbInactive;
 
-            string[] sortOptions = new[] { "Name", "Age", "Gender", "Income", "Income Verified" };
+            string[] sortOptions = new[] { "Name", "Age" };
 
             var members = _context.Members
                 .Include(x => x.Household)
@@ -623,45 +545,6 @@ namespace Grow.Controllers
                 {
                     members = members
                         .OrderByDescending(m => m.DOB);
-                }
-            }
-            else if (sortField == "Gender")
-            {
-                if (sortDirection == "asc")
-                {
-                    members = members
-                        .OrderBy(m => m.Gender.GenderType);
-                }
-                else
-                {
-                    members = members
-                        .OrderByDescending(m => m.Gender.GenderType);
-                }
-            }
-            else if (sortField == "Income")
-            {
-                if (sortDirection == "asc")
-                {
-                    members = members
-                        .OrderBy(m => m.IncomeAmount);
-                }
-                else
-                {
-                    members = members
-                        .OrderByDescending(m => m.IncomeAmount);
-                }
-            }
-            else if (sortField == "Income Verified")
-            {
-                if (sortDirection == "asc")
-                {
-                    members = members
-                        .OrderBy(m => m.IncomeVerified);
-                }
-                else
-                {
-                    members = members
-                        .OrderByDescending(m => m.IncomeVerified);
                 }
             }
             else
@@ -983,10 +866,7 @@ namespace Grow.Controllers
                              select new
                              {
                                  Membership_Number = t1.MembershipNumber,
-                                 Number_Of_Members = t1.NumOfMembers,
-                                 Income_Total = t1.IncomeTotal,
-                                 LICO_Verified = t1.LICOVerified,
-                                 LICO_Verified_Date = t1.LICOVerifiedDate == null ? "" : t1.LICOVerifiedDate.Value.ToShortDateString()
+                                 Income_Total = t1.IncomeTotal
                              };
 
             //How many rows?
@@ -1114,9 +994,6 @@ namespace Grow.Controllers
                              select new
                              {
                                  Membership_Number = t1.MembershipNumber,
-                                 Number_Of_Members = t1.NumOfMembers,
-                                 Income_Total = t1.IncomeTotal,
-                                 City = t1.City.CityName,
                                  Number_Of_Visits = t1.Transactions.Where(x => x.TransactionDate >= date).Count()
                              };
 
@@ -1245,10 +1122,7 @@ namespace Grow.Controllers
                              select new
                              {
                                  Name = t1.FullName,
-                                 Age = t1.Age,
-                                 Gender = t1.Gender.GenderType,
-                                 Income = t1.IncomeAmount,
-                                 Income_Verified = t1.IncomeVerified
+                                 Age = t1.Age
                              };
 
             //How many rows?
