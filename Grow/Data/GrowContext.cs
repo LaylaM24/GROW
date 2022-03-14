@@ -28,6 +28,7 @@ namespace Grow.Data
         public DbSet<TransactionDetail> TransactionDetails { get; set; }
         public DbSet<MemberDocument> MemberDocuments { get; set; }
         public DbSet<LowIncomeCutOff> LowIncomeCutOffs { get; set; }
+        public DbSet<GROWAddress> GROWAddresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
