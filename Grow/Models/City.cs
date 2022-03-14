@@ -9,6 +9,7 @@ namespace Grow.Models
         {
             this.Households = new HashSet<Household>();
             this.Volunteers = new HashSet<Volunteer>();
+            this.GROWAddresses = new HashSet<GROWAddress>();
         }
 
         public int ID { get; set; }
@@ -22,5 +23,6 @@ namespace Grow.Models
 
         public ICollection<Household> Households { get; set; }
         public ICollection<Volunteer> Volunteers { get; set; }
+        public ICollection<GROWAddress> GROWAddresses { get; set; }
     }
 }

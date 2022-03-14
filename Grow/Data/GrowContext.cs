@@ -143,6 +143,13 @@ namespace Grow.Data
                 .WithOne(m => m.HealthConcern)
                 .HasForeignKey(m => m.HealthConcernID)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // GROWAddress - City Relationship
+            modelBuilder.Entity<City>()
+                .HasMany(m => m.GROWAddresses)
+                .WithOne(m => m.City)
+                .HasForeignKey(m => m.CityID)
+                .OnDelete(DeleteBehavior.Restrict);
             #endregion
         }
     }

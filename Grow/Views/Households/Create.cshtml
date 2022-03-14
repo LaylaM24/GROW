@@ -89,8 +89,15 @@
 </form>
 
 @section Scripts{ 
-<script>
+    <script>
     $(document).ready(function () {
+
+        // GROW Address
+            var gCityID = @Html.Raw(Json.Serialize(ViewBag.GrowAddress.CityID));
+            var gStreetNo = @Html.Raw(Json.Serialize(ViewBag.GrowAddress.StreetNumber));
+            var gStreetName = @Html.Raw(Json.Serialize(ViewBag.GrowAddress.StreetName));
+            var gAptNo = @Html.Raw(Json.Serialize(ViewBag.GrowAddress.ApartmentNumber));
+            var gPostalCode = @Html.Raw(Json.Serialize(ViewBag.GrowAddress.PostalCode));
 
         $("#btnCreate").click(function () {
 
@@ -107,19 +114,19 @@
         $("#cbNoFixedAddress").change(function () {
             if (this.checked) {
                 // city
-                $("#ddlCity").val("2");
+                $("#ddlCity").val(gCityID);
 
                 // street no
-                $("#txtStreetNo").val("4377");
+                $("#txtStreetNo").val(gStreetNo);
 
                 // street name
-                $("#txtStreetName").val("Fourth Ave.");
+                $("#txtStreetName").val(gStreetName);
 
                 // apt no
-                $("#txtAptNo").val("");
+                $("#txtAptNo").val(gAptNo);
 
                 // postal code
-                $("#txtPostalCode").val("L2E4N1");
+                $("#txtPostalCode").val(gPostalCode);
             }
             else
             {
@@ -140,5 +147,5 @@
             }
         });
     });
-</script>
+    </script>
 }

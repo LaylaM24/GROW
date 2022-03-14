@@ -10,6 +10,14 @@ namespace Grow.Models
     {
         public int ID { get; set; }
 
+        public string Address
+        {
+            get
+            {
+                return StreetNumber + " " + StreetName + (ApartmentNumber != null ? $" Apt. {ApartmentNumber}" : "") + (City != null ? ", " + City.CityName : "") + " " + PostalCode?.ToUpper();
+            }
+        }
+
         [Display(Name = "Street No.")]
         [Required(ErrorMessage = "Street Number is a required field.")]
         [StringLength(10, ErrorMessage = "Street number cannot exceed 10 characters.")]
