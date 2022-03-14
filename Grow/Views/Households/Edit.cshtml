@@ -114,7 +114,10 @@
                                 <input type="submit" disabled="disabled" value="Income Verified" class="btn btn-link" />
                             </th>
                             <th>
-                                <button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberModal" title="Add Member" type="button">&#x271A;</button>
+                                <a asp-controller="Members" asp-action="Create" asp-route-id="@Model.ID">
+                                    <button class="btn btn-outline-success modal-link" title="Add Member" type="button">&#x271A;</button>
+                                </a>
+                                @*<button class="btn btn-outline-success modal-link" tag="" name="CreateForm" data-toggle="modal" data-target="#theMemberModal" title="Add Member" type="button">&#x271A;</button>*@
                             </th>
                         </tr>
 
@@ -137,8 +140,14 @@
                                     @Html.DisplayFor(modelItem => member.IncomeVerified)
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm modal-link" tag="@member.ID" name="EditForm" data-toggle="modal" data-target="#theMemberModal" title="Edit @member.FullName" type="button">&#x270D;</button>
-                                    <button class="btn btn-sm modal-link" tag="@member.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberModal" title="Delete @member.FullName" type="button">&#x274C;</button>
+                                    <a asp-controller="Members" asp-action="Edit" asp-route-id="@member.ID">
+                                        <button class="btn btn-sm modal-link" title="Edit @member.FullName" type="button">&#x270D;</button>
+                                    </a>
+                                    <a asp-controller="Members" asp-action="Delete" asp-route-id="@member.ID">
+                                        <button class="btn btn-sm modal-link" title="Delete @member.FullName" type="button">&#x274C;</button>
+                                    </a>
+                                    @*<button class="btn btn-sm modal-link" tag="@member.ID" name="EditForm" data-toggle="modal" data-target="#theMemberModal" title="Edit @member.FullName" type="button">&#x270D;</button>
+                                    <button class="btn btn-sm modal-link" tag="@member.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberModal" title="Delete @member.FullName" type="button">&#x274C;</button>*@
                                 </td>
                             </tr>
                         }
@@ -222,7 +231,7 @@
                 }
             });
 
-            // Member Modal Scripts
+            @*// Member Modal Scripts
             function refreshModal(actionForm, memberID) {
               switch (actionForm) {
                 case 'CreateForm': $('#formMemberBody').load('/HouseholdMembers/CreateMember/' + @Model.ID);
@@ -366,7 +375,7 @@
 
             $('#theMemberModal').on('hide.bs.modal', function () {
                 $('#MemberList').load('/Households/MemberList/@Model.ID');
-            });
+            });*@
 
         });
     </script>
