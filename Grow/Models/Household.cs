@@ -88,7 +88,7 @@ namespace Grow.Models
 
         [Display(Name = "Postal Code")]
         [Required(ErrorMessage = "Postal Code is a required field.")]
-        [RegularExpression("^[A-Za-z]\\d[A-Za-z]\\d[A-Za-z]\\d$", ErrorMessage = "Please enter a valid Postal Code with no spaces.")]
+        [RegularExpression("^[A-Za-z]\\d[A-Za-z](| )\\d[A-Za-z]\\d$", ErrorMessage = "Please enter a valid Postal Code.")]
         public string PostalCode { get; set; }
 
         // Foreign Keys
