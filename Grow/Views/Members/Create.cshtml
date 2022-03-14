@@ -1,46 +1,43 @@
 ﻿@model Grow.Models.Member
 
-@{
-    ViewData["Title"] = "Create";
-}
-
 <h2>Create Member</h2>
-
-<hr />
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<br />
+<form asp-controller="Members" asp-action="Create" method="post" enctype="multipart/form-data" id="theMemberForm">
     <div class="row">
         <div class="col-md-6">
+            <input type="hidden" asp-for="HouseholdID" value="@ViewData["HouseholdID"]" />
+            <input type="hidden" asp-for="IncomeAmount" value="0" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
+                <label asp-for="FirstName" class="control-label"></label>*
+                <input asp-for="FirstName" class="form-control" placeholder="e.g. John" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
+                <label asp-for="LastName" class="control-label"></label>*
+                <input asp-for="LastName" class="form-control" placeholder="e.g. Smith" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DOB" class="control-label"></label>
-                <input asp-for="DOB" class="form-control" />
-                <span asp-validation-for="DOB" class="text-danger"></span>
+                <label asp-for="DOB" class="control-label"></label>*
+                <input id="txtDOB" asp-for="DOB" class="form-control" />
+                <span id="valDOB" asp-validation-for="DOB" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GenderID" class="control-label"></label>
-                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.GenderID">
+                <label asp-for="GenderID" class="control-label"></label>*
+                <select asp-for="GenderID" class="form-control" asp-items="ViewBag.Genders">
                     <option value="">Select a Gender</option>
                 </select>
                 <span asp-validation-for="GenderID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
+                <label asp-for="Phone" class="control-label"></label>*
+                <input asp-for="Phone" class="form-control" placeholder="e.g. 905 123 4567" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control" placeholder="e.g. Example@email.com" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -55,185 +52,332 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Income Verification Documents:</label><br />
-                <input type="file" class="" name="theFiles" multiple="multiple" />
+                <input id="files" type="file" class="" name="theFiles" multiple="multiple" />
             </div><br />
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                @*<label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>*@
+                <label asp-for="MemberRestrictions" class="control-label"></label>
                 <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="control-label">Dietary Restrictions</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
-                            <strong>-</strong>
-                        </button>
-                        @Html.ListBox("selectedRestrictionOptions", (MultiSelectList)ViewBag.selOptsR, new { @size = 10, @class = "form-control" })
+                    <div class="col-5 mr-0">
+                        <input type="text" value="Available Restrictions" style="width: 100%; height: 25px; text-align: center; font-size: 14px;" disabled readonly />
+                        @Html.ListBox("availRestrictionOptions", (MultiSelectList)ViewBag.availOptsR, new { @id = "availRestrictionOptions", @size = 5, @class = "form-control" })
                     </div>
-
-                    <div class="form-group col-md-6">
-                        <label class="control-label">Choose Dietary Restrictions</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
-                            <strong>+</strong>
-                        </button>
-                        @Html.ListBox("availRestrictionOptions", (MultiSelectList)ViewBag.availOptsR, new { @size = 10, @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @*<label class="control-label">@Html.DisplayNameFor(model => model.MemberConcerns)</label>*@
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Health Concerns</label> <button type="button" id="btnRight" class="btn btn-danger btn-sm">
-                                <strong>-</strong>
-                            </button>
-                            @Html.ListBox("selectedHealthOptions", (MultiSelectList)ViewBag.selOpts, new { @size = 10, @class = "form-control" })
+                    <div class="col-1 ml-0 mr-0 my-auto">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <button type="button" id="btnAddR" class="btn btn-success btn-sm" style="width: 30px;"><strong>+</strong></button>
+                            </div>
                         </div>
-
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Choose Health Concerns</label> <button type="button" id="btnLeft" class="btn btn-success btn-sm">
-                                <strong>+</strong>
-                            </button>
-                            @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @size = 10, @class = "form-control" })
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" id="btnRemoveR" class="btn btn-danger btn-sm" style="width: 30px;"><strong>-</strong></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Income Source(s)</label>
-                    <hr />
-                    <div>
-                        <div id="IncomeSource1" style="display: none;">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="control-label">Source</label>
-                                    <select id="ddl1" class="form-control" asp-items="ViewBag.IncomeSourceID">
-                                        <option value="-1">Select an Income Source</option>
-                                    </select>
-                                </div>
-                                <div class="col-5">
-                                    <label class="control-label">Income Amount</label>
-                                    <input id="txt1" class="form-control" />
-                                </div>
-                                <div class="col-1">
-                                    <a>
-                                        <span data-number="1" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <br />
-                        </div>
-                        <div id="IncomeSource2" style="display: none;">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="control-label">Source</label>
-                                    <select id="ddl2" class="form-control" asp-items="ViewBag.IncomeSourceID">
-                                        <option value="-1">Select an Income Source</option>
-                                    </select>
-                                </div>
-                                <div class="col-5">
-                                    <label class="control-label">Income Amount</label>
-                                    <input id="txt2" name="IncomeAmount2" class="form-control" />
-                                </div>
-                                <div class="col-1">
-                                    <a>
-                                        <span data-number="2" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <br />
-                        </div>
-                        <div id="IncomeSource3" style="display: none;">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label class="control-label">Source</label>
-                                    <select id="ddl3" class="form-control" asp-items="ViewBag.IncomeSourceID">
-                                        <option value="-1">Select an Income Source</option>
-                                    </select>
-                                </div>
-                                <div class="col-5">
-                                    <label class="control-label">Income Amount</label>
-                                    <input id="txt3" name="IncomeAmount3" class="form-control" />
-                                </div>
-                                <div class="col-1">
-                                    <a>
-                                        <span data-number="3" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
-                                    </a>
-                                </div>
-                            </div>
-                            <br />
-                        </div>
-                    </div><br />
-                    <a>
-                        <span id="btnAddIncome" class="btn btn-success"><strong>&#x271A; Add Income Source</strong></span>
-                    </a>
-                </div>
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="IncomeVerified" /> @Html.DisplayNameFor(model => model.IncomeVerified)
-                    </label>
+                    <div class="col-5 ml-0">
+                        <input type="text" value="Selected Restrictions" style="width: 100%; height: 25px; text-align: center; font-size: 14px;" disabled readonly />
+                        @Html.ListBox("selectedRestrictionOptions", (MultiSelectList)ViewBag.selOptsR, new { @id = "selectedRestrictionOptions", @size = 5, @class = "form-control" })
+                    </div>
                 </div>
             </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="MemberConcerns" class="control-label"></label>
+                <div class="row">
+                    <div class="col-5 mr-1">
+                        <input type="text" value="Available Concerns" style="width: 100%; height: 25px; text-align: center; font-size: 14px;" disabled readonly />
+                        @Html.ListBox("availOptions", (MultiSelectList)ViewBag.availOpts, new { @id = "availOptions", @size = 5, @class = "form-control" })
+                    </div>
+                    <div class="col-1 ml-0 mr-0 my-auto">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <button type="button" id="btnAddC" class="btn btn-success btn-sm" style="width: 30px;"><strong>+</strong></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" id="btnRemoveC" class="btn btn-danger btn-sm" style="width: 30px;"><strong>-</strong></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5 ml-1">
+                        <input type="text" value="Selected Concerns" style="width: 100%; height: 25px; text-align: center; font-size: 14px;" disabled readonly />
+                        @Html.ListBox("selectedHealthOptions", (MultiSelectList)ViewBag.selOpts, new { @id = "selectedHealthOptions", @size = 5, @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Income Source(s)</label>
+                <hr />
+                <div>
+                    <div id="IncomeSource1" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl1" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="control-label">Income Amount</label>
+                                <input type="number" id="txt1" min="0" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="1" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <span id="valIS1" class="text-danger"></span>
+                        <br />
+                    </div>
+                    <div id="IncomeSource2" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl2" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="control-label">Income Amount</label>
+                                <input type="number" id="txt2" min="0" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="2" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <span id="valIS2" class="text-danger"></span>
+                        <br />
+                    </div>
+                    <div id="IncomeSource3" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl3" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="control-label">Income Amount</label>
+                                <input type="number" id="txt3" min="0" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="3" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <span id="valIS3" class="text-danger"></span>
+                        <br />
+                    </div>
+                </div><br />
+                <a>
+                    <span id="btnAddIncome" class="btn btn-success"><strong>&#x271A; Add Income Source</strong></span>
+                </a>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IncomeVerified" /> @Html.DisplayNameFor(model => model.IncomeVerified)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row ml-1">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="form-group">
+                    <a asp-controller="Households" asp-action="Edit" asp-route-id="@ViewData["HouseholdID"]">
+                        <input type="button" value="Cancel" class="btn btn-secondary" style="width: 75px;" />
+                    </a>
+                </div>
+                <div class="ml-2"></div>
+                <div class="form-group">
+                    <input type="button" value="Create" class="btn btn-primary" id="submitMemberForm" />
+                </div>
             </div>
         </div>
     </div>
 </form>
 
-<div>
-    <a href='@ViewData["returnURL"]'>Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script src="~/js/multiselectRestriction.js"></script>
-<script src="~/js/multiselect.js"></script>
-<script>
-    $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
 
-        $("#btnAddIncome").click(function () {
-            if (!$("#IncomeSource1").is(":visible")) {
-                $("#IncomeSource1").css("display", "inline");
-                $("#ddl1").attr("name", "IncomeSource1");
-                $("#txt1").attr("name", "IncomeAmount1");
-            }
-            else if (!$("#IncomeSource2").is(":visible")) {
-                $("#IncomeSource2").css("display", "inline");
-                $("#ddl2").attr("name", "IncomeSource2");
-                $("#txt2").attr("name", "IncomeAmount2");
-            }
-            else if (!$("#IncomeSource3").is(":visible")) {
-                $("#IncomeSource3").css("display", "inline");
-                $("#ddl3").attr("name", "IncomeSource3");
-                $("#txt3").attr("name", "IncomeAmount3");
-            }
+            // SUMBIT FUNCTION
+            $("#submitMemberForm").click(function (event) {
 
-            if ($("#IncomeSource1").is(":visible") && $("#IncomeSource2").is(":visible") && $("#IncomeSource3").is(":visible")) {
-                $("#btnAddIncome").css("display", "none");
-            }
+                // Validate DOB
+                var dobValidated = false;
+
+                if ($("#txtDOB").length) {
+
+                    // Reset error message if applicable
+                    $("#valDOB").text("");
+
+                    if ($("#txtDOB").val()) {
+                        var d = new Date();
+                        var year = $("#txtDOB").val().split("-")[0];
+
+                        if (parseInt(year) < 1900 || parseInt(year) > d.getFullYear()) {
+                            $("#valDOB").text("Please enter a valid date.");
+                        }
+                        else {
+                            dobValidated = true;
+                        }
+                    }
+                }
+
+                // Validate Income Sources
+                var incomeSourcesValidated = true;
+
+                if ($("#IncomeSource1").length) {
+                    if ($("#IncomeSource1").is(":visible")) {
+                        $("#valIS1").text("");
+                        if ($("#ddl1 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt1").val()) || $("#txt1").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS1").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS1").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
+                if ($("#IncomeSource2").length) {
+                    if ($("#IncomeSource2").is(":visible")) {
+                        $("#valIS2").text("");
+                        if ($("#ddl2 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt2").val()) || $("#txt2").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS2").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS2").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
+                if ($("#IncomeSource3").length) {
+                    if ($("#IncomeSource3").is(":visible")) {
+                        $("#valIS3").text("");
+                        if ($("#ddl3 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt3").val()) || $("#txt3").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS3").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS3").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
+
+                if (dobValidated == true && incomeSourcesValidated == true) {
+
+                    // Select all restrictions and concerns before post
+                    if ($("#selectedRestrictionOptions").length) {
+                        $("#selectedRestrictionOptions option").each(function (index) {
+                            $(this).prop('selected', true);
+                        });
+                    }
+
+                    if ($("#selectedHealthOptions").length) {
+                        $("#selectedHealthOptions option").each(function (index) {
+                            $(this).prop('selected', true);
+                        });
+                    }
+
+                    // Submit Form
+                    $("#theMemberForm").submit();
+                }
+            });
+
+            // MULTI-SELECT
+            $("#btnAddR").click(function (event) {
+                if ($("#availRestrictionOptions").val() != null) {
+                    var SelectData = $("#availRestrictionOptions :selected").toArray();
+                    $("#selectedRestrictionOptions").append(SelectData);
+                    SelectData.remove;
+                }
+            });
+
+            $("#btnRemoveR").click(function (event) {
+                if ($("#selectedRestrictionOptions").val() != null) {
+                    var SelectData = $("#selectedRestrictionOptions :selected").toArray();
+                    $("#availRestrictionOptions").append(SelectData);
+                    SelectData.remove;
+                }
+            });
+
+            $("#btnAddC").click(function (event) {
+                if ($("#availOptions").val() != null) {
+                    var SelectData = $("#availOptions :selected").toArray();
+                    $("#selectedHealthOptions").append(SelectData);
+                    SelectData.remove;
+                }
+            });
+
+            $("#btnRemoveC").click(function (event) {
+                if ($("#selectedHealthOptions").val() != null) {
+                    var SelectData = $("#selectedHealthOptions :selected").toArray();
+                    $("#availOptions").append(SelectData);
+                    SelectData.remove;
+                }
+            });
+
+           // INCOME SOURCES
+            $("#btnAddIncome").click(function () {
+                if (!$("#IncomeSource1").is(":visible")) {
+                    $("#IncomeSource1").css("display", "inline");
+                    $("#ddl1").attr("name", "IncomeSource1");
+                    $("#txt1").attr("name", "IncomeAmount1");
+                }
+                else if (!$("#IncomeSource2").is(":visible")) {
+                    $("#IncomeSource2").css("display", "inline");
+                    $("#ddl2").attr("name", "IncomeSource2");
+                    $("#txt2").attr("name", "IncomeAmount2");
+                }
+                else if (!$("#IncomeSource3").is(":visible")) {
+                    $("#IncomeSource3").css("display", "inline");
+                    $("#ddl3").attr("name", "IncomeSource3");
+                    $("#txt3").attr("name", "IncomeAmount3");
+                }
+
+                if ($("#IncomeSource1").is(":visible") && $("#IncomeSource2").is(":visible") && $("#IncomeSource3").is(":visible")) {
+                    $("#btnAddIncome").css("display", "none");
+                }
+            });
+
+            $(".rmIncome").click(function () {
+                var num = $(this).attr("data-number");
+                if (num == 1) {
+                    $("#IncomeSource1").css("display", "none");
+                    $("#ddl1").removeAttr("name");
+                    $("#txt1").removeAttr("name");
+                }
+                else if (num == 2) {
+                    $("#IncomeSource2").css("display", "none");
+                    $("#ddl2").removeAttr("name");
+                    $("#txt2").removeAttr("name");
+                }
+                else if (num == 3) {
+                    $("#IncomeSource3").css("display", "none");
+                    $("#ddl3").removeAttr("name");
+                    $("#txt3").removeAttr("name");
+                }
+
+                $("#btnAddIncome").css("display", "inline");
+            });
         });
-
-        $(".rmIncome").click(function () {
-            var num = $(this).attr("data-number");
-
-            if (num == 1) {
-                $("#IncomeSource1").css("display", "none");
-                $("#ddl1").removeAttr("name");
-                $("#txt1").removeAttr("name");
-            }
-            else if (num == 2) {
-                $("#IncomeSource2").css("display", "none");
-                $("#ddl2").removeAttr("name");
-                $("#txt2").removeAttr("name");
-            }
-            else if (num == 3) {
-                $("#IncomeSource3").css("display", "none");
-                $("#ddl3").removeAttr("name");
-                $("#txt3").removeAttr("name");
-            }
-
-            $("#btnAddIncome").css("display", "inline");
-        });
-
-    });
-</script>
+    </script>
 }

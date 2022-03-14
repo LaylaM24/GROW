@@ -47,7 +47,7 @@ namespace Grow.Models
         {
             get
             {
-                return Phone.Substring(0, 3) + "-" + Phone.Substring(3, 3) + "-" + Phone[6..];
+                return Phone == null ? "" : Phone.Substring(0, 3) + "-" + Phone.Substring(3, 3) + "-" + Phone[6..];
             }
         }
 
