@@ -80,10 +80,15 @@ namespace Grow.Controllers
                 }
                 catch { }
             }
+            else
+            {
+                households = households.Where(x => x.RenewalDate <= DateTime.Today);
+                ViewData["Date"] = DateTime.Today.ToShortDateString();
+            }
 
             if(cbInactive == true)
             {
-                households = households.Where(x => x.RenewalDate >= DateTime.Today);
+                households = households.Where(x => x.Active != false);
             }
 
             if (!String.IsNullOrEmpty(actionButton))
@@ -205,7 +210,7 @@ namespace Grow.Controllers
             ViewData["SelectedCity"] = City;
             ViewData["ExclInactive"] = cbInactive;
 
-            string[] sortOptions = new[] { "Membership No.", "No. Members", "Total Income", "Street No.", "Street Name", "Apartment No.", "Postal Code" };
+            string[] sortOptions = new[] { "Membership No.", "No. Members", "Total Income", "Street No.", "Street Name", "Apartment No.", "City", "Postal Code" };
 
             var households = _context.Households
                 .Include(x => x.City)
@@ -218,7 +223,7 @@ namespace Grow.Controllers
 
             if (cbInactive == true)
             {
-                households = households.Where(x => x.RenewalDate >= DateTime.Today);
+                households = households.Where(x => x.Active != false);
             }
 
             if (!String.IsNullOrEmpty(actionButton))
@@ -297,6 +302,19 @@ namespace Grow.Controllers
                         .OrderByDescending(m => m.ApartmentNumber);
                 }
             }
+            else if (sortField == "City")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                        .OrderBy(m => m.City);
+                }
+                else
+                {
+                    households = households
+                        .OrderByDescending(m => m.City);
+                }
+            }
             else if (sortField == "Postal Code")
             {
                 if (sortDirection == "asc")
@@ -363,7 +381,7 @@ namespace Grow.Controllers
 
             if (cbInactive == true)
             {
-                households = households.Where(x => x.RenewalDate >= DateTime.Today);
+                households = households.Where(x => x.Active != false);
             }
 
             if (!String.IsNullOrEmpty(actionButton))
@@ -469,7 +487,7 @@ namespace Grow.Controllers
 
             if (cbInactive == true)
             {
-                households = households.Where(x => x.RenewalDate >= DateTime.Today);
+                households = households.Where(x => x.Active != false);
             }
 
             if (!String.IsNullOrEmpty(actionButton))
@@ -580,7 +598,7 @@ namespace Grow.Controllers
 
             if (cbInactive == true)
             {
-                members = members.Where(x => x.Household.RenewalDate >= DateTime.Today);
+                members = members.Where(x => x.Household.Active != false);
             }
 
             if (!String.IsNullOrEmpty(actionButton))
