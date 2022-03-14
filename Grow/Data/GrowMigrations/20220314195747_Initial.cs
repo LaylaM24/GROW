@@ -101,6 +101,29 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GROWAddresses",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    StreetNumber = table.Column<string>(maxLength: 10, nullable: false),
+                    StreetName = table.Column<string>(maxLength: 100, nullable: false),
+                    ApartmentNumber = table.Column<string>(maxLength: 10, nullable: true),
+                    PostalCode = table.Column<string>(nullable: false),
+                    CityID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GROWAddresses", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_GROWAddresses_Cities_CityID",
+                        column: x => x.CityID,
+                        principalTable: "Cities",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Households",
                 columns: table => new
                 {
@@ -402,6 +425,11 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_GROWAddresses_CityID",
+                table: "GROWAddresses",
+                column: "CityID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Households_CityID",
                 table: "Households",
                 column: "CityID");
@@ -495,6 +523,9 @@ namespace Grow.Data.GrowMigrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "GROWAddresses");
+
             migrationBuilder.DropTable(
                 name: "LowIncomeCutOffs");
 

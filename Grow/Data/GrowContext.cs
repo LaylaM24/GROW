@@ -28,6 +28,7 @@ namespace Grow.Data
         public DbSet<TransactionDetail> TransactionDetails { get; set; }
         public DbSet<MemberDocument> MemberDocuments { get; set; }
         public DbSet<LowIncomeCutOff> LowIncomeCutOffs { get; set; }
+        public DbSet<GROWAddress> GROWAddresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -141,6 +142,13 @@ namespace Grow.Data
                 .HasMany(m => m.MemberConcerns)
                 .WithOne(m => m.HealthConcern)
                 .HasForeignKey(m => m.HealthConcernID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // GROWAddress - City Relationship
+            modelBuilder.Entity<City>()
+                .HasMany(m => m.GROWAddresses)
+                .WithOne(m => m.City)
+                .HasForeignKey(m => m.CityID)
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
         }

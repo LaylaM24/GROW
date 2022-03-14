@@ -42,15 +42,6 @@
                 <th>
                     <input type="submit" name="actionButton" value="Age" class="btn btn-link" />
                 </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Gender" class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Income" class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Income Verified" class="btn btn-link" />
-                </th>
                 <th></th>
             </tr>
         </thead>
@@ -63,15 +54,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Age)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender.GenderType)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IncomeAmount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IncomeVerified)
                     </td>
                     <td>
                         <a asp-controller="Members" asp-action="Details" asp-route-id="@item.ID">View Member</a>

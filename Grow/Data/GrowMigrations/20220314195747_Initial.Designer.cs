@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grow.Data.GrowMigrations
 {
     [DbContext(typeof(GrowContext))]
-    [Migration("20220313130524_Initial")]
+    [Migration("20220314195747_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,40 @@ namespace Grow.Data.GrowMigrations
                     b.HasKey("ID");
 
                     b.ToTable("DietaryRestrictions");
+                });
+
+            modelBuilder.Entity("Grow.Models.GROWAddress", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ApartmentNumber")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(10);
+
+                    b.Property<int>("CityID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StreetName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("StreetNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(10);
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CityID");
+
+                    b.ToTable("GROWAddresses");
                 });
 
             modelBuilder.Entity("Grow.Models.Gender", b =>
@@ -521,6 +555,15 @@ namespace Grow.Data.GrowMigrations
                     b.HasIndex("CityID");
 
                     b.ToTable("Volunteers");
+                });
+
+            modelBuilder.Entity("Grow.Models.GROWAddress", b =>
+                {
+                    b.HasOne("Grow.Models.City", "City")
+                        .WithMany("GROWAddresses")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Grow.Models.Household", b =>

@@ -181,6 +181,8 @@ namespace Grow.Controllers
             // Get next available Membership No.
             ViewData["NextMembershipNo"] = _context.Households.OrderByDescending(x => x.MembershipNumber).FirstOrDefault().MembershipNumber + 1;
 
+            ViewBag.GrowAddress = _context.GROWAddresses.FirstOrDefault();
+
             PopulateDropDownLists();
             return View();
         }
@@ -237,6 +239,8 @@ namespace Grow.Controllers
             // Get next available Membership No.
             ViewData["NextMembershipNo"] = _context.Households.OrderByDescending(x => x.MembershipNumber).FirstOrDefault().MembershipNumber + 1;
 
+            ViewBag.GrowAddress = _context.GROWAddresses.FirstOrDefault();
+
             PopulateDropDownLists(household);
             return View(household);
         }
@@ -258,6 +262,8 @@ namespace Grow.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.GrowAddress = _context.GROWAddresses.FirstOrDefault();
 
             PopulateDropDownLists(household);
             return View(household);
@@ -349,6 +355,8 @@ namespace Grow.Controllers
                     }
                 }
             }
+
+            ViewBag.GrowAddress = _context.GROWAddresses.FirstOrDefault();
 
             PopulateDropDownLists(household);
             return View(household);

@@ -268,6 +268,25 @@ namespace Grow.Data
                 }
                 #endregion
 
+                #region GROW Addresses
+                if (!context.GROWAddresses.Any())
+                {
+                    var city = context.Cities.Where(x => x.CityName == "Niagara Falls").FirstOrDefault();
+
+                    context.GROWAddresses.AddRange(
+                        new GROWAddress
+                        {
+                           StreetNumber = "4377",
+                           StreetName = "Fourth Ave.",
+                           PostalCode = "L2E 4N1",
+                           CityID = city.ID,
+                           City = city
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
                 // Test data
                 #region Items
                 if (!context.Items.Any())

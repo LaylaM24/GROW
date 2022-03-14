@@ -7,6 +7,11 @@
 
 <div class="container-fluid">
     <div class="row">
+        <div class="col-12 mb-4">
+            <h4>GROW Address</h4>
+            <input value="@ViewBag.GrowAddress" style="width:500px;" readonly />
+            <a asp-controller="GROWAddresses" asp-action="Edit">Edit</a>
+        </div>
         <div class="col-sm-6 col-md-4">
             <h4 id="MedicalTrials">Health Concerns</h4>
             @Html.DropDownList("HealthConcernsID", null, htmlAttributes: new { @size = 6, @class = "form-control" })

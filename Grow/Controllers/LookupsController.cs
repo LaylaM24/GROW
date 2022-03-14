@@ -1,6 +1,7 @@
 ﻿using Grow.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Grow.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.GrowAddress = _context.GROWAddresses.Include(x => x.City).FirstOrDefault().Address;
             ViewData["HealthConcernsID"] = new SelectList(_context.HealthConcerns.OrderBy(a => a.Concern), "ID", "Concern");
             ViewData["DietaryRestrictionsID"] = new SelectList(_context.DietaryRestrictions.OrderBy(a => a.Restriction), "ID", "Restriction");
             ViewData["IncomeSourcesID"] = new SelectList(_context.IncomeSources.OrderBy(a => a.Source), "ID", "Source");

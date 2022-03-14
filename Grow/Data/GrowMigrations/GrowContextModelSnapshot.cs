@@ -47,6 +47,40 @@ namespace Grow.Data.GrowMigrations
                     b.ToTable("DietaryRestrictions");
                 });
 
+            modelBuilder.Entity("Grow.Models.GROWAddress", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ApartmentNumber")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(10);
+
+                    b.Property<int>("CityID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StreetName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("StreetNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(10);
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CityID");
+
+                    b.ToTable("GROWAddresses");
+                });
+
             modelBuilder.Entity("Grow.Models.Gender", b =>
                 {
                     b.Property<int>("ID")
@@ -519,6 +553,15 @@ namespace Grow.Data.GrowMigrations
                     b.HasIndex("CityID");
 
                     b.ToTable("Volunteers");
+                });
+
+            modelBuilder.Entity("Grow.Models.GROWAddress", b =>
+                {
+                    b.HasOne("Grow.Models.City", "City")
+                        .WithMany("GROWAddresses")
+                        .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Grow.Models.Household", b =>
