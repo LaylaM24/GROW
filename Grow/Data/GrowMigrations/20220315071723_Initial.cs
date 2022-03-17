@@ -446,6 +446,18 @@ namespace Grow.Data.GrowMigrations
                 column: "ItemCategoryID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Items_ItemName",
+                table: "Items",
+                column: "ItemName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_ItemNo",
+                table: "Items",
+                column: "ItemNo",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MemberConcerns_HealthConcernID",
                 table: "MemberConcerns",
                 column: "HealthConcernID");

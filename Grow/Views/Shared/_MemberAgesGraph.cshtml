@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    </head>
+    <body>
+        <canvas id="memberAges" style="width: 100%; max-width: 600px"></canvas>
+        <script>
+            var xValues = ["0-17", "18-29", "30-49", "50-69", "70+"];
+            var yValues = [0, 0, 1, 2, 2];
+            var barColors = ["red", "green", "yellow", "blue", "orange"];
+            
+            new Chart("memberAges", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Member Ages By Age Group"
+                    },
+                    scales: {
+                        yAxes: [{
+                            display: true,
+                            ticks: {
+                                min: 0,
+                                max: 3,
+                                stepSize: 1
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

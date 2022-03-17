@@ -24,7 +24,8 @@
             <a asp-action="HouseholdIncome" class="btn btn-outline-dark" style="display: inline;">Clear</a>
         </div>
         <div class="col form-check float-right align-baseline">
-            <a asp-action="HouseholdIncome" class="btn btn-info float-right" style="margin-left: 15px">View Graph</a>
+            <partial name="_HouseholdIncomeGraph" />
+            <br />
             <a asp-action="DownloadHouseholdIncome" asp-route-exclInactive="@ViewData["ExclInactive"]" asp-route-lowRange="@ViewData["lowRange"]" asp-route-highRange="@ViewData["highRange"]" class="btn btn-info float-right">Download Report</a> <br />
             <br />
             <label class="form-check-label float-right">
@@ -40,6 +41,9 @@
                     <input type="submit" name="actionButton" value="Membership No." class="btn btn-link" />
                 </th>
                 <th>
+                    <input type="submit" name="actionButton" value="Household Name" class="btn btn-link" />
+                </th>
+                <th>
                     <input type="submit" name="actionButton" value="Total Income" class="btn btn-link" />
                 </th>
                 <th></th>
@@ -51,6 +55,9 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.MembershipNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HouseholdName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.IncomeTotal)

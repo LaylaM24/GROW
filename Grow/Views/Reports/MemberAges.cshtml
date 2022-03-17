@@ -24,7 +24,8 @@
             <a asp-action="MemberAges" class="btn btn-outline-dark" style="display: inline;">Clear</a>
         </div>
         <div class="col form-check float-right align-baseline">
-            <a asp-action="MemberAges" class="btn btn-info float-right" style="margin-left: 15px">View Graph</a>
+            <partial name="_MemberAgesGraph" />
+            <br />
             <a asp-action="DownloadMemberAges" asp-route-exclInactive="@ViewData["ExclInactive"]" asp-route-lowRange="@ViewData["lowRange"]" asp-route-highRange="@ViewData["highRange"]" class="btn btn-info float-right">Download Report</a> <br />
             <br />
             <label class="form-check-label float-right">
@@ -36,6 +37,9 @@
     <table class="table">
         <thead>
             <tr>
+                <th>
+                    <input type="submit" name="actionButton" value="Household" class="btn btn-link" />
+                </th>
                 <th>
                     <input type="submit" name="actionButton" value="Name" class="btn btn-link" />
                 </th>
@@ -49,6 +53,9 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Household.HouseholdName)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>

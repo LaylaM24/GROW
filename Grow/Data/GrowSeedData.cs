@@ -38,6 +38,34 @@ namespace Grow.Data
                         new City
                         {
                             CityName = "Welland"
+                        },
+                        new City
+                        {
+                            CityName = "Fort Erie"
+                        },
+                        new City
+                        {
+                            CityName = "Grimsby"
+                        },
+                        new City
+                        {
+                            CityName = "Lincoln"
+                        },
+                        new City
+                        {
+                            CityName = "West Lincoln"
+                        },
+                        new City
+                        {
+                            CityName = "Pelham"
+                        },
+                        new City
+                        {
+                            CityName = "Wainfleet"
+                        },
+                        new City
+                        {
+                            CityName = "Niagara-on-the-Lake"
                         }
                     );
                     context.SaveChanges();
@@ -308,7 +336,7 @@ namespace Grow.Data
                         },
                         new Item
                         {
-                            ItemNo = 148,
+                            ItemNo = 149,
                             ItemName = "Anise / Fennel",
                             Price = 1.50,
                             ItemCategoryID = 1
@@ -316,14 +344,14 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 102,
-                            ItemName = "Avocado large*",
+                            ItemName = "Avocado (large)*",
                             Price = 1.00,
                             ItemCategoryID = 1
                         },
                         new Item
                         {
                             ItemNo = 103,
-                            ItemName = "Avocado small*",
+                            ItemName = "Avocado (small)*",
                             Price = 0.50,
                             ItemCategoryID = 1
                         },
@@ -435,6 +463,13 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 118,
+                            ItemName = "Green Onions",
+                            Price = 0.25,
+                            ItemCategoryID = 1
+                        },
+                        new Item
+                        {
+                            ItemNo = 119,
                             ItemName = "Kale",
                             Price = 0.50,
                             ItemCategoryID = 1
@@ -505,7 +540,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 130,
-                            ItemName = "Peaches/Nectarines",
+                            ItemName = "Peaches / Nectarines",
                             Price = 0.10,
                             ItemCategoryID = 1
                         },
@@ -526,7 +561,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 133,
-                            ItemName = "Peppers Hot 3/0.05",
+                            ItemName = "Peppers Hot (3)",
                             Price = 0.05,
                             ItemCategoryID = 1
                         },
@@ -550,8 +585,7 @@ namespace Grow.Data
                             ItemName = "Potatoes",
                             Price = 0.05,
                             ItemCategoryID = 1
-                        },
-                        
+                        },                        
                         new Item
                         {
                             ItemNo = 137,
@@ -624,14 +658,14 @@ namespace Grow.Data
                         },
                         new Item
                         {
-                            ItemNo = 147,
+                            ItemNo = 148,
                             ItemName = "Shallots",
                             Price = 0.05,
                             ItemCategoryID = 1
                         },
                         new Item
                         {
-                            ItemNo = 149,
+                            ItemNo = 150,
                             ItemName = "Bag of Potatoes",
                             Price = 1.50,
                             ItemCategoryID = 1
@@ -646,25 +680,24 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 202,
-                            ItemName = "Chicken Drumsticks 4lbs",
+                            ItemName = "Chicken Drumsticks (4lbs)",
                             Price = 3.00,
                             ItemCategoryID = 2
                         },
                         new Item
                         {
                             ItemNo = 203,
-                            ItemName = "Chicken Thighs 4lbs",
+                            ItemName = "Chicken Thighs (4lbs)",
                             Price = 3.00,
                             ItemCategoryID = 2
                         },
                         new Item
                         {
                             ItemNo = 204,
-                            ItemName = "Chicken Wings 2lbs",
+                            ItemName = "Chicken Wings (2lbs)",
                             Price = 2.00,
                             ItemCategoryID = 2
                         },
-
                         new Item
                         {
                             ItemNo = 205,
@@ -675,7 +708,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 206,
-                            ItemName = "Veggie Burger 2pc",
+                            ItemName = "Veggie Burger (2 pack)",
                             Price = 2.00,
                             ItemCategoryID = 2
                         },
@@ -686,10 +719,9 @@ namespace Grow.Data
                             Price = 2.75,
                             ItemCategoryID = 2
                         },
-
                         new Item
                         {
-                            ItemNo = 445,
+                            ItemNo = 446,
                             ItemName = "Coffee",
                             Price = 4.00,
                             ItemCategoryID = 3
@@ -753,20 +785,20 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 409,
-                            ItemName = "Cereal all other",
+                            ItemName = "Cereal All Other",
                             Price = 2.00,
                             ItemCategoryID = 3
                         },
                         new Item
                         {
                             ItemNo = 410,
-                            ItemName = "CofCereal Rice Krispiesfee",
+                            ItemName = "Cereal Rice Krispies",
                             Price = 3.00,
                             ItemCategoryID = 3
                         },
                         new Item
                         {
-                            ItemNo = 446,
+                            ItemNo = 445,
                             ItemName = "Coconut Milk",
                             Price = 1.00,
                             ItemCategoryID = 3
@@ -781,7 +813,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 412,
-                            ItemName = "Dried Legumes/Beans",
+                            ItemName = "Dried Legumes / Beans",
                             Price = 1.50,
                             ItemCategoryID = 3
                         },
@@ -802,13 +834,13 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 415,
-                            ItemName = "Granola Bars 6 pack",
+                            ItemName = "Granola Bars (6 pack)",
                             Price = 1.00,
                             ItemCategoryID = 3
                         },
                         new Item
                         {
-                            ItemNo = 446,
+                            ItemNo = 449,
                             ItemName = "Gummies",
                             Price = 0.10,
                             ItemCategoryID = 3
@@ -830,14 +862,14 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 418,
-                            ItemName = "Laundry Soap large",
+                            ItemName = "Laundry Soap (large)",
                             Price = 6.00,
                             ItemCategoryID = 3
                         },
                         new Item
                         {
                             ItemNo = 419,
-                            ItemName = "Laundry Soap small",
+                            ItemName = "Laundry Soap (small)",
                             Price = 3.00,
                             ItemCategoryID = 3
                         },
@@ -907,7 +939,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 429,
-                            ItemName = "rice",
+                            ItemName = "Rice",
                             Price = 1.50,
                             ItemCategoryID = 3
                         },
@@ -920,7 +952,7 @@ namespace Grow.Data
                         },
                         new Item
                         {
-                            ItemNo = 448,
+                            ItemNo = 450,
                             ItemName = "Raisins",
                             Price = 4.00,
                             ItemCategoryID = 3
@@ -949,7 +981,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 432,
-                            ItemName = "Soup Small",
+                            ItemName = "Soup (small)",
                             Price = 0.50,
                             ItemCategoryID = 3
                         },
@@ -1040,7 +1072,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 301,
-                            ItemName = "Almond Milk 2L",
+                            ItemName = "Almond Milk (2L)",
                             Price = 2.00,
                             ItemCategoryID = 4
                         },
@@ -1061,7 +1093,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 304,
-                            ItemName = "Cheese Large",
+                            ItemName = "Cheese (large)",
                             Price = 3.00,
                             ItemCategoryID = 4
                         },
@@ -1082,7 +1114,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 307,
-                            ItemName = "Goat Milk 1L",
+                            ItemName = "Goat Milk (1L)",
                             Price = 2.00,
                             ItemCategoryID = 4
                         },
@@ -1110,21 +1142,21 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 311,
-                            ItemName = "Milk - 1L",
+                            ItemName = "Milk (1L)",
                             Price = 1.00,
                             ItemCategoryID = 4
                         },
                         new Item
                         {
                             ItemNo = 312,
-                            ItemName = "Milk - 4L",
+                            ItemName = "Milk (4L)",
                             Price = 3.00,
                             ItemCategoryID = 4
                         },
                         new Item
                         {
                             ItemNo = 313,
-                            ItemName = "Oat Milk 1l",
+                            ItemName = "Oat Milk (1L)",
                             Price = 2.00,
                             ItemCategoryID = 4
                         },
@@ -1152,7 +1184,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 317,
-                            ItemName = "Soy Milk 1l",
+                            ItemName = "Soy Milk (1L)",
                             Price = 2.00,
                             ItemCategoryID = 4
                         },
@@ -1166,7 +1198,7 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 319,
-                            ItemName = "Yogurt 4 pack",
+                            ItemName = "Yogurt (4 pack)",
                             Price = 1.00,
                             ItemCategoryID = 4
                         },
@@ -1187,20 +1219,20 @@ namespace Grow.Data
                         new Item
                         {
                             ItemNo = 322,
-                            ItemName = "Yogurt 6 pack",
+                            ItemName = "Yogurt (6 pack)",
                             Price = 1.50,
                             ItemCategoryID = 4
                         },
                         new Item
                         {
-                            ItemNo = 323,
-                            ItemName = "Commisso's",
+                            ItemNo = 324,
+                            ItemName = "Bread Commisso's",
                             Price = 1.00,
                             ItemCategoryID = 4
                         },
                         new Item
                         {
-                            ItemNo = 324,
+                            ItemNo = 323,
                             ItemName = "Sliced Cheese",
                             Price = 2.50,
                             ItemCategoryID = 4
@@ -1214,69 +1246,53 @@ namespace Grow.Data
                         },
                         new Item
                         {
-                            ItemNo = 600,
+                            ItemNo = 601,
                             ItemName = "Cat Food (wet)",
                             Price = 0.50,
                             ItemCategoryID = 5
                         },
                         new Item
                         {
-                            ItemNo = 601,
+                            ItemNo = 602,
                             ItemName = "Sweets (Costco)",
                             Price = 0.00,
                             ItemCategoryID = 5
                         },
                         new Item
                         {
-                            ItemNo = 602,
+                            ItemNo = 603,
                             ItemName = "Drinks",
                             Price = 0.50,
                             ItemCategoryID = 5
                         },
                         new Item
                         {
-                            ItemNo = 603,
+                            ItemNo = 604,
                             ItemName = "GROW Soup",
                             Price = 2.50,
                             ItemCategoryID = 5
                         },
                         new Item
                         {
-                            ItemNo = 604,
+                            ItemNo = 605,
                             ItemName = "Deoderant",
                             Price = 1.00,
                             ItemCategoryID = 5
                         },
                         new Item
                         {
-                            ItemNo = 605,
-                            ItemName = "Cat Food (wet)",
-                            Price = 0.50,
-                            ItemCategoryID = 5
-                        },
-                        new Item
-                        {
                             ItemNo = 606,
-                            ItemName = "Polenta",
-                            Price = 3.00,
-                            ItemCategoryID = 5
-                        },
-                        new Item
-                        {
-                            ItemNo = 607,
                             ItemName = "Orzo",
                             Price = 0.75,
                             ItemCategoryID = 5
                         },
                         new Item
                         {
-                            ItemNo = 608,
+                            ItemNo = 607,
                             ItemName = "Ramen / Rice Krispies",
                             Price = 0.25,
                             ItemCategoryID = 5
                         }
-
-
                     );
                     context.SaveChanges();
                 }

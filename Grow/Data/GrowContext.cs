@@ -37,6 +37,16 @@ namespace Grow.Data
             modelBuilder.Entity<Household>()
                 .HasIndex(h => h.MembershipNumber)
                 .IsUnique();
+
+            // Item - ItemNo Unique Constraint
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => i.ItemNo)
+                .IsUnique();
+
+            // Item - ItemName Unique Constraint
+            modelBuilder.Entity<Item>()
+                .HasIndex(i => i.ItemName)
+                .IsUnique();
             #endregion
 
             #region Table Relationships
