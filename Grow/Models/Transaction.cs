@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Grow.Models
 {
-    public class Transaction
+    public class Transaction : IValidatableObject
     {
         public Transaction()
         {
@@ -37,7 +37,15 @@ namespace Grow.Models
 
         public Volunteer Volunteer { get; set; }
 
-        [Display(Name = "Transaction Details")]
+        [Display(Name = "Receipts")]
         public ICollection<TransactionDetail> TransactionDetails { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (TransactionDate < DateTime.Today)
+            {
+                yield return new ValidationResult("Transaction Data cannot be set in the past.", new[] { "TransactionDate" });
+            }
+        }
     }
 }

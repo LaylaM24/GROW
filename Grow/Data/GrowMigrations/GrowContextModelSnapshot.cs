@@ -216,6 +216,12 @@ namespace Grow.Data.GrowMigrations
 
                     b.HasIndex("ItemCategoryID");
 
+                    b.HasIndex("ItemName")
+                        .IsUnique();
+
+                    b.HasIndex("ItemNo")
+                        .IsUnique();
+
                     b.ToTable("Items");
                 });
 

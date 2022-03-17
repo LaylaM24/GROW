@@ -307,12 +307,12 @@ namespace Grow.Controllers
                 if (sortDirection == "asc")
                 {
                     households = households
-                        .OrderBy(m => m.City);
+                        .OrderBy(m => m.City.CityName);
                 }
                 else
                 {
                     households = households
-                        .OrderByDescending(m => m.City);
+                        .OrderByDescending(m => m.City.CityName);
                 }
             }
             else if (sortField == "Postal Code")
@@ -370,7 +370,7 @@ namespace Grow.Controllers
         {
             ViewData["ExclInactive"] = cbInactive;
 
-            string[] sortOptions = new[] { "Membership No.", "Total Income" };
+            string[] sortOptions = new[] { "Membership No.", "Household Name", "Total Income" };
 
             var households = _context.Households.AsQueryable();
 
@@ -408,6 +408,19 @@ namespace Grow.Controllers
                         .OrderByDescending(m => m.IncomeTotal);
                 }
             }
+            else if (sortField == "Household Name")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                        .OrderBy(m => m.HouseholdName);
+                }
+                else
+                {
+                    households = households
+                        .OrderByDescending(m => m.HouseholdName);
+                }
+            }
             else
             {
                 if (sortDirection == "asc")
@@ -439,7 +452,7 @@ namespace Grow.Controllers
         {
             ViewData["ExclInactive"] = cbInactive;
 
-            string[] sortOptions = new[] { "Membership No.", "No. Visits" };
+            string[] sortOptions = new[] { "Membership No.", "Household Name", "No. Visits" };
 
             var households = _context.Households
                 .Include(x => x.City)
@@ -476,6 +489,19 @@ namespace Grow.Controllers
                         .OrderByDescending(m => m.Transactions.Where(x => x.TransactionDate >= date).Count());
                 }
             }
+            else if (sortField == "Household Name")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                        .OrderBy(m => m.HouseholdName);
+                }
+                else
+                {
+                    households = households
+                        .OrderByDescending(m => m.HouseholdName);
+                }
+            }
             else
             {
                 if (sortDirection == "asc")
@@ -501,11 +527,11 @@ namespace Grow.Controllers
         }
 
         public async Task<IActionResult> MemberAges(int? page, int? pageSizeID,
-            string actionButton, string LowRange, string HighRange, bool cbInactive, string sortDirection = "asc", string sortField = "Name")
+            string actionButton, string LowRange, string HighRange, bool cbInactive, string sortDirection = "asc", string sortField = "Household")
         {
             ViewData["ExclInactive"] = cbInactive;
 
-            string[] sortOptions = new[] { "Name", "Age" };
+            string[] sortOptions = new[] { "Household", "Name", "Age" };
 
             var members = _context.Members
                 .Include(x => x.Household)
@@ -534,7 +560,20 @@ namespace Grow.Controllers
                 sortField = actionButton;
             }
 
-            if (sortField == "Age")
+            if (sortField == "Household")
+            {
+                if (sortDirection == "asc")
+                {
+                    members = members
+                        .OrderBy(m => m.Household.HouseholdName);
+                }
+                else
+                {
+                    members = members
+                        .OrderByDescending(m => m.Household.HouseholdName);
+                }
+            }
+            else if (sortField == "Age")
             {
                 if (sortDirection == "asc")
                 {
@@ -552,12 +591,12 @@ namespace Grow.Controllers
                 if (sortDirection == "asc")
                 {
                     members = members
-                        .OrderBy(m => m.LastName).ThenBy(m => m.FirstName);
+                        .OrderBy(m => m.FirstName).ThenBy(m => m.LastName);
                 }
                 else
                 {
                     members = members
-                        .OrderByDescending(m => m.LastName).ThenByDescending(m => m.FirstName);
+                        .OrderByDescending(m => m.FirstName).ThenByDescending(m => m.LastName);
                 }
             }
 

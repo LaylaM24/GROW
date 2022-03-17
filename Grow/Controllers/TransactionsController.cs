@@ -65,6 +65,7 @@ namespace Grow.Controllers
         // GET: Transactions/Create
         public IActionResult Create()
         {
+            ViewBag.TransDate = DateTime.Today.ToShortDateString();
             PopulateDropDownLists();            
             return View();
         }
@@ -83,6 +84,7 @@ namespace Grow.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.TransDate = DateTime.Today.ToShortDateString();
             PopulateDropDownLists();
             return View(transaction);
         }
