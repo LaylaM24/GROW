@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grow.Data.GrowMigrations
 {
     [DbContext(typeof(GrowContext))]
-    [Migration("20220314195747_Initial")]
+    [Migration("20220315071723_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -217,6 +217,12 @@ namespace Grow.Data.GrowMigrations
                     b.HasKey("ID");
 
                     b.HasIndex("ItemCategoryID");
+
+                    b.HasIndex("ItemName")
+                        .IsUnique();
+
+                    b.HasIndex("ItemNo")
+                        .IsUnique();
 
                     b.ToTable("Items");
                 });
