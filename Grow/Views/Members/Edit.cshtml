@@ -245,7 +245,7 @@
                             <br />
                         </div>
                     }
-                    @if (Model.MemberIncomes.Count() == 3)
+                    @if (Model.MemberIncomes.Count() >= 3)
                     {
                         <div id="IncomeSource3">
                             <div class="row">
@@ -293,10 +293,154 @@
                             <br />
                         </div>
                     }
+                    @if (Model.MemberIncomes.Count() >= 4)
+                    {
+                        <div id="IncomeSource4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl4" name="IncomeSource4" class="form-control" asp-items="ViewBag.IncomeSources4">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="control-label">Income Amount</label>
+                                    <input type="number" name="IncomeAmount4" id="txt4" value="@Model.MemberIncomes.ElementAt(3).IncomeAmount" min="0" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="4" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <span id="valIS4" class="text-danger"></span>
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="IncomeSource4" style="display: none;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl4" class="form-control" asp-items="ViewBag.IncomeSources4">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="control-label">Income Amount</label>
+                                    <input type="number" id="txt4" min="0" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="4" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <span id="valIS4" class="text-danger"></span>
+                            <br />
+                        </div>
+                    }
+                    @if (Model.MemberIncomes.Count() >= 5)
+                    {
+                        <div id="IncomeSource5">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl5" name="IncomeSource5" class="form-control" asp-items="ViewBag.IncomeSources5">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="control-label">Income Amount</label>
+                                    <input type="number" name="IncomeAmount5" id="txt5" value="@Model.MemberIncomes.ElementAt(4).IncomeAmount" min="0" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="5" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <span id="valIS5" class="text-danger"></span>
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="IncomeSource5" style="display: none;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl5" class="form-control" asp-items="ViewBag.IncomeSources5">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="control-label">Income Amount</label>
+                                    <input type="number" id="txt5" min="0" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="5" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <span id="valIS5" class="text-danger"></span>
+                            <br />
+                        </div>
+                    }
+                    @if (Model.MemberIncomes.Count() == 6)
+                    {
+                        <div id="IncomeSource6">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl6" name="IncomeSource6" class="form-control" asp-items="ViewBag.IncomeSources6">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="control-label">Income Amount</label>
+                                    <input type="number" name="IncomeAmount6" id="txt6" value="@Model.MemberIncomes.ElementAt(5).IncomeAmount" min="0" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="6" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <span id="valIS6" class="text-danger"></span>
+                            <br />
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="IncomeSource6" style="display: none;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="control-label">Source</label>
+                                    <select id="ddl6" class="form-control" asp-items="ViewBag.IncomeSources6">
+                                        <option value="-1">Select an Income Source</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="control-label">Income Amount</label>
+                                    <input type="number" id="txt6" min="0" class="form-control" />
+                                </div>
+                                <div class="col-1">
+                                    <a>
+                                        <span data-number="6" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <span id="valIS6" class="text-danger"></span>
+                            <br />
+                        </div>
+                    }
                 </div><br />
 
                 <a>
-                    @if (Model.MemberIncomes.Count() == 3)
+                    @if (Model.MemberIncomes.Count() == 6)
                     {
                         <span id="btnAddIncome" class="btn btn-success" style="display: none;"><strong>&#x271A; Add Income Source</strong></span>
                     }
@@ -334,11 +478,38 @@
     <script>
         $(document).ready(function () {
 
+            // IF RETURNING WITH ERRORS
+            var deitaryRestrictions = @Html.Raw(Json.Serialize(ViewData["SelectedDietaryRestrictions"]));
+            var healthConcerns = @Html.Raw(Json.Serialize(ViewData["SelectedHealthConcerns"]));
+            //var incomeSources = @*Html.Raw(Json.Serialize(ViewData["SelectedIncomeSources"]))*@;
+
+            if (deitaryRestrictions != null) {
+                $("#availRestrictionOptions option").each(function (index) {
+                    if ($.inArray($(this).val(), deitaryRestrictions) != -1){
+                        $(this).prop('selected', true);
+                    }
+                });
+                var SelectData = $("#availRestrictionOptions :selected").toArray();
+                $("#selectedRestrictionOptions").append(SelectData);
+                SelectData.remove;
+            }
+
+            if (healthConcerns != null) {
+                $("#availOptions option").each(function (index) {
+                    if ($.inArray($(this).val(), healthConcerns) != -1) {
+                        $(this).prop('selected', true);
+                    }
+                });
+                var SelectData = $("#availOptions :selected").toArray();
+                $("#selectedHealthOptions").append(SelectData);
+                SelectData.remove;
+            }
+
             // DELETE FILE
             $(".btnDeleteFile").click(function (event) {
 
                 var doc = $(this).val();
-                
+
                 $.ajax({
                     type: "POST",
                     url: "/Members/DeleteFile",
@@ -427,6 +598,54 @@
                     }
                 }
 
+                if ($("#IncomeSource4").length) {
+                    if ($("#IncomeSource4").is(":visible")) {
+                        $("#valIS4").text("");
+                        if ($("#ddl4 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt4").val()) || $("#txt4").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS4").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS4").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
+                if ($("#IncomeSource5").length) {
+                    if ($("#IncomeSource5").is(":visible")) {
+                        $("#valIS5").text("");
+                        if ($("#ddl5 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt5").val()) || $("#txt5").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS5").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS5").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
+                if ($("#IncomeSource6").length) {
+                    if ($("#IncomeSource6").is(":visible")) {
+                        $("#valIS6").text("");
+                        if ($("#ddl6 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt6").val()) || $("#txt6").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS6").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS6").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
 
                 if (dobValidated && incomeSourcesValidated) {
 
@@ -498,8 +717,24 @@
                     $("#ddl3").attr("name", "IncomeSource3");
                     $("#txt3").attr("name", "IncomeAmount3");
                 }
+                else if (!$("#IncomeSource4").is(":visible")) {
+                    $("#IncomeSource4").css("display", "inline");
+                    $("#ddl4").attr("name", "IncomeSource4");
+                    $("#txt4").attr("name", "IncomeAmount4");
+                }
+                else if (!$("#IncomeSource5").is(":visible")) {
+                    $("#IncomeSource5").css("display", "inline");
+                    $("#ddl5").attr("name", "IncomeSource5");
+                    $("#txt5").attr("name", "IncomeAmount5");
+                }
+                else if (!$("#IncomeSource6").is(":visible")) {
+                    $("#IncomeSource6").css("display", "inline");
+                    $("#ddl6").attr("name", "IncomeSource6");
+                    $("#txt6").attr("name", "IncomeAmount6");
+                }
 
-                if ($("#IncomeSource1").is(":visible") && $("#IncomeSource2").is(":visible") && $("#IncomeSource3").is(":visible")) {
+                if ($("#IncomeSource1").is(":visible") && $("#IncomeSource2").is(":visible") && $("#IncomeSource3").is(":visible")
+                    && $("#IncomeSource4").is(":visible") && $("#IncomeSource5").is(":visible") && $("#IncomeSource6").is(":visible")) {
                     $("#btnAddIncome").css("display", "none");
                 }
             });
@@ -520,6 +755,21 @@
                     $("#IncomeSource3").css("display", "none");
                     $("#ddl3").removeAttr("name");
                     $("#txt3").removeAttr("name");
+                }
+                else if (num == 4) {
+                    $("#IncomeSource4").css("display", "none");
+                    $("#ddl4").removeAttr("name");
+                    $("#txt4").removeAttr("name");
+                }
+                else if (num == 5) {
+                    $("#IncomeSource5").css("display", "none");
+                    $("#ddl5").removeAttr("name");
+                    $("#txt5").removeAttr("name");
+                }
+                else if (num == 6) {
+                    $("#IncomeSource6").css("display", "none");
+                    $("#ddl6").removeAttr("name");
+                    $("#txt6").removeAttr("name");
                 }
 
                 $("#btnAddIncome").css("display", "inline");
