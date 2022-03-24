@@ -272,11 +272,11 @@
             // IF RETURNING WITH ERRORS
             var deitaryRestrictions = @Html.Raw(Json.Serialize(ViewData["SelectedDietaryRestrictions"]));
             var healthConcerns = @Html.Raw(Json.Serialize(ViewData["SelectedHealthConcerns"]));
-            //var incomeSources = @*Html.Raw(Json.Serialize(ViewData["SelectedIncomeSources"]))*@;
+            var incomeSourcesString = @Html.Raw(Json.Serialize(ViewData["SelectedIncomeSources"]));
 
             if (deitaryRestrictions != null) {
                 $("#availRestrictionOptions option").each(function (index) {
-                    if ($.inArray($(this).val(), deitaryRestrictions) != -1) {
+                    if ($.inArray($(this).val(), deitaryRestrictions) != -1){
                         $(this).prop('selected', true);
                     }
                 });
@@ -294,6 +294,18 @@
                 var SelectData = $("#availOptions :selected").toArray();
                 $("#selectedHealthOptions").append(SelectData);
                 SelectData.remove;
+            }
+
+            if (incomeSourcesString != null) {
+                var incomeSources = incomeSourcesString.replace("{","").replace("}", "").split(",");
+                $.each(incomeSources, function (index, value) {
+                    var num = index + 1;
+                    $("#IncomeSource" + num).css("display", "inline");
+                    $("#ddl" + num).val(parseInt(incomeSources[index].split(":")[0].replace('"', '').replace('"', '')));
+                    $("#txt" + num).val(parseInt(incomeSources[index].split(":")[1]).toFixed(2));
+                    $("#ddl" + num).attr("name", "IncomeSource" + num);
+                    $("#txt" + num).attr("name", "IncomeAmount" + num);
+                });
             }
 
             // SUMBIT FUNCTION
