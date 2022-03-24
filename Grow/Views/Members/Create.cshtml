@@ -48,7 +48,13 @@
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="DataConsent" /> @Html.DisplayNameFor(model => model.DataConsent)
-                </label>
+                </label><br />
+                <a class="mb-1" role="button" data-toggle="collapse" href="#collapseSumConsent" aria-expanded="false" aria-controls="collapseSumConsent">
+                    Read Consent Agreement
+                </a>
+                <div class="collapse" id="collapseSumConsent">
+                    <p><b>Consent to:</b> Collection of Personal Information. The member acknowledges that the collection, use and/or disclosure of personal information is required for the management of the Member's and their dependants' participation or engagement with GROW, including, but not limited to, the administration of the membership for the GROW market, and participation in other programs offered by GROW. The Member hereby consents to the collection, use, and/or disclosure of the Member's personal information as required to facilitate the foregoing.</p>
+                </div>
             </div>
             <div class="form-group">
                 <label class="control-label">Income Verification Documents:</label><br />
@@ -272,11 +278,11 @@
             // IF RETURNING WITH ERRORS
             var deitaryRestrictions = @Html.Raw(Json.Serialize(ViewData["SelectedDietaryRestrictions"]));
             var healthConcerns = @Html.Raw(Json.Serialize(ViewData["SelectedHealthConcerns"]));
-            //var incomeSources = @*Html.Raw(Json.Serialize(ViewData["SelectedIncomeSources"]))*@;
+            var incomeSourcesString = @Html.Raw(Json.Serialize(ViewData["SelectedIncomeSources"]));
 
             if (deitaryRestrictions != null) {
                 $("#availRestrictionOptions option").each(function (index) {
-                    if ($.inArray($(this).val(), deitaryRestrictions) != -1) {
+                    if ($.inArray($(this).val(), deitaryRestrictions) != -1){
                         $(this).prop('selected', true);
                     }
                 });
@@ -294,6 +300,18 @@
                 var SelectData = $("#availOptions :selected").toArray();
                 $("#selectedHealthOptions").append(SelectData);
                 SelectData.remove;
+            }
+
+            if (incomeSourcesString != null) {
+                var incomeSources = incomeSourcesString.replace("{","").replace("}", "").split(",");
+                $.each(incomeSources, function (index, value) {
+                    var num = index + 1;
+                    $("#IncomeSource" + num).css("display", "inline");
+                    $("#ddl" + num).val(parseInt(incomeSources[index].split(":")[0].replace('"', '').replace('"', '')));
+                    $("#txt" + num).val(parseInt(incomeSources[index].split(":")[1]).toFixed(2));
+                    $("#ddl" + num).attr("name", "IncomeSource" + num);
+                    $("#txt" + num).attr("name", "IncomeAmount" + num);
+                });
             }
 
             // SUMBIT FUNCTION

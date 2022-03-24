@@ -12,6 +12,7 @@ using Grow.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Grow.Controllers
 {
@@ -233,7 +234,7 @@ namespace Grow.Controllers
 
             ViewData["SelectedDietaryRestrictions"] = selectedRestrictionOptions;
             ViewData["SelectedHealthConcerns"] = selectedHealthOptions;
-            ViewData["SelectedIncomeSources"] = sources;
+            ViewData["SelectedIncomeSources"] = JsonConvert.SerializeObject(sources);
 
             PopulateAssignedHealthConcernsData(member);
             PopulateAssignedRestrictionData(member);
@@ -372,7 +373,7 @@ namespace Grow.Controllers
 
             ViewData["SelectedDietaryRestrictions"] = selectedRestrictionOptions;
             ViewData["SelectedHealthConcerns"] = selectedHealthOptions;
-            ViewData["SelectedIncomeSources"] = sources;
+            ViewData["SelectedIncomeSources"] = JsonConvert.SerializeObject(sources);
 
             PopulateAssignedHealthConcernsData(memberToUpdate);
             PopulateAssignedRestrictionData(memberToUpdate);
