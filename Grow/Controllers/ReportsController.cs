@@ -452,7 +452,7 @@ namespace Grow.Controllers
         {
             ViewData["ExclInactive"] = cbInactive;
 
-            string[] sortOptions = new[] { "Membership No.", "Household Name", "No. Visits" };
+            string[] sortOptions = new[] { "Membership No.", "Household Name", "No. Visits", "Amount Spent" };
 
             var households = _context.Households
                 .Include(x => x.City)
@@ -500,6 +500,20 @@ namespace Grow.Controllers
                 {
                     households = households
                         .OrderByDescending(m => m.HouseholdName);
+                }
+            }
+            else if (sortField == "Amount Spent")
+            {
+                var date = new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day);
+                if (sortDirection == "asc")
+                {
+                    households = households
+                        .OrderBy(m => m.Transactions.Where(x => x.TransactionDate >= date).Sum(x => x.TransactionTotal));
+                }
+                else
+                {
+                    households = households
+                        .OrderByDescending(m => m.Transactions.Where(x => x.TransactionDate >= date).Sum(x => x.TransactionTotal));
                 }
             }
             else
@@ -1033,7 +1047,8 @@ namespace Grow.Controllers
                              select new
                              {
                                  Membership_Number = t1.MembershipNumber,
-                                 Number_Of_Visits = t1.Transactions.Where(x => x.TransactionDate >= date).Count()
+                                 Number_Of_Visits = t1.Transactions.Where(x => x.TransactionDate >= date).Count(),
+                                 Amount_Spent = t1.Transactions.Where(x => x.TransactionDate >= date).Sum(x => x.TransactionTotal)
                              };
 
             //How many rows?

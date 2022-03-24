@@ -38,6 +38,9 @@
                 <th>
                     <input type="submit" name="actionButton" value="No. Visits" class="btn btn-link" />
                 </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Amount Spent" class="btn btn-link" />
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -53,6 +56,9 @@
                     </td>
                     <td>
                         @(item.Transactions.Where(x => x.TransactionDate >= new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day)).Count())
+                    </td>
+                    <td>
+                        @(item.Transactions.Where(x => x.TransactionDate >= new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day)).Sum(x => x.TransactionTotal))
                     </td>
                     <td>
                         <a asp-controller="Households" asp-action="Details" asp-route-id="@item.ID">View Household</a>
