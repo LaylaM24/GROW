@@ -34,6 +34,23 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    Phone = table.Column<string>(maxLength: 10, nullable: true),
+                    Email = table.Column<string>(maxLength: 255, nullable: false),
+                    Active = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Genders",
                 columns: table => new
                 {
@@ -425,6 +442,12 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Employees_Email",
+                table: "Employees",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GROWAddresses_CityID",
                 table: "GROWAddresses",
                 column: "CityID");
@@ -535,6 +558,9 @@ namespace Grow.Data.GrowMigrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Employees");
+
             migrationBuilder.DropTable(
                 name: "GROWAddresses");
 

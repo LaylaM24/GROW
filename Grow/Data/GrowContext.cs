@@ -29,9 +29,15 @@ namespace Grow.Data
         public DbSet<MemberDocument> MemberDocuments { get; set; }
         public DbSet<LowIncomeCutOff> LowIncomeCutOffs { get; set; }
         public DbSet<GROWAddress> GROWAddresses { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Add a unique index to the Employee Email
+            modelBuilder.Entity<Employee>()
+            .HasIndex(a => new { a.Email })
+            .IsUnique();
+
             #region Constraints
             // Household MembershipNumber unique constraint
             modelBuilder.Entity<Household>()

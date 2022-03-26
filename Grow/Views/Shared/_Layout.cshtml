@@ -27,19 +27,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Households" asp-action="Index">Households</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Lookups" asp-action="Index">Lookups</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Items" asp-action="Index">Inventory</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Transactions" asp-action="Index">Sales</a>
-                        </li>
-                       
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Menu<b class="caret"></b>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Lookup Values</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">Inventory</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Transactions" asp-action="Index">Sales</a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register User</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="UserRoles" asp-action="Index">Manage User Roles</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Employees" asp-action="Index">Manage Employee/Volunteer Accounts</a>
+                                }
+                            </div>
                     </ul>
                 </div>
             </div>
