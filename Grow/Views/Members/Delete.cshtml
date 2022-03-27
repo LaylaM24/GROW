@@ -43,12 +43,15 @@
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.PhoneFormatted)
                 </dd>
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
+                @if (!String.IsNullOrEmpty(Model.Email))
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                }
             </dl>
         </div>
         <div class="col-sm-6">
@@ -74,7 +77,7 @@
                     <dd class="col-sm-8">
                         @foreach (var i in Model.MemberIncomes)
                         {
-                            <text>@(i.IncomeSource.Source) - @(i.IncomeAmount.ToString("C")) </text>
+                            <text>@(i.IncomeSource.Source) - @(i.IncomeAmount.ToString("C")) </text><br />
                         }
                     </dd>
                 }
@@ -86,7 +89,7 @@
                     <dd class="col-sm-8">
                         @foreach (var i in Model.MemberRestrictions)
                         {
-                            @i.DietaryRestriction.Restriction
+                            @i.DietaryRestriction.Restriction<br />
                         }
                     </dd>
                 }
@@ -98,7 +101,7 @@
                     <dd class="col-sm-8">
                         @foreach (var i in Model.MemberConcerns)
                         {
-                            @i.HealthConcern.Concern
+                            @i.HealthConcern.Concern<br />
                         }
                     </dd>
                 }

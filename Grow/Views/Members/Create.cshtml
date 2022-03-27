@@ -32,7 +32,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Phone" class="control-label"></label>*
-                <input asp-for="Phone" class="form-control" placeholder="e.g. 905 123 4567" />
+                <input asp-for="Phone" class="form-control" placeholder="e.g. 9051234567" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -48,7 +48,13 @@
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="DataConsent" /> @Html.DisplayNameFor(model => model.DataConsent)
-                </label>
+                </label><br />
+                <a class="mb-1" role="button" data-toggle="collapse" href="#collapseSumConsent" aria-expanded="false" aria-controls="collapseSumConsent">
+                    Read Consent Agreement
+                </a>
+                <div class="collapse" id="collapseSumConsent">
+                    <p><b>Consent to:</b> Collection of Personal Information. The member acknowledges that the collection, use and/or disclosure of personal information is required for the management of the Member's and their dependants' participation or engagement with GROW, including, but not limited to, the administration of the membership for the GROW market, and participation in other programs offered by GROW. The Member hereby consents to the collection, use, and/or disclosure of the Member's personal information as required to facilitate the foregoing.</p>
+                </div>
             </div>
             <div class="form-group">
                 <label class="control-label">Income Verification Documents:</label><br />
@@ -173,6 +179,69 @@
                         <span id="valIS3" class="text-danger"></span>
                         <br />
                     </div>
+                    <div id="IncomeSource4" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl4" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="control-label">Income Amount</label>
+                                <input type="number" id="txt4" min="0" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="4" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <span id="valIS4" class="text-danger"></span>
+                        <br />
+                    </div>
+                    <div id="IncomeSource5" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl5" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="control-label">Income Amount</label>
+                                <input type="number" id="txt5" min="0" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="5" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <span id="valIS5" class="text-danger"></span>
+                        <br />
+                    </div>
+                    <div id="IncomeSource6" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="control-label">Source</label>
+                                <select id="ddl6" class="form-control" asp-items="ViewBag.IncomeSources">
+                                    <option value="-1">Select an Income Source</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label class="control-label">Income Amount</label>
+                                <input type="number" id="txt6" min="0" class="form-control" />
+                            </div>
+                            <div class="col-1">
+                                <a>
+                                    <span data-number="6" class="btn btn-danger rmIncome" style="position: absolute; bottom: 0; right: 0;"><strong>X</strong></span>
+                                </a>
+                            </div>
+                        </div>
+                        <span id="valIS6" class="text-danger"></span>
+                        <br />
+                    </div>
                 </div><br />
                 <a>
                     <span id="btnAddIncome" class="btn btn-success"><strong>&#x271A; Add Income Source</strong></span>
@@ -205,6 +274,45 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+
+            // IF RETURNING WITH ERRORS
+            var deitaryRestrictions = @Html.Raw(Json.Serialize(ViewData["SelectedDietaryRestrictions"]));
+            var healthConcerns = @Html.Raw(Json.Serialize(ViewData["SelectedHealthConcerns"]));
+            var incomeSourcesString = @Html.Raw(Json.Serialize(ViewData["SelectedIncomeSources"]));
+
+            if (deitaryRestrictions != null) {
+                $("#availRestrictionOptions option").each(function (index) {
+                    if ($.inArray($(this).val(), deitaryRestrictions) != -1){
+                        $(this).prop('selected', true);
+                    }
+                });
+                var SelectData = $("#availRestrictionOptions :selected").toArray();
+                $("#selectedRestrictionOptions").append(SelectData);
+                SelectData.remove;
+            }
+
+            if (healthConcerns != null) {
+                $("#availOptions option").each(function (index) {
+                    if ($.inArray($(this).val(), healthConcerns) != -1) {
+                        $(this).prop('selected', true);
+                    }
+                });
+                var SelectData = $("#availOptions :selected").toArray();
+                $("#selectedHealthOptions").append(SelectData);
+                SelectData.remove;
+            }
+
+            if (incomeSourcesString != null) {
+                var incomeSources = incomeSourcesString.replace("{","").replace("}", "").split(",");
+                $.each(incomeSources, function (index, value) {
+                    var num = index + 1;
+                    $("#IncomeSource" + num).css("display", "inline");
+                    $("#ddl" + num).val(parseInt(incomeSources[index].split(":")[0].replace('"', '').replace('"', '')));
+                    $("#txt" + num).val(parseInt(incomeSources[index].split(":")[1]).toFixed(2));
+                    $("#ddl" + num).attr("name", "IncomeSource" + num);
+                    $("#txt" + num).attr("name", "IncomeAmount" + num);
+                });
+            }
 
             // SUMBIT FUNCTION
             $("#submitMemberForm").click(function (event) {
@@ -281,6 +389,54 @@
                     }
                 }
 
+                if ($("#IncomeSource4").length) {
+                    if ($("#IncomeSource4").is(":visible")) {
+                        $("#valIS4").text("");
+                        if ($("#ddl4 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt4").val()) || $("#txt4").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS4").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS4").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
+                if ($("#IncomeSource5").length) {
+                    if ($("#IncomeSource5").is(":visible")) {
+                        $("#valIS5").text("");
+                        if ($("#ddl5 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt5").val()) || $("#txt5").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS5").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS5").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
+                if ($("#IncomeSource6").length) {
+                    if ($("#IncomeSource6").is(":visible")) {
+                        $("#valIS6").text("");
+                        if ($("#ddl6 option:selected").val() != -1) {
+                            if (!$.isNumeric($("#txt6").val()) || $("#txt6").val() == "") {
+                                incomeSourcesValidated = false;
+                                $("#valIS6").text("Please enter a valid income amount.");
+                            }
+                        }
+                        else {
+                            incomeSourcesValidated = false;
+                            $("#valIS6").text("Please fill out income fields or remove income source.");
+                        }
+                    }
+                }
+
 
                 if (dobValidated == true && incomeSourcesValidated == true) {
 
@@ -352,8 +508,24 @@
                     $("#ddl3").attr("name", "IncomeSource3");
                     $("#txt3").attr("name", "IncomeAmount3");
                 }
+                else if (!$("#IncomeSource4").is(":visible")) {
+                    $("#IncomeSource4").css("display", "inline");
+                    $("#ddl4").attr("name", "IncomeSource4");
+                    $("#txt4").attr("name", "IncomeAmount4");
+                }
+                else if (!$("#IncomeSource5").is(":visible")) {
+                    $("#IncomeSource5").css("display", "inline");
+                    $("#ddl5").attr("name", "IncomeSource5");
+                    $("#txt5").attr("name", "IncomeAmount5");
+                }
+                else if (!$("#IncomeSource6").is(":visible")) {
+                    $("#IncomeSource6").css("display", "inline");
+                    $("#ddl6").attr("name", "IncomeSource6");
+                    $("#txt6").attr("name", "IncomeAmount6");
+                }
 
-                if ($("#IncomeSource1").is(":visible") && $("#IncomeSource2").is(":visible") && $("#IncomeSource3").is(":visible")) {
+                if ($("#IncomeSource1").is(":visible") && $("#IncomeSource2").is(":visible") && $("#IncomeSource3").is(":visible")
+                    && $("#IncomeSource4").is(":visible") && $("#IncomeSource5").is(":visible") && $("#IncomeSource6").is(":visible")) {
                     $("#btnAddIncome").css("display", "none");
                 }
             });
@@ -374,6 +546,21 @@
                     $("#IncomeSource3").css("display", "none");
                     $("#ddl3").removeAttr("name");
                     $("#txt3").removeAttr("name");
+                }
+                else if (num == 4) {
+                    $("#IncomeSource4").css("display", "none");
+                    $("#ddl4").removeAttr("name");
+                    $("#txt4").removeAttr("name");
+                }
+                else if (num == 5) {
+                    $("#IncomeSource5").css("display", "none");
+                    $("#ddl5").removeAttr("name");
+                    $("#txt5").removeAttr("name");
+                }
+                else if (num == 6) {
+                    $("#IncomeSource6").css("display", "none");
+                    $("#ddl6").removeAttr("name");
+                    $("#txt6").removeAttr("name");
                 }
 
                 $("#btnAddIncome").css("display", "inline");
