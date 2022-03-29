@@ -18,10 +18,13 @@ namespace Grow.Controllers
     public class MembersController : Controller
     {
         private readonly GrowContext _context;
+        //for sending email
+        private readonly IMyEmailSender _emailSender;
 
-        public MembersController(GrowContext context)
+        public MembersController(GrowContext context, IMyEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         // GET: Members
@@ -731,5 +734,8 @@ namespace Grow.Controllers
         {
             return _context.Members.Any(e => e.ID == id);
         }
+
+
+
     }
 }

@@ -167,15 +167,33 @@ namespace Grow.Controllers
         {
             ViewDataReturnURL();
 
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(item);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", new { item.ID });
+                }
             }
-
+            catch (DbUpdateException dex)
+            {
+                if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Items.ItemNo"))
+                {
+                    ModelState.AddModelError("ItemNo", "Unable to create item. Remember, you cannot have duplicate item numbers.");
+                }
+                else if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Items.ItemName"))
+                {
+                    ModelState.AddModelError("ItemName", "Unable to create item. Remember, you cannot have duplicate item names.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to create item. Try again, and if the problem persists see your system administrator.");
+                }
+            }
+            
             PopulateDropDownLists();
-            return RedirectToAction("Details", new { item.ID });
+            return View(item);
         }
 
         // GET: Items/Edit/5
@@ -206,25 +224,28 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,ItemNo,ItemName,Price,ItemCategoryID")] Item item)
+        public async Task<IActionResult> Edit(int id)
         {
             ViewDataReturnURL();
 
-            if (id != item.ID)
+            var itemToUpdate = await _context.Items.FirstOrDefaultAsync(i => i.ID == id);
+            
+            if (itemToUpdate == null)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            
+            if (await TryUpdateModelAsync<Item>(itemToUpdate, "",
+                i => i.ItemNo, i => i.ItemName, i => i.Price, i => i.ItemCategoryID))
             {
                 try
                 {
-                    _context.Update(item);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", new { itemToUpdate.ID });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ItemExists(item.ID))
+                    if (!ItemExists(itemToUpdate.ID))
                     {
                         return NotFound();
                     }
@@ -233,10 +254,24 @@ namespace Grow.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (DbUpdateException dex)
+                {
+                    if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Items.ItemNo"))
+                    {
+                        ModelState.AddModelError("ItemNo", "Unable to save item. Remember, you cannot have duplicate item numbers.");
+                    }
+                    else if (dex.GetBaseException().Message.Contains("UNIQUE constraint failed: Items.ItemName"))
+                    {
+                        ModelState.AddModelError("ItemName", "Unable to save item. Remember, you cannot have duplicate item names.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Unable to save item. Try again, and if the problem persists see your system administrator.");
+                    }
+                }
             }
-            PopulateDropDownLists();
-            return RedirectToAction("Details", new { item.ID });
+            PopulateDropDownLists(itemToUpdate);
+            return View(itemToUpdate);
         }
 
         // GET: Items/Delete/5
@@ -251,6 +286,7 @@ namespace Grow.Controllers
 
             var item = await _context.Items
                 .Include(i => i.ItemCategory)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (item == null)
@@ -269,10 +305,19 @@ namespace Grow.Controllers
             ViewDataReturnURL();
 
             var item = await _context.Items.FindAsync(id);
-            _context.Items.Remove(item);
 
-            await _context.SaveChangesAsync();
-            return Redirect(ViewData["returnURL"].ToString());
+            try
+            {
+                _context.Items.Remove(item);
+                await _context.SaveChangesAsync();
+                return Redirect(ViewData["returnURL"].ToString());
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Unable to delete item. Try again, and if the problem persists see your system administrator.");
+            }
+
+            return View(item);
         }
 
         private void PopulateDropDownLists(Item item = null)

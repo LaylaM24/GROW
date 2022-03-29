@@ -8,16 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using Grow.Data;
 using Grow.Models;
 using Grow.Utilities;
+using Grow.ViewModels;
 
 namespace Grow.Controllers
 {
     public class HouseholdsController : Controller
     {
         private readonly GrowContext _context;
-
-        public HouseholdsController(GrowContext context)
+        //for sending email
+        private readonly IMyEmailSender _emailSender;
+        public HouseholdsController(GrowContext context, IMyEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
+
         }
 
         // GET: Households
@@ -470,6 +474,58 @@ namespace Grow.Controllers
         private bool HouseholdExists(int id)
         {
             return _context.Households.Any(e => e.ID == id);
+        }
+
+                // GET/POST: Grow/Notification/5
+        public async Task<IActionResult> Notification(int? id, string Subject, string emailContent)
+        {
+
+
+            if (string.IsNullOrEmpty(Subject) || string.IsNullOrEmpty(emailContent))
+            {
+                ViewData["Message"] = "You must enter both a Subject Line and Message Content before sending out a notification.";
+            }
+            else
+            {
+                int folksCount = 0;
+                try
+                {
+                    //Send a Notice.
+                    List<EmailAddress> folks = (from p in _context.Members
+                                                where p.DataConsent == true
+                                                select new EmailAddress
+                                                {
+                                                    Name = p.FullName,
+                                                    Address = p.Email
+                                                }).ToList();
+                    folksCount = folks.Count();
+                    if (folksCount > 0)
+                    {
+                        var msg = new EmailMessage()
+                        {
+                            ToAddresses = folks,
+                            Subject = Subject,
+                            //possibly use this if theres a signature that wants to be sent by grow
+                            Content = "<p>" + emailContent + "</p><p>Insert message from grow here</p>"
+
+                        };
+                        await _emailSender.SendToManyAsync(msg);
+                        ViewData["Message"] = "Message sent to " + folksCount + " Member"
+                            + ((folksCount == 1) ? "." : "s.");
+                    }
+                    else
+                    {
+                        ViewData["Message"] = "Message NOT sent!  No Members with data consent!";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string errMsg = ex.GetBaseException().Message;
+                    ViewData["Message"] = "Error: Could not send email message to the " + folksCount + " Member"
+                        + ((folksCount == 1) ? "" : "s") ;
+                }
+            }
+            return View();
         }
     }
 }

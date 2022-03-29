@@ -1,0 +1,65 @@
+﻿@model Grow.Models.Transaction;
+
+<table class="table">
+    <tr>
+        <th>
+            <input type="submit" disabled="disabled" value="Item No." class="btn btn-link" />
+        </th>
+        <th>
+            <input type="submit" disabled="disabled" value="Item" class="btn btn-link" />
+        </th>
+        <th>
+            <input type="submit" disabled="disabled" value="Cost" class="btn btn-link" />
+        </th>
+        <th>
+            <input type="submit" disabled="disabled" value="Quantity" class="btn btn-link" />
+        </th>
+        <th>
+            <input type="submit" disabled="disabled" value="Ext. Cost" class="btn btn-link" />
+        </th>
+        <th>
+            <button class="btn btn-outline-success modal-link" tag="@Model.ID" name="AddForm" data-toggle="modal" data-target="#theItemModal" title="Add Item" type="button">&#x271A;</button>
+        </th>
+    </tr>
+
+    @foreach (var item in Model.TransactionDetails)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Item.ItemNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExtendedCost)
+            </td>
+            <td>
+                <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theItemModal" title="Edit @item.Item.ItemName" type="button">&#x270D;</button>
+                <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theItemModal" title="Delete @item.Item.ItemName" type="button">&#x274C;</button>
+            </td>
+        </tr>
+    }
+
+    <tr>
+        <th>
+            <input type="submit" disabled="disabled" value="Total" class="btn btn-link" />
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+        <th>
+            @Model.TransactionTotal.ToString("C")
+        </th>
+        <th></th>
+    </tr>
+</table>

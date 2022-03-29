@@ -216,20 +216,18 @@ namespace Grow.Data
                 if (!context.ItemCategories.Any())
                 {
                     context.ItemCategories.AddRange(
-                         new ItemCategory
-                         {
-                             CategoryName = "Specials"
-                         },
-
                         new ItemCategory
                         {
-                            CategoryName = "Dairy/Eggs/Bread"
+                            CategoryName = "Specials"
                         },
                         new ItemCategory
                         {
                             CategoryName = "Pantry"
                         },
-                        
+                        new ItemCategory
+                        {
+                            CategoryName = "Dairy/Eggs/Bread"
+                        },                        
                         new ItemCategory
                         {
                             CategoryName = "Freezer"
@@ -238,8 +236,6 @@ namespace Grow.Data
                         {
                             CategoryName = "Produce"
                         }
-
-
                     );
                     context.SaveChanges();
                 }

@@ -15,7 +15,7 @@ namespace Grow.Models
 
         public int ID { get; set; }
 
-        [Display(Name = "Employee")]
+        [Display(Name = "Employee/Volunteer")]
         public string FullName
         {
             get

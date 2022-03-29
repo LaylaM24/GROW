@@ -12,12 +12,38 @@
     <body>
         <div id="map" style="height: 300px;"></div>
         <script>
-            var map = L.map('map').setView([43.0582, -79.2902], 10);
+            var map = L.map('map').setView([43.0582, -79.2902], 9);
 
             L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
                 maxZoom: 20
             }).addTo(map);
+
+            var fortErie = L.marker([42.9018, -78.9722]).addTo(map);
+            var grimsby = L.marker([43.1942, -79.5624]).addTo(map);
+            var lincoln = L.marker([43.1392, -79.4849]).addTo(map);
+            var niagaraFalls = L.marker([43.0896, -79.0849]).addTo(map);
+            var niagaraOnTheLake = L.marker([43.2550, -79.0773]).addTo(map);
+            var pelham = L.marker([43.0372, -79.3288]).addTo(map);
+            var portColborne = L.marker([42.8865, -79.2509]).addTo(map);
+            var stCatherines = L.marker([43.1594, -79.2469]).addTo(map);
+            var thorold = L.marker([43.1236, -79.1989]).addTo(map);
+            var wainfleet = L.marker([42.9234, -79.3758]).addTo(map);
+            var welland = L.marker([42.9922, -79.2483]).addTo(map);
+            var westLincoln = L.marker([43.0999, -79.5464]).addTo(map);
+
+            fortErie.bindPopup("Fort Erie has 0 households");
+            grimsby.bindPopup("Grimsby has 0 households");
+            lincoln.bindPopup("Lincoln has 0 households");
+            niagaraFalls.bindPopup("Niagara Falls has 1 household");
+            niagaraOnTheLake.bindPopup("Niagara-on-the-Lake has 0 households");
+            pelham.bindPopup("Pelham has 0 households");
+            portColborne.bindPopup("Port Colborne has 1 household");
+            stCatherines.bindPopup("St. Catherines has 1 household");
+            thorold.bindPopup("Thorold has 1 household");
+            wainfleet.bindPopup("Wainfleet has 0 households");
+            welland.bindPopup("Welland has 1 household");
+            westLincoln.bindPopup("West Lincoln has 0 households");
         </script>
     </body>
 </html>

@@ -20,11 +20,21 @@ namespace Grow.Models
                 return PostalCode?.ToUpper();
             }
         }
+
         public string Address
         {
             get
             {
                 return StreetNumber + " " + StreetName + (ApartmentNumber != null ? $" Apt. {ApartmentNumber}" : "");
+            }
+        }
+
+        [Display(Name = "Address")]
+        public string AddressWithCity
+        {
+            get
+            {
+                return StreetNumber + " " + StreetName + (ApartmentNumber != null ? $" Apt. {ApartmentNumber}" : "") + $", {City?.CityName} {PostalCode}";
             }
         }
 
@@ -95,6 +105,7 @@ namespace Grow.Models
         [Display(Name = "City")]
         [Required(ErrorMessage = "You must select a City.")]
         public int CityID { get; set; }
+
         public City City { get; set; }
 
         public ICollection<Member> Members { get; set; }
