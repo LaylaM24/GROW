@@ -85,5 +85,6 @@ namespace Grow.Models
         [Required(ErrorMessage = "City is a required field.")]
         public int CityID { get; set; }
         public City City { get; set; }
+
     }
 }

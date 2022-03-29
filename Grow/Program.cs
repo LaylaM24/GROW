@@ -24,6 +24,8 @@ namespace Grow
 
                 try
                 {
+                    var identityContext = services.GetRequiredService<ApplicationDbContext>();
+                    ApplicationSeedData.SeedAsync(identityContext, services).Wait();
                     var context = services.GetRequiredService<GrowContext>();
                     context.Database.Migrate();
                     GrowSeedData.Initialize(services);

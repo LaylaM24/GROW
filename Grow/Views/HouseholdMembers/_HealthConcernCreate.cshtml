@@ -1,0 +1,18 @@
+﻿@model Grow.Models.HealthConcern
+
+<form asp-controller="HealthConcerns" asp-action="Create" id="createHealthConcernForm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="Concern" class="control-label"></label>
+                <input asp-for="Concern" class="form-control" />
+                <span asp-validation-for="Concern" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" id="submitHealthConcernCreate" class="btn btn-outline-secondary" />
+            </div>
+        </div>
+    </div>
+</form>
+
