@@ -28,10 +28,11 @@ namespace Grow.Controllers
 
             PopulateDropDownLists();
 
-            string[] sortOptions = new[] { "Household", "Membership No.", "Address", "City", "Postal Code", "Total Income" };
+            string[] sortOptions = new[] { "Household", "Membership No.", "Address", "Total Income", "Members" };
 
             var households = from h in _context.Households
                              .Include(h => h.City)
+                             .Include(h => h.Members)
                              .AsNoTracking()
                              select h;
 
@@ -81,39 +82,17 @@ namespace Grow.Controllers
                 {
                     households = households
                         .OrderBy(h => h.StreetName)
-                        .ThenBy(h => h.StreetNumber);
+                        .ThenBy(h => h.StreetNumber)
+                        .ThenBy(h => h.City.CityName)
+                        .ThenBy(h => h.PostalCode);
                 }
                 else
                 {
                     households = households
                         .OrderByDescending(h => h.StreetName)
-                        .ThenByDescending(h => h.StreetNumber);
-                }
-            }
-            else if (sortField == "City")
-            {
-                if (sortDirection == "asc")
-                {
-                    households = households
-                        .OrderBy(h => h.City.CityName);
-                }
-                else
-                {
-                    households = households
-                        .OrderByDescending(h => h.City.CityName);
-                }
-            }
-            else if (sortField == "Postal Code")
-            {
-                if (sortDirection == "asc")
-                {
-                    households = households
-                        .OrderBy(h => h.PostalCode);
-                }
-                else
-                {
-                    households = households
-                        .OrderByDescending(h => h.PostalCode);
+                        .ThenByDescending(h => h.StreetNumber)
+                        .ThenByDescending(h => h.City.CityName)
+                        .ThenByDescending(h => h.PostalCode);
                 }
             }
             else if (sortField == "Total Income")
@@ -127,6 +106,19 @@ namespace Grow.Controllers
                 {
                     households = households
                         .OrderByDescending(h => h.IncomeTotal);
+                }
+            }
+            else if (sortField == "Members")
+            {
+                if (sortDirection == "asc")
+                {
+                    households = households
+                        .OrderBy(h => h.Members.Count());
+                }
+                else
+                {
+                    households = households
+                        .OrderByDescending(h => h.Members.Count());
                 }
             }
             else

@@ -28,6 +28,15 @@ namespace Grow.Models
             }
         }
 
+        [Display(Name = "Address")]
+        public string AddressWithCity
+        {
+            get
+            {
+                return StreetNumber + " " + StreetName + (ApartmentNumber != null ? $" Apt. {ApartmentNumber}" : "") + $", {City?.CityName} {PostalCode}";
+            }
+        }
+
         public int ID { get; set; }
 
         [Display(Name = "Household Name")]

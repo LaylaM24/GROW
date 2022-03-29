@@ -12,6 +12,7 @@ using Grow.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Grow.Controllers
 {
@@ -166,10 +167,26 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,Notes,HouseholdID,GenderID")] Member member,
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,Notes,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles, string[] selectedHealthOptions, string[] selectedRestrictionOptions, string IncomeSource1,
-            double IncomeAmount1, string IncomeSource2, double IncomeAmount2, string IncomeSource3, double IncomeAmount3)
+            double IncomeAmount1, string IncomeSource2, double IncomeAmount2, string IncomeSource3, double IncomeAmount3, string IncomeSource4, double IncomeAmount4,
+            string IncomeSource5, double IncomeAmount5, string IncomeSource6, double IncomeAmount6)
         {
+            // Get Dictionary of Income Sources
+            Dictionary<int, double> sources = new Dictionary<int, double>();
+            if (IncomeSource1 != null)
+                sources.Add(Convert.ToInt32(IncomeSource1), IncomeAmount1);
+            if (IncomeSource2 != null)
+                sources.Add(Convert.ToInt32(IncomeSource2), IncomeAmount2);
+            if (IncomeSource3 != null)
+                sources.Add(Convert.ToInt32(IncomeSource3), IncomeAmount3);
+            if (IncomeSource4 != null)
+                sources.Add(Convert.ToInt32(IncomeSource4), IncomeAmount4);
+            if (IncomeSource5 != null)
+                sources.Add(Convert.ToInt32(IncomeSource5), IncomeAmount5);
+            if (IncomeSource6 != null)
+                sources.Add(Convert.ToInt32(IncomeSource6), IncomeAmount6);
+
             try
             {
                 if (ModelState.IsValid)
@@ -178,14 +195,6 @@ namespace Grow.Controllers
                     _context.SaveChanges();
 
                     // Add Member Income Sources
-                    Dictionary<int, double> sources = new Dictionary<int, double>();
-                    if (IncomeSource1 != null)
-                        sources.Add(Convert.ToInt32(IncomeSource1), IncomeAmount1);
-                    if (IncomeSource2 != null)
-                        sources.Add(Convert.ToInt32(IncomeSource2), IncomeAmount2);
-                    if (IncomeSource3 != null)
-                        sources.Add(Convert.ToInt32(IncomeSource3), IncomeAmount3);
-
                     UpdateMemberIncomes(sources, member);
 
                     // Add Member Restrictions
@@ -217,10 +226,15 @@ namespace Grow.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                var test = e.Message;
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
+
+            ViewData["SelectedDietaryRestrictions"] = selectedRestrictionOptions;
+            ViewData["SelectedHealthConcerns"] = selectedHealthOptions;
+            ViewData["SelectedIncomeSources"] = JsonConvert.SerializeObject(sources);
 
             PopulateAssignedHealthConcernsData(member);
             PopulateAssignedRestrictionData(member);
@@ -260,7 +274,8 @@ namespace Grow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,Notes,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles, string IncomeSource1, double IncomeAmount1, string IncomeSource2, double IncomeAmount2,
-            string IncomeSource3, double IncomeAmount3, string[] selectedHealthOptions, string[] selectedRestrictionOptions)
+            string IncomeSource3, double IncomeAmount3, string IncomeSource4, double IncomeAmount4, string IncomeSource5, double IncomeAmount5, string IncomeSource6, double IncomeAmount6,
+            string[] selectedHealthOptions, string[] selectedRestrictionOptions)
         {
             var memberToUpdate = _context.Members
                 .Include(x => x.Gender)
@@ -289,6 +304,21 @@ namespace Grow.Controllers
             memberToUpdate.DataConsent = member.DataConsent;
             memberToUpdate.IncomeVerified = member.IncomeVerified;
 
+            // Get Dictionary of Income Sources
+            Dictionary<int, double> sources = new Dictionary<int, double>();
+            if (IncomeSource1 != null)
+                sources.Add(Convert.ToInt32(IncomeSource1), IncomeAmount1);
+            if (IncomeSource2 != null)
+                sources.Add(Convert.ToInt32(IncomeSource2), IncomeAmount2);
+            if (IncomeSource3 != null)
+                sources.Add(Convert.ToInt32(IncomeSource3), IncomeAmount3);
+            if (IncomeSource4 != null)
+                sources.Add(Convert.ToInt32(IncomeSource4), IncomeAmount4);
+            if (IncomeSource5 != null)
+                sources.Add(Convert.ToInt32(IncomeSource5), IncomeAmount5);
+            if (IncomeSource6 != null)
+                sources.Add(Convert.ToInt32(IncomeSource6), IncomeAmount6);
+
             if (ModelState.IsValid)
             {
                 try
@@ -298,14 +328,6 @@ namespace Grow.Controllers
                     await _context.SaveChangesAsync();
 
                     // Update Member Income Sources
-                    Dictionary<int, double> sources = new Dictionary<int, double>();
-                    if (IncomeSource1 != null)
-                        sources.Add(Convert.ToInt32(IncomeSource1), IncomeAmount1);
-                    if (IncomeSource2 != null)
-                        sources.Add(Convert.ToInt32(IncomeSource2), IncomeAmount2);
-                    if (IncomeSource3 != null)
-                        sources.Add(Convert.ToInt32(IncomeSource3), IncomeAmount3);
-
                     UpdateMemberIncomes(sources, memberToUpdate);
 
                     // Update Member Restrictions
@@ -348,6 +370,10 @@ namespace Grow.Controllers
                     }
                 }
             }
+
+            ViewData["SelectedDietaryRestrictions"] = selectedRestrictionOptions;
+            ViewData["SelectedHealthConcerns"] = selectedHealthOptions;
+            ViewData["SelectedIncomeSources"] = JsonConvert.SerializeObject(sources);
 
             PopulateAssignedHealthConcernsData(memberToUpdate);
             PopulateAssignedRestrictionData(memberToUpdate);
@@ -468,10 +494,25 @@ namespace Grow.Controllers
             else
                 ViewData["IncomeSources2"] = new SelectList(isQuery, "ID", "Source");
 
-            if (member?.MemberIncomes.Count() == 3)
+            if (member?.MemberIncomes.Count() >= 3)
                 ViewData["IncomeSources3"] = new SelectList(isQuery, "ID", "Source", member?.MemberIncomes.ElementAt(2).IncomeSourceID);
             else
                 ViewData["IncomeSources3"] = new SelectList(isQuery, "ID", "Source");
+
+            if (member?.MemberIncomes.Count() >= 4)
+                ViewData["IncomeSources4"] = new SelectList(isQuery, "ID", "Source", member?.MemberIncomes.ElementAt(3).IncomeSourceID);
+            else
+                ViewData["IncomeSources4"] = new SelectList(isQuery, "ID", "Source");
+
+            if (member?.MemberIncomes.Count() >= 5)
+                ViewData["IncomeSources5"] = new SelectList(isQuery, "ID", "Source", member?.MemberIncomes.ElementAt(4).IncomeSourceID);
+            else
+                ViewData["IncomeSources5"] = new SelectList(isQuery, "ID", "Source");
+
+            if (member?.MemberIncomes.Count() == 6)
+                ViewData["IncomeSources6"] = new SelectList(isQuery, "ID", "Source", member?.MemberIncomes.ElementAt(5).IncomeSourceID);
+            else
+                ViewData["IncomeSources6"] = new SelectList(isQuery, "ID", "Source");
 
             ViewData["Genders"] = new SelectList(gQuery, "ID", "GenderType", member?.GenderID);
             ViewData["HealthConcerns"] = new SelectList(hcQuery, "ID", "Concern");

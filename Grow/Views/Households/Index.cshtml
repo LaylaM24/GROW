@@ -93,7 +93,7 @@
                                 @{
                                     foreach (var i in item.Members)
                                     {
-                                        <a asp-action="" asp-route-id="">@i.FullName</a><br />
+                                        <a asp-controller="Transactions" asp-action="Create" asp-route-id="@i.HouseholdID">@i.FullName</a><br />
                                     }
                                 }
                             </div>
