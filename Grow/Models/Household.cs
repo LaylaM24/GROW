@@ -28,6 +28,7 @@ namespace Grow.Models
             }
         }
 
+        [Display(Name = "Address")]
         public string AddressWithCity
         {
             get

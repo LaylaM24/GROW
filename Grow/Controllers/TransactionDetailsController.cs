@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Grow.Data;
 using Grow.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Grow.Controllers
 {
@@ -19,181 +20,166 @@ namespace Grow.Controllers
             _context = context;
         }
 
-        public IActionResult Add()
+        public IActionResult Index()
         {
-            ViewData["ItemID"] = new SelectList(_context.Items, "ID", "ItemName");
-            ViewData["TransactionID"] = new SelectList(_context.Transactions, "ID", "ID");
-            return View();
+            return RedirectToAction("Index", "Transactions");
         }
 
-        // GET: TransactionDetails
-        public async Task<IActionResult> Index()
+        public PartialViewResult AddItem(int ID)
+        {
+            // Save trans ID for form
+            ViewData["TransactionID"] = ID;
+
+            PopulateDropDownLists();
+
+            return PartialView("_AddItem");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddItem([Bind("TransactionID, ItemID, Quantity, UnitCost, ExtendedCost")] TransactionDetail transDetail)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    // Get unit cost and extended cost
+                    var item = _context.Items.FirstOrDefault(x => x.ID == transDetail.ItemID);
+
+                    transDetail.UnitCost = item.Price;
+                    transDetail.ExtendedCost = item.Price * transDetail.Quantity;
+
+                    _context.TransactionDetails.Add(transDetail);
+                    _context.SaveChanges();
+
+                    UpdateTransactionTotal(transDetail.TransactionID);
+
+                    return Json(new { success = true });
+                }
+            }
+            catch (RetryLimitExceededException)
+            {
+                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+
+            PopulateDropDownLists();
+            return View(transDetail);
+        }
+
+
+        public PartialViewResult EditItem(int ID)
         {
             var transactionDetail = _context.TransactionDetails
-                .Include(td => td.Item)
-                .Include(td => td.Transactions);
+                .Include(x => x.Item)
+                .FirstOrDefault(x => x.ID == ID);
 
-            return View(await transactionDetail.ToListAsync());
+            PopulateDropDownLists(transactionDetail.Item);
+
+            return PartialView("_EditItem", transactionDetail);
         }
 
-        // GET: TransactionDetails/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var transactionDetail = await _context.TransactionDetails
-                .Include(td => td.Item)
-                .Include(td => td.Transactions)
-                .FirstOrDefaultAsync(m => m.ID == id);
-
-            if (transactionDetail == null)
-            {
-                return NotFound();
-            }
-
-            return RedirectToAction("Details", "Transactions", new { id = transactionDetail.TransactionID });
-        }
-
-        // GET: TransactionDetails/Create
-        public IActionResult Create()
-        {
-            ViewData["ItemID"] = new SelectList(_context.Items, "ID", "ItemName");
-            ViewData["TransactionID"] = new SelectList(_context.Transactions, "ID", "ID");
-            return View();
-        }
-
-        // POST: TransactionDetails/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,TransactionID,ItemID,Quantity,UnitCost,ExtendedCost")] TransactionDetail transactionDetail)
+        public async Task<IActionResult> EditItem([Bind("ID, TransactionID, ItemID, Quantity, UnitCost, ExtendedCost")] TransactionDetail transDetail)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(transactionDetail);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Transactions", new { id = transactionDetail.TransactionID });
-            }
-
-            ViewData["ItemID"] = new SelectList(_context.Items, "ID", "ItemName");
-            ViewData["TransactionID"] = new SelectList(_context.Transactions, "ID", "ID");
-            return RedirectToAction("Details", "Transactions", new { id = transactionDetail.TransactionID });
-        }
-
-        // GET: TransactionDetails/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var transactionDetail = await _context.TransactionDetails.FindAsync(id);
-            if (transactionDetail == null)
-            {
-                return NotFound();
-            }
-
-            ViewData["ItemID"] = new SelectList(_context.Items, "ID", "ItemName");
-            ViewData["TransactionID"] = new SelectList(_context.Transactions, "ID", "ID"); 
-
-            return RedirectToAction("Details", "Transactions", new { id = transactionDetail.TransactionID });
-        }
-
-        // POST: TransactionDetails/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,TransactionID,ItemID,Quantity,UnitCost,ExtendedCost")] TransactionDetail transactionDetail)
-        {
-            if (id != transactionDetail.ID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(transactionDetail);
-                    await _context.SaveChangesAsync();
+                    TransactionDetail td = _context.TransactionDetails.FirstOrDefault(x => x.ID == transDetail.ID);
+
+                    // Update fields
+                    td.ItemID = transDetail.ItemID;
+                    td.Quantity = transDetail.Quantity;
+
+                    // Get unit cost and extended cost
+                    var item = _context.Items.FirstOrDefault(x => x.ID == transDetail.ItemID);
+
+                    td.UnitCost = item.Price;
+                    td.ExtendedCost = item.Price * transDetail.Quantity;
+
+                    _context.SaveChanges();
+
+                    UpdateTransactionTotal(td.TransactionID);
+
+                    return Json(new { success = true });
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TransactionDetailExists(transactionDetail.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Details", "Transactions", new { id = transactionDetail.TransactionID });
             }
-            ViewData["ItemID"] = new SelectList(_context.Items, "ID", "ItemName");
-            ViewData["TransactionID"] = new SelectList(_context.Transactions, "ID", "ID");
-            return RedirectToAction("Details", "Transactions", new { id = transactionDetail.TransactionID });
+            catch (RetryLimitExceededException)
+            {
+                ModelState.AddModelError("", "Unable to save changes after multiple attempts. Try again, and if the problem persists, see your system administrator.");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+            }
+
+            PopulateDropDownLists();
+            return View(transDetail);
         }
 
-        // GET: TransactionDetails/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        public PartialViewResult DeleteItem(int ID)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            // Get the TD to delete
+            TransactionDetail td = _context.TransactionDetails
+                .Include(x => x.Item)
+                .FirstOrDefault(x => x.ID == ID);
 
-            var transactionDetail = await _context.TransactionDetails
-                .Include(t => t.Item)
-                .Include(t => t.Transactions)
-                .FirstOrDefaultAsync(m => m.ID == id);
-
-            if (transactionDetail == null)
-            {
-                return NotFound();
-            }
-
-            return RedirectToAction("Details", "Transactions", new { id = transactionDetail.TransactionID });
+            return PartialView("_DeleteItem", td);
         }
 
-        // POST: TransactionDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int ID)
         {
-            var transactionDetail = await _context.TransactionDetails.FindAsync(id);
-            _context.TransactionDetails.Remove(transactionDetail);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Transactions", new { id = transactionDetail.TransactionID });
+            var td = _context.TransactionDetails
+                .Include(x => x.Item)
+                .FirstOrDefault(x => x.ID == ID);
+
+            int transID = td.TransactionID;
+
+            if (td != null)
+            {
+                _context.TransactionDetails.Remove(td);
+                await _context.SaveChangesAsync();
+
+                UpdateTransactionTotal(transID);
+
+                return Json(new { success = true });
+            }
+
+            return View(td);
         }
 
 
-        //becuase we would need to populate 2 drop down list ive used this code instead instead of calling the method.
-        //im sure you could create seperate methods to call but we can now create new transaction details with this.
+        private void UpdateTransactionTotal(int id)
+        {
+            Transaction t = _context.Transactions
+                .Include(x => x.TransactionDetails)
+                .FirstOrDefault(x => x.ID == id);
 
-                        /*-----------------------------------------------------------------------------------------
-                        ViewData["ItemID"] = new SelectList(_context.Items, "ID", "ItemName");
-                        ViewData["TransactionID"] = new SelectList(_context.Transactions, "ID", "ID");
-                        -----------------------------------------------------------------------------------------*/
+            if(t != null)
+            {
+                t.TransactionTotal = 0;
 
+                foreach(var td in t.TransactionDetails)
+                {
+                    t.TransactionTotal += td.ExtendedCost;
+                }
 
-                        /*
-                        private void PopulateDropDownLists(TransactionDetail transactionDetail = null)
-                        {
-                            var iQuery = from i in _context.Items
-                                         orderby i.ItemName
-                                         select i;
+                _context.SaveChanges();
+            }
+        }
 
-                            ViewData["ItemID"] = new SelectList(iQuery, "ID", "ItemName", transactionDetail?.ItemID);
-                        }
-                        */
-
+        private void PopulateDropDownLists(Item item = null)
+        {
+            ViewBag.ItemID = new SelectList(_context.Items, "ID", "ItemName", item?.ID);
+        }
 
         private bool TransactionDetailExists(int id)
         {
