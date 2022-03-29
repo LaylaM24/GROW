@@ -44,6 +44,10 @@ namespace Grow
             services.AddSingleton<IEmailConfiguration>(Configuration
                 .GetSection("EmailConfiguration").Get<EmailConfiguration>());
 
+            //With added methods for production use.
+            services.AddTransient<IMyEmailSender, MyEmailSender>();
+
+
             //For the Identity System
             services.AddTransient<IEmailSender, EmailSender>();
 

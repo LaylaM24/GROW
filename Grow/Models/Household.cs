@@ -20,6 +20,7 @@ namespace Grow.Models
                 return PostalCode?.ToUpper();
             }
         }
+
         public string Address
         {
             get
@@ -104,6 +105,7 @@ namespace Grow.Models
         [Display(Name = "City")]
         [Required(ErrorMessage = "You must select a City.")]
         public int CityID { get; set; }
+
         public City City { get; set; }
 
         public ICollection<Member> Members { get; set; }

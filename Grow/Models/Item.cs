@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Grow.Models
 {
-    public class Item
+    public class Item : IValidatableObject
     {
         public Item()
         {
@@ -33,5 +33,29 @@ namespace Grow.Models
         public ItemCategory ItemCategory { get; set; }
 
         public ICollection<TransactionDetail> TransactionDetails { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (ItemCategoryID == 1 && ItemNo < 100 || ItemCategoryID == 1 && ItemNo > 199)
+            {
+                yield return new ValidationResult("Please follow the guidelines above.", new[] { "ItemNo" });
+            }
+            else if (ItemCategoryID == 2 && ItemNo < 200 || ItemCategoryID == 2 && ItemNo > 299)
+            {
+                yield return new ValidationResult("Please follow the guidelines above.", new[] { "ItemNo" });
+            }
+            else if (ItemCategoryID == 3 && ItemNo < 300 || ItemCategoryID == 3 && ItemNo > 399)
+            {
+                yield return new ValidationResult("Please follow the guidelines above.", new[] { "ItemNo" });
+            }
+            else if (ItemCategoryID == 4 && ItemNo < 400 || ItemCategoryID == 4 && ItemNo > 499)
+            {
+                yield return new ValidationResult("Please follow the guidelines above.", new[] { "ItemNo" });
+            }
+            else if (ItemCategoryID == 5 && ItemNo < 600 || ItemCategoryID == 5 && ItemNo > 699)
+            {
+                yield return new ValidationResult("Please follow the guidelines above.", new[] { "ItemNo" });
+            }
+        }
     }
 }
