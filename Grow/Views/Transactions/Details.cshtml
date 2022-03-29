@@ -1,85 +1,128 @@
 ﻿@model Grow.Models.Transaction
 
 @{
-    ViewData["Title"] = "Transaction Details";
+    ViewData["Title"] = "Sale Details";
 }
 
-<h2>Transaction Details</h2>
+<h2>Sale Details</h2>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TransactionDate)
+<hr />
+<div class="media">
+    <div class="media-body ml-3">
+        <div class="row">
+            <div class="col-sm-6">
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Household.HouseholdName)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Household.HouseholdName)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Household.AddressWithCity)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Household.AddressWithCity)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-sm-6">
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.TransactionDate)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.TransactionDate)
+                    </dd>
+                    <dt class="col-sm-4">
+                        Sales Person
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Volunteer.ShortName)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group" id="ListItems">
+    <h3>Items</h3>
+    <dl class="dl-horizontal">
+        <dt>
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TransactionDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TransactionTotal)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TransactionTotal)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Household)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Household.HouseholdName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Volunteer)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Volunteer.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TransactionDetails)
-        </dt>
-        <dd class="col-sm-10">
-            <table class="table table-striped">
-                <thead>
+        <dd>
+            <div id="ItemList">
+                <table class="table">
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(modelItem => Model.TransactionDetails.FirstOrDefault().Item)
+                            <input type="submit" disabled="disabled" value="Item No." class="btn btn-link" />
                         </th>
                         <th>
-                            @Html.DisplayNameFor(modelItem => Model.TransactionDetails.FirstOrDefault().Quantity)
+                            <input type="submit" disabled="disabled" value="Item" class="btn btn-link" />
                         </th>
                         <th>
-                            @Html.DisplayNameFor(modelItem => Model.TransactionDetails.FirstOrDefault().ExtendedCost)
+                            <input type="submit" disabled="disabled" value="Cost" class="btn btn-link" />
                         </th>
-                        <th></th>
+                        <th>
+                            <input type="submit" disabled="disabled" value="Quantity" class="btn btn-link" />
+                        </th>
+                        <th>
+                            <input type="submit" disabled="disabled" value="Ext. Cost" class="btn btn-link" />
+                        </th>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var transaction in Model.TransactionDetails)
+
+                    @foreach (var item in Model.TransactionDetails)
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => transaction.Item.ItemName)
+                                @Html.DisplayFor(modelItem => item.Item.ItemNo)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => transaction.Quantity)
+                                @Html.DisplayFor(modelItem => item.Item.ItemName)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => transaction.ExtendedCost)
+                                @Html.DisplayFor(modelItem => item.UnitCost)
                             </td>
                             <td>
-                                <a asp-controller="TransactionDetails" asp-action="Details" asp-route-id="@transaction.ID">
-                                    View Details
-                                </a>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExtendedCost)
                             </td>
                         </tr>
                     }
-                </tbody>
-            </table>
+
+                    <tr>
+                        <th>
+                            <input type="submit" disabled="disabled" value="Total" class="btn btn-link" />
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                            @Model.TransactionTotal.ToString("C")
+                        </th>
+                        <th></th>
+                    </tr>
+                </table>
+            </div>
         </dd>
     </dl>
 </div>
 <br />
-<p>
-    @Html.ActionLink("Add", "Add", "TransactionDetails", new { id = Model.ID }, null) |
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to Transaction List", "Index")
-</p>
+<div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <a asp-action="Edit" asp-route-id="@Model.ID">
+                    <input type="button" value="Edit" class="btn btn-primary" style="width: 75px;" />
+                </a>
+            </div>
+        </div>
+    </div>
+    <a asp-action="SalesHistory">Back to List</a>
+</div>

@@ -1,51 +1,211 @@
 ﻿@model Grow.Models.Transaction
 
 @{
-    ViewData["Title"] = "Create Transaction";
+    ViewData["Title"] = "New Sale";
 }
 
-<h2>Create New Transaction</h2>
+<h2>New Sale</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TransactionDate" class="control-label"></label>
-                <input asp-for="TransactionDate" class="form-control" value="@ViewBag.TransDate" readonly />
-                <span asp-validation-for="TransactionDate" class="text-danger"></span>
+<partial name="_ItemModal" />
+<form id="createForm">
+    <div class="media">
+        <div class="media-body ml-3">
+            <div class="row">
+                <div class="col-sm-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Household.HouseholdName)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Household.HouseholdName)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Household.AddressWithCity)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Household.AddressWithCity)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-sm-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.TransactionDate)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.TransactionDate)
+                        </dd>
+                        <dt class="col-sm-4">
+                            Sales Person
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Volunteer.ShortName)
+                        </dd>
+                    </dl>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="TransactionTotal" class="control-label"></label>
-                <input asp-for="TransactionTotal" class="form-control" />
-                <span asp-validation-for="TransactionTotal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HouseholdID" class="control-label"></label>
-                <select asp-for="HouseholdID" class="form-control" asp-items="ViewBag.HouseholdID">
-                    <option value="">Select a Household</option>
-                </select>
-                <span asp-validation-for="HouseholdID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="VolunteerID" class="control-label"></label>
-                <select asp-for="VolunteerID" class="form-control" asp-items="ViewBag.VolunteerID">
-                    <option value="">Select a Volunteer</option>
-                </select>
-                <span asp-validation-for="VolunteerID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group" id="ListItems">
+        <h3>Items</h3>
+        <dl class="dl-horizontal">
+            <dt>
+            </dt>
+            <dd>
+                <div id="ItemList">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Item No." class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Item" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Cost" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Quantity" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Ext. Cost" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <button class="btn btn-outline-success modal-link" tag="@Model.ID" name="AddForm" data-toggle="modal" data-target="#theItemModal" title="Add Item" type="button">&#x271A;</button>
+                            </th>
+                        </tr>
+
+                        @foreach (var item in Model.TransactionDetails)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Item.ItemNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Item.ItemName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnitCost)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ExtendedCost)
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theItemModal" title="Edit @item.Item.ItemName" type="button">&#x270D;</button>
+                                    <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theItemModal" title="Delete @item.Item.ItemName" type="button">&#x274C;</button>
+                                </td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Total" class="btn btn-link" />
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                                @Model.TransactionTotal.ToString("C")
+                            </th>
+                            <th></th>
+                        </tr>
+                    </table>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <br />
+
+    <div class="row ml-1">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="form-group">
+                    <input id="btnDelete" type="button" value="Delete" class="btn btn-danger" style="width: 75px;" />
+                </div>
+                <div class="ml-2"></div>
+                <div class="form-group">
+                    <a asp-action="Details" asp-route-id="@Model.ID">
+                        <input type="button" value="Done" class="btn btn-primary" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+    $(document).ready(function () {
+
+        $("#btnDelete").click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "/Transactions/DeleteNewTransaction",
+                data: { id: @Model.ID },
+                success: function () {
+                    window.location.href = "/Transactions";
+                },
+                error: function () {
+                    alert("Operation Failed. Cannot delete record at this time.");
+                }
+            });
+
+        });
+
+        // Member Modal Scripts
+            function refreshModal(actionForm, transDetailID) {
+              switch (actionForm) {
+                  case 'AddForm': $('#formItemBody').load('/TransactionDetails/AddItem/' + transDetailID);
+                    break;
+                  case 'EditForm': $('#formItemBody').load('/TransactionDetails/EditItem/' + transDetailID);
+                      break;
+                  case 'DeleteForm': $('#formItemBody').load('/TransactionDetails/DeleteItem/' + transDetailID);
+                      break;
+                default: break;
+              };
+            return;
+            };
+
+            $(document).on("click", ".modal-link", function () {
+                var actionForm = $(this).attr("name");
+                var itemID = $(this).attr("tag");
+                refreshModal(actionForm, itemID);
+            });
+
+            $(document).on("click", "#submitItemForm", function (event) {
+                event.preventDefault();
+
+                var form = $('#theItemForm');
+                if (form.valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function () {
+                            $('#theItemModal').modal('hide');
+                        },
+                        error: function () {
+                            alert("Operation Failed. Please make sure all required fields are filled correctly.");
+                        }
+                    });
+                }
+                return false;
+            });
+
+            $('#theItemModal').on('hide.bs.modal', function () {
+                $('#ItemList').load('/Transactions/ItemList/@Model.ID');
+            });
+
+    });
+</script>
 }

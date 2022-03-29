@@ -1,36 +1,36 @@
-﻿@model IEnumerable<Grow.Models.Household>
+﻿@model IEnumerable<Grow.Models.Transaction>
 
 @{
-    ViewData["Title"] = "Households";
+    ViewData["Title"] = "Sales";
 }
-
-<h1>Create Sale</h1>
+<div class="form-horizontal">
+    <div class="row">
+        <div class="col-6">
+            <a asp-action="Index">
+                <span class="btn btn-primary">Back to Sales</span>
+            </a>
+        </div>
+    </div>
+</div>
 <br />
-<form asp-action="Index" method="get">
+<h1>Sales History</h1>
+<br />
+<form asp-action="SalesHistory" method="get">
     <input type="hidden" name="sortDirection" value="@ViewData["sortDirection"]" />
     <input type="hidden" name="sortField" value="@ViewData["sortField"]" />
     <div class="form-horizontal">
         <div class="row">
             <div class="col-6">
                 <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
-                    Filter / Search
+                    Search
                 </button>
-            </div>
-            <div class="col-6 text-right">
-                <a asp-action="SalesHistory">
-                    <span class="btn btn-outline-dark">Sales History</span>
-                </a>
             </div>
         </div>
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
             <div class="card card-body bg-light">
                 <div class="row">
                     <div class="form-group col-md-4">
-                        <label class="control-label">Filter by City:</label>
-                        @Html.DropDownList("CityID", null, "None", htmlAttributes: new { @class = "form-control" })
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Search Household Address:</label>
+                        <label class="control-label">Search Household Name:</label>
                         @Html.TextBox("SearchString", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-4 align-self-end">
@@ -46,13 +46,16 @@
         <thead>
             <tr>
                 <th>
+                    <input type="submit" name="actionButton" value="Transaction Date" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Total" class="btn btn-link" />
+                </th>
+                <th>
                     <input type="submit" name="actionButton" value="Household" class="btn btn-link" />
                 </th>
                 <th>
-                    <input type="submit" name="actionButton" value="Membership No." class="btn btn-link" />
-                </th>
-                <th>
-                    <input type="submit" name="actionButton" value="Address" class="btn btn-link" />
+                    <input type="submit" name="actionButton" value="Sales Person" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -62,21 +65,25 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.HouseholdName)
+                        @Html.DisplayFor(modelItem => item.TransactionDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MembershipNumber)
+                        @Html.DisplayFor(modelItem => item.TransactionTotal)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AddressWithCity)
+                        @Html.DisplayFor(modelItem => item.Household.HouseholdName)
                     </td>
                     <td>
-                        <a asp-action="Create" asp-route-id="@item.ID">&#x271A; Create Sale</a>
+                        @Html.DisplayFor(modelItem => item.Volunteer.ShortName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    <br />
     <partial name="_PagingNavBar" />
 </form>

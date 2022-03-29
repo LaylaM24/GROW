@@ -1,0 +1,36 @@
+﻿@model Grow.Models.TransactionDetail
+
+<h2>Delete Item</h2>
+<br />
+
+<input type="hidden" asp-for="TransactionID" />
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="ItemID" class="control-label"></label>
+            <input asp-for="Item.ItemName" class="form-control" readonly />
+            <span asp-validation-for="ItemID" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="Quantity" class="control-label"></label>
+            <input asp-for="Quantity" min="1" class="form-control" readonly />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<br />
+<form asp-controller="TransactionDetails" asp-action="Delete" asp-route-ID="@Model.ID" method="post" id="theItemForm">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="submit" value="Delete" class="btn btn-danger" id="submitItemForm" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

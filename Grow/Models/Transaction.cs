@@ -34,10 +34,9 @@ namespace Grow.Models
         [Display(Name = "Volunteer")]
         [Required(ErrorMessage = "Volunteer is required.")]
         public int VolunteerID { get; set; }
-
         public Volunteer Volunteer { get; set; }
 
-        [Display(Name = "Receipts")]
+        [Display(Name = "Items")]
         public ICollection<TransactionDetail> TransactionDetails { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
