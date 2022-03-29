@@ -45,6 +45,10 @@
             </tr>
         </thead>
         <tbody>
+            @{ 
+                DateTime date = DateTime.Today;
+                date = date.AddMonths(-1);
+            }
             @foreach (var item in Model)
             {
                 <tr>
@@ -55,10 +59,10 @@
                         @Html.DisplayFor(modelItem => item.HouseholdName)
                     </td>
                     <td>
-                        @(item.Transactions.Where(x => x.TransactionDate >= new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day)).Count())
+                        @(item.Transactions.Where(x => x.TransactionDate >= date).Count())
                     </td>
                     <td>
-                        @(item.Transactions.Where(x => x.TransactionDate >= new DateTime(DateTime.Today.Year, DateTime.Today.Month - 1, DateTime.Today.Day)).Sum(x => x.TransactionTotal))
+                        @(item.Transactions.Where(x => x.TransactionDate >= date).Sum(x => x.TransactionTotal).ToString("C"))
                     </td>
                     <td>
                         <a asp-controller="Households" asp-action="Details" asp-route-id="@item.ID">View Household</a>
