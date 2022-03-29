@@ -242,7 +242,7 @@ namespace Grow.Controllers
         // GET: Transactions/Create
         public IActionResult Create(int id)
         {
-            if (id < 0)
+            if(id < 0)
             {
                 return RedirectToAction("Index", "Transactions");
             }

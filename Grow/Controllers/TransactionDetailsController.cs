@@ -163,11 +163,11 @@ namespace Grow.Controllers
                 .Include(x => x.TransactionDetails)
                 .FirstOrDefault(x => x.ID == id);
 
-            if (t != null)
+            if(t != null)
             {
                 t.TransactionTotal = 0;
 
-                foreach (var td in t.TransactionDetails)
+                foreach(var td in t.TransactionDetails)
                 {
                     t.TransactionTotal += td.ExtendedCost;
                 }
