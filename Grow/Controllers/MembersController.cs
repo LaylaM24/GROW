@@ -222,7 +222,7 @@ namespace Grow.Controllers
                     });
                     _context.SaveChanges();
 
-                    return RedirectToAction("Edit", "Households", new { id = member.HouseholdID });
+                    return RedirectToAction("Details", "Households", new { id = member.HouseholdID });
                 }
             }
             catch (RetryLimitExceededException)
