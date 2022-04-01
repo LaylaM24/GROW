@@ -170,7 +170,7 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,Notes,HouseholdID,GenderID")] Member member,
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,EmailConsent,Notes,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles, string[] selectedHealthOptions, string[] selectedRestrictionOptions, string IncomeSource1,
             double IncomeAmount1, string IncomeSource2, double IncomeAmount2, string IncomeSource3, double IncomeAmount3, string IncomeSource4, double IncomeAmount4,
             string IncomeSource5, double IncomeAmount5, string IncomeSource6, double IncomeAmount6)
@@ -222,7 +222,7 @@ namespace Grow.Controllers
                     });
                     _context.SaveChanges();
 
-                    return RedirectToAction("Edit", "Households", new { id = member.HouseholdID });
+                    return RedirectToAction("Details", "Households", new { id = member.HouseholdID });
                 }
             }
             catch (RetryLimitExceededException)
@@ -275,7 +275,7 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,Notes,HouseholdID,GenderID")] Member member,
+        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,DOB,Phone,Email,IncomeVerified,IncomeAmount,DataConsent,EmailConsent,Notes,HouseholdID,GenderID")] Member member,
             string[] selectedOptions, List<IFormFile> theFiles, string IncomeSource1, double IncomeAmount1, string IncomeSource2, double IncomeAmount2,
             string IncomeSource3, double IncomeAmount3, string IncomeSource4, double IncomeAmount4, string IncomeSource5, double IncomeAmount5, string IncomeSource6, double IncomeAmount6,
             string[] selectedHealthOptions, string[] selectedRestrictionOptions)
@@ -305,6 +305,7 @@ namespace Grow.Controllers
             memberToUpdate.Email = member.Email;
             memberToUpdate.Notes = member.Notes;
             memberToUpdate.DataConsent = member.DataConsent;
+            memberToUpdate.EmailConsent = member.EmailConsent;
             memberToUpdate.IncomeVerified = member.IncomeVerified;
 
             // Get Dictionary of Income Sources
