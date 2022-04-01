@@ -1396,6 +1396,7 @@ namespace Grow.Data
                             IncomeVerified = true,
                             IncomeAmount = 10000,
                             DataConsent = true,
+                            EmailConsent = false,
                             GenderID = 1
                         },
                         new Member
@@ -1409,6 +1410,7 @@ namespace Grow.Data
                             IncomeVerified = false,
                             IncomeAmount = 15000,
                             DataConsent = true,
+                            EmailConsent = true,
                             GenderID = 1
                         },
                         new Member
@@ -1422,6 +1424,7 @@ namespace Grow.Data
                             IncomeVerified = true,
                             IncomeAmount = 20000,
                             DataConsent = false,
+                            EmailConsent = true,
                             GenderID = 1
                         },
                         new Member
@@ -1435,6 +1438,7 @@ namespace Grow.Data
                             IncomeVerified = true,
                             IncomeAmount = 5000,
                             DataConsent = true,
+                            EmailConsent = true,
                             GenderID = 1
                         },
                         new Member
@@ -1448,6 +1452,7 @@ namespace Grow.Data
                             IncomeVerified = false,
                             IncomeAmount = 1000,
                             DataConsent = true,
+                            EmailConsent = true,
                             GenderID = 1
                         });
                     context.SaveChanges();
@@ -1656,93 +1661,6 @@ namespace Grow.Data
                             ChangeType = "Create",
                             ChangeDescription = "Household Created",
                             ChangeDate = DateTime.Now
-                        }
-                    );
-                    context.SaveChanges();
-                }
-                #endregion
-
-                #region Transaction
-                if (!context.Transactions.Any())
-                {
-                    context.Transactions.AddRange(
-                        new Transaction
-                        {
-                            HouseholdID = 1,
-                            TransactionDate = DateTime.Now,
-                            TransactionTotal = 4.50,
-                            VolunteerID = 1
-                        },
-                        new Transaction
-                        {
-                            HouseholdID = 2,
-                            TransactionDate = DateTime.Now,
-                            TransactionTotal = 2.75,
-                            VolunteerID = 2
-                        },
-                        new Transaction
-                        {
-                            HouseholdID = 3,
-                            TransactionDate = DateTime.Now,
-                            TransactionTotal = 6.00,
-                            VolunteerID = 3
-                        }
-                    );
-                    context.SaveChanges();
-                }
-                #endregion
-
-                #region Transaction Details
-                if (!context.TransactionDetails.Any())
-                {
-                    context.TransactionDetails.AddRange(
-                        new TransactionDetail
-                        {
-                            TransactionID = 1,
-                            ItemID = 1,
-                            Quantity = 10,
-                            UnitCost = 0.10,
-                            ExtendedCost = 1.00
-                        },
-                        new TransactionDetail
-                        {
-                            TransactionID = 1,
-                            ItemID = 2,
-                            Quantity = 10,
-                            UnitCost = 0.10,
-                            ExtendedCost = 1.00
-                        },
-                        new TransactionDetail
-                        {
-                            TransactionID = 1,
-                            ItemID = 4,
-                            Quantity = 1,
-                            UnitCost = 4.00,
-                            ExtendedCost = 4.00
-                        },
-                        new TransactionDetail
-                        {
-                            TransactionID = 2,
-                            ItemID = 3,
-                            Quantity = 1,
-                            UnitCost = 2.75,
-                            ExtendedCost = 2.75
-                        },
-                        new TransactionDetail
-                        {
-                            TransactionID = 3,
-                            ItemID = 4,
-                            Quantity = 1,
-                            UnitCost = 4.00,
-                            ExtendedCost = 4.00
-                        },
-                        new TransactionDetail
-                        {
-                            TransactionID = 3,
-                            ItemID = 2,
-                            Quantity = 5,
-                            UnitCost = 0.10,
-                            ExtendedCost = 0.50
                         }
                     );
                     context.SaveChanges();

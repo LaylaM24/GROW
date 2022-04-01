@@ -29,6 +29,10 @@ namespace Grow.Models
         [Required(ErrorMessage = "Household is required.")]
         public int HouseholdID { get; set; }
 
+        [Display(Name = "Member")]
+        [Required(ErrorMessage = "Member is required.")]
+        public int MemberID { get; set; }
+
         public Household Household { get; set; }
 
         [Display(Name = "Volunteer")]
