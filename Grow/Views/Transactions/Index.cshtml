@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Grow.Models.Household>
+﻿@model IEnumerable<Grow.Models.Member>
 
 @{
     ViewData["Title"] = "Households";
@@ -46,13 +46,16 @@
         <thead>
             <tr>
                 <th>
-                    <input type="submit" name="actionButton" value="Household" class="btn btn-link" />
-                </th>
-                <th>
                     <input type="submit" name="actionButton" value="Membership No." class="btn btn-link" />
                 </th>
                 <th>
+                    <input type="submit" name="actionButton" value="Household" class="btn btn-link" />
+                </th>
+                <th>
                     <input type="submit" name="actionButton" value="Address" class="btn btn-link" />
+                </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
                 </th>
                 <th></th>
             </tr>
@@ -62,13 +65,16 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.HouseholdName)
+                        @Html.DisplayFor(modelItem => item.Household.MembershipNumber)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.MembershipNumber)
+                        @Html.DisplayFor(modelItem => item.Household.HouseholdName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AddressWithCity)
+                        @Html.DisplayFor(modelItem => item.Household.AddressWithCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
                     </td>
                     <td>
                         <a asp-action="Create" asp-route-id="@item.ID">&#x271A; Create Sale</a>

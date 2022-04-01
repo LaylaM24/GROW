@@ -55,6 +55,9 @@
                     <input type="submit" name="actionButton" value="Household" class="btn btn-link" />
                 </th>
                 <th>
+                    <input type="submit" name="actionButton" value="Member" class="btn btn-link" />
+                </th>
+                <th>
                     <input type="submit" name="actionButton" value="Sales Person" class="btn btn-link" />
                 </th>
                 <th></th>
@@ -72,6 +75,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Household.HouseholdName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Member.FullName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Volunteer.ShortName)
