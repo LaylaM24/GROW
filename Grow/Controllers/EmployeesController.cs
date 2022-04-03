@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Grow.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class EmployeesController : Controller
     {
         private readonly GrowContext _context;

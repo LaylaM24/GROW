@@ -1,6 +1,7 @@
 ﻿using Grow.Data;
 using Grow.Models;
 using Grow.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace Grow.Controllers
 {
+    [Authorize(Roles = "Admin, SuperAdmin, Volunteer")]
     public class HouseholdMembersController : Controller
     {
         private readonly GrowContext _context;

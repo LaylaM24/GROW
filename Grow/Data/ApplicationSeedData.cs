@@ -13,7 +13,7 @@ namespace Grow.Data
         {
             //Create Roles
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            string[] roleNames = { "Admin", "Supervisor", "Volunteer" };
+            string[] roleNames = { "Admin", "SuperAdmin", "Volunteer" };
             IdentityResult roleResult;
             foreach (var roleName in roleNames)
             {
@@ -40,19 +40,19 @@ namespace Grow.Data
                     userManager.AddToRoleAsync(user, "Admin").Wait();
                 }
             }
-            if (userManager.FindByEmailAsync("super1@outlook.com").Result == null)
+            if (userManager.FindByEmailAsync("superadmin1@outlook.com").Result == null)
             {
                 IdentityUser user = new IdentityUser
                 {
-                    UserName = "super1@outlook.com",
-                    Email = "super1@outlook.com"
+                    UserName = "superadmin1@outlook.com",
+                    Email = "superadmin1@outlook.com"
                 };
 
                 IdentityResult result = userManager.CreateAsync(user, "Password").Result;
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "Supervisor").Wait();
+                    userManager.AddToRoleAsync(user, "SuperAdmin").Wait();
                 }
             }
             if (userManager.FindByEmailAsync("volunteer1@outlook.com").Result == null)

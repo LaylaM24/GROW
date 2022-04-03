@@ -13,9 +13,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Grow.Controllers
 {
+    [Authorize(Roles = "Admin, SuperAdmin, Volunteer")]
     public class MembersController : Controller
     {
         private readonly GrowContext _context;

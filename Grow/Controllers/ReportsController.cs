@@ -1,6 +1,7 @@
 ﻿using Grow.Data;
 using Grow.Models;
 using Grow.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Grow.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class ReportsController : Controller
     {
         private readonly GrowContext _context;

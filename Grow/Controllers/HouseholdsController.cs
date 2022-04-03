@@ -9,9 +9,11 @@ using Grow.Data;
 using Grow.Models;
 using Grow.Utilities;
 using Grow.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Grow.Controllers
 {
+    [Authorize(Roles = "Admin, SuperAdmin, Volunteer")]
     public class HouseholdsController : Controller
     {
         private readonly GrowContext _context;

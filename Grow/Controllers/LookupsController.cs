@@ -1,4 +1,5 @@
 ﻿using Grow.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Grow.Controllers
 {
+    [Authorize(Roles = "SuperAdmin")]
     public class LookupsController : Controller
     {
         private readonly GrowContext _context;
