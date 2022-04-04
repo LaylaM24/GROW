@@ -373,14 +373,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions.FindAsync(id);
             _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(SalesHistory));
-        }
-
-        public async void DeleteNewTransaction(int id)
-        {
-            var transaction = _context.Transactions.Find(id);
-            _context.Transactions.Remove(transaction);
-            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         public PartialViewResult ItemList(int id)
