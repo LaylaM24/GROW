@@ -481,7 +481,7 @@ namespace Grow.Controllers
                 {
                     //Send a Notice.
                     List<EmailAddress> folks = (from p in _context.Members
-                                                where p.DataConsent == true
+                                                where p.EmailConsent == true
                                                 select new EmailAddress
                                                 {
                                                     Name = p.FullName,
