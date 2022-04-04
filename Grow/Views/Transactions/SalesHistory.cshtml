@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-6">
             <a asp-action="Index">
-                <span class="btn btn-primary">Back to Sales</span>
+                <span class="btn btn-outline-primary">Back to Sales</span>
             </a>
         </div>
     </div>
@@ -84,8 +84,7 @@
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        <a asp-action="Details" asp-route-id="@item.ID">View Details</a>
                     </td>
                 </tr>
             }

@@ -77,8 +77,6 @@ namespace Grow.Controllers
                 .Include(x => x.Item)
                 .FirstOrDefault(x => x.ID == ID);
 
-            PopulateDropDownLists(transactionDetail.Item);
-
             return PartialView("_EditItem", transactionDetail);
         }
 
@@ -118,7 +116,6 @@ namespace Grow.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
-            PopulateDropDownLists();
             return View(transDetail);
         }
 

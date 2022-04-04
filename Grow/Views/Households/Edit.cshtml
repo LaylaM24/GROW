@@ -46,14 +46,28 @@
                         <span asp-validation-for="IncomeTotal" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-check form-group ">
-                        <br /><br />
-                        <input asp-for="LICOVerified" class="form-check-input" type="checkbox">
-                        <label asp-for="LICOVerified" class="form-check-label"></label>
-                        <span asp-validation-for="LICOVerified" class="text-danger"></span>
+                @if (User.IsInRole("SuperAdmin"))
+                {
+                    <div class="col-6">
+                        <div class="form-check form-group">
+                            <br /><br />
+                            <input asp-for="LICOVerified" class="form-check-input" type="checkbox">
+                            <label asp-for="LICOVerified" class="form-check-label"></label>
+                            <span asp-validation-for="LICOVerified" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <div class="col-6">
+                        <div class="form-check form-group">
+                            <br /><br />
+                            <input type="hidden" asp-for="LICOVerified" />
+                            @Html.DisplayFor(model => model.LICOVerified)
+                            @Html.DisplayNameFor(model => model.LICOVerified)
+                        </div>
+                    </div>
+                }
             </div>
         </div>
         <div class="col-md-6">
