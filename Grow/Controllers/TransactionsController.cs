@@ -22,30 +22,30 @@ namespace Grow.Controllers
 
         // GET: Transactions
         public async Task<IActionResult> Index(string SearchString, int? CityID, int? page, int? pageSizeID,
-            string actionButton, string sortDirection = "asc", string sortField = "Household")
+            string actionButton, string sortDirection = "asc", string sortField = "Membership No.")
         {
             ViewData["Filtering"] = "";
 
             PopulateDropDownLists();
 
-            string[] sortOptions = new[] { "Household", "Membership No.", "Address" };
+            string[] sortOptions = new[] { "Household", "Membership No.", "Member", "Address" };
 
-            var households = from h in _context.Households
-                             .Include(h => h.City)
-                             .Include(h => h.Members)
+            var members = from h in _context.Members
+                             .Include(x => x.Household)
+                             .ThenInclude(h => h.City)
                              .AsNoTracking()
                              select h;
 
             if (CityID.HasValue)
             {
-                households = households.Where(h => h.CityID == CityID);
+                members = members.Where(h => h.Household.CityID == CityID);
                 ViewData["Filtering"] = " show";
             }
 
             if (!String.IsNullOrEmpty(SearchString))
             {
-                households = households.Where(h => h.StreetNumber.ToUpper().Contains(SearchString.ToUpper())
-                                                || h.StreetName.ToUpper().Contains(SearchString.ToUpper()));
+                members = members.Where(h => h.Household.StreetNumber.ToUpper().Contains(SearchString.ToUpper())
+                                                || h.Household.StreetName.ToUpper().Contains(SearchString.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 
@@ -67,45 +67,60 @@ namespace Grow.Controllers
             {
                 if (sortDirection == "asc")
                 {
-                    households = households
-                        .OrderBy(h => h.MembershipNumber);
+                    members = members
+                        .OrderBy(h => h.Household.MembershipNumber);
                 }
                 else
                 {
-                    households = households
-                        .OrderByDescending(h => h.MembershipNumber);
+                    members = members
+                        .OrderByDescending(h => h.Household.MembershipNumber);
+                }
+            }
+            else if (sortField == "Member")
+            {
+                if (sortDirection == "asc")
+                {
+                    members = members
+                        .OrderBy(h => h.LastName)
+                        .ThenBy(x => x.FirstName);
+                }
+                else
+                {
+                    members = members
+                        .OrderByDescending(h => h.LastName)
+                        .ThenByDescending(x => x.FirstName);
                 }
             }
             else if (sortField == "Address")
             {
                 if (sortDirection == "asc")
                 {
-                    households = households
-                        .OrderBy(h => h.StreetName)
-                        .ThenBy(h => h.StreetNumber)
-                        .ThenBy(h => h.City.CityName)
-                        .ThenBy(h => h.PostalCode);
+                    members = members
+                        .OrderBy(h => h.Household.StreetName)
+                        .ThenBy(h => h.Household.StreetNumber)
+                        .ThenBy(h => h.Household.City.CityName)
+                        .ThenBy(h => h.Household.PostalCode);
                 }
                 else
                 {
-                    households = households
-                        .OrderByDescending(h => h.StreetName)
-                        .ThenByDescending(h => h.StreetNumber)
-                        .ThenByDescending(h => h.City.CityName)
-                        .ThenByDescending(h => h.PostalCode);
+                    members = members
+                        .OrderByDescending(h => h.Household.StreetName)
+                        .ThenByDescending(h => h.Household.StreetNumber)
+                        .ThenByDescending(h => h.Household.City.CityName)
+                        .ThenByDescending(h => h.Household.PostalCode);
                 }
             }
             else
             {
                 if (sortDirection == "asc")
                 {
-                    households = households
-                        .OrderBy(h => h.HouseholdName);
+                    members = members
+                        .OrderBy(h => h.Household.HouseholdName);
                 }
                 else
                 {
-                    households = households
-                        .OrderByDescending(h => h.HouseholdName);
+                    members = members
+                        .OrderByDescending(h => h.Household.HouseholdName);
                 }
             }
 
@@ -115,7 +130,7 @@ namespace Grow.Controllers
             int pageSize = PageSizeHelper.SetPageSize(HttpContext, pageSizeID);
             ViewData["pageSizeID"] = PageSizeHelper.PageSizeList(pageSize);
 
-            var pagedData = await PaginatedList<Household>.CreateAsync(households.AsNoTracking(), page ?? 1, pageSize);
+            var pagedData = await PaginatedList<Member>.CreateAsync(members.AsNoTracking(), page ?? 1, pageSize);
             return View(pagedData);
         }
 
@@ -124,10 +139,11 @@ namespace Grow.Controllers
         {
             ViewData["Filtering"] = "";
 
-            string[] sortOptions = new[] { "Transaction Date", "Total", "Household", "Sales Person" };
+            string[] sortOptions = new[] { "Transaction Date", "Total", "Household", "Member", "Sales Person" };
 
             var transaction = from t in _context.Transactions
                               .Include(t => t.Household)
+                              .Include(t => t.Member)
                               .Include(t => t.Volunteer)
                               .AsNoTracking()
                               select t;
@@ -191,6 +207,21 @@ namespace Grow.Controllers
                         .OrderByDescending(h => h.Household.HouseholdName);
                 }
             }
+            else if (sortField == "Member")
+            {
+                if (sortDirection == "asc")
+                {
+                    transaction = transaction
+                        .OrderBy(h => h.Member.LastName)
+                        .ThenBy(x => x.Member.FirstName);
+                }
+                else
+                {
+                    transaction = transaction
+                        .OrderByDescending(h => h.Member.LastName)
+                        .ThenByDescending(x => x.Member.FirstName);
+                }
+            }
             else
             {
                 if (sortDirection == "asc")
@@ -226,6 +257,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
+                .Include(x => x.Member)
                 .Include(t => t.Volunteer)
                 .Include(t => t.TransactionDetails)
                     .ThenInclude(td => td.Item)
@@ -242,7 +274,10 @@ namespace Grow.Controllers
         // GET: Transactions/Create
         public IActionResult Create(int id)
         {
-            if(id < 0)
+            // Get member
+            var member = _context.Members.FirstOrDefault(x => x.ID == id);
+
+            if (member == null)
             {
                 return RedirectToAction("Index", "Transactions");
             }
@@ -250,7 +285,8 @@ namespace Grow.Controllers
             // Create a new transaction immediately
             Transaction newTrans = new Transaction()
             {
-                HouseholdID = id,
+                HouseholdID = member.HouseholdID,
+                MemberID = member.ID,
                 TransactionDate = DateTime.Today,
                 TransactionTotal = 0,
                 // Change to actual volunteer later
@@ -270,30 +306,12 @@ namespace Grow.Controllers
             Transaction trans = _context.Transactions
                 .Include(x => x.Household)
                 .ThenInclude(x => x.City)
+                .Include(x => x.Member)
                 .Include(x => x.TransactionDetails)
                 .Include(x => x.Volunteer)
                 .FirstOrDefault(x => x.ID == newTrans.ID);
 
             return View(trans);
-        }
-
-        // POST: Transactions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,TransactionDate,TransactionTotal,HouseholdID,VolunteerID")] Transaction transaction)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(transaction);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            ViewBag.TransDate = DateTime.Today.ToShortDateString();
-            PopulateDropDownLists();
-            return View(transaction);
         }
 
         // GET: Transactions/Edit/5
@@ -308,6 +326,7 @@ namespace Grow.Controllers
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
                 .Include(t => t.Volunteer)
+                .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -321,44 +340,7 @@ namespace Grow.Controllers
             return View(transaction);
         }
 
-        // POST: Transactions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("ID,TransactionDate,TransactionTotal,HouseholdID,VolunteerID")] Transaction transaction)
-        //{
-        //    if (id != transaction.ID)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(transaction);
-        //            await _context.SaveChangesAsync();
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!TransactionExists(transaction.ID))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //    }
-        //    PopulateDropDownLists();
-        //    return View(transaction);
-        //}
-
         // GET: Transactions/Delete/5
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -370,6 +352,7 @@ namespace Grow.Controllers
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
                 .Include(t => t.Volunteer)
+                .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -390,14 +373,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions.FindAsync(id);
             _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(SalesHistory));
-        }
-
-        public async void DeleteNewTransaction(int id)
-        {
-            var transaction = _context.Transactions.Find(id);
-            _context.Transactions.Remove(transaction);
-            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         public PartialViewResult ItemList(int id)

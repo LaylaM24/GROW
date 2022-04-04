@@ -26,6 +26,12 @@
                         <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.Household.AddressWithCity)
                         </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Member.FullName)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Member.FullName)
+                        </dd>
                     </dl>
                 </div>
                 <div class="col-sm-6">
@@ -128,7 +134,9 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="form-group">
-                    <input id="btnDelete" type="button" value="Delete" class="btn btn-danger" style="width: 75px;" />
+                    <a asp-action="Delete" asp-route-id="@Model.ID">
+                        <input type="button" value="Delete" class="btn btn-danger" style="width: 75px;" />
+                    </a>
                 </div>
                 <div class="ml-2"></div>
                 <div class="form-group">
@@ -145,22 +153,6 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 <script>
     $(document).ready(function () {
-
-        $("#btnDelete").click(function () {
-
-            $.ajax({
-                type: "POST",
-                url: "/Transactions/DeleteNewTransaction",
-                data: { id: @Model.ID },
-                success: function () {
-                    window.location.href = "/Transactions";
-                },
-                error: function () {
-                    alert("Operation Failed. Cannot delete record at this time.");
-                }
-            });
-
-        });
 
         // Member Modal Scripts
             function refreshModal(actionForm, transDetailID) {

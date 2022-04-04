@@ -550,6 +550,7 @@ namespace Grow.Controllers
             var members = _context.Members
                 .Include(x => x.Household)
                 .Include(x => x.Gender)
+                .Where(x => x.DataConsent == true)
                 .AsQueryable();
 
             if (LowRange != null && HighRange != null)
@@ -1158,6 +1159,7 @@ namespace Grow.Controllers
         {
             var membersQuery = _context.Members
                 .Include(x => x.Gender)
+                .Where(x => x.DataConsent == true)
                 .AsQueryable();
 
             if (highRange > 0)

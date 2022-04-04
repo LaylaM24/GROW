@@ -56,6 +56,17 @@
                     <p><b>Consent to:</b> Collection of Personal Information. The member acknowledges that the collection, use and/or disclosure of personal information is required for the management of the Member's and their dependants' participation or engagement with GROW, including, but not limited to, the administration of the membership for the GROW market, and participation in other programs offered by GROW. The Member hereby consents to the collection, use, and/or disclosure of the Member's personal information as required to facilitate the foregoing.</p>
                 </div>
             </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="EmailConsent" /> @Html.DisplayNameFor(model => model.EmailConsent)
+                </label><br />
+                <a class="mb-1" role="button" data-toggle="collapse" href="#collapseSumEmailConsent" aria-expanded="false" aria-controls="collapseSumEmailConsent">
+                    Read Consent Agreement
+                </a>
+                <div class="collapse" id="collapseSumEmailConsent">
+                    <p><b>Consent to:</b> Receive emails from GROW to the provided email address for any communication purposes.</p>
+                </div>
+            </div>
             @if (Model.MemberDocuments.Count() > 0)
             {
                 <div class="form-group">
@@ -76,7 +87,7 @@
                                             foreach (var d in Model.MemberDocuments)
                                             {
                                                 <div id="@d.ID">
-                                                    <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a> 
+                                                    <a asp-action="Download" asp-route-id="@d.ID">@d.FileName</a>
                                                     <button class="btn btn-sm modal-link btnDeleteFile" title="Delete File" type="button" value="@d.ID">&#x274C;</button>
                                                 </div><br />
                                             }

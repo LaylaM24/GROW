@@ -96,6 +96,10 @@ namespace Grow.Models
         [Required(ErrorMessage = "Data Consent is a required field.")]
         public bool DataConsent { get; set; }
 
+        [Display(Name = "Email Consent")]
+        [Required(ErrorMessage = "Email Consent is a required field.")]
+        public bool EmailConsent { get; set; }
+
         [Display(Name = "Notes")]
         [StringLength(500, ErrorMessage = "Notes cannot exceed 500 characters.")]
         public string Notes { get; set; }

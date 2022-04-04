@@ -270,7 +270,7 @@ namespace Grow.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,MembershipNumber,CreatedDate,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,CityID,City,Members")] Household household)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,MembershipNumber,CreatedDate,RenewalDate,StreetNumber,StreetName,ApartmentNumber,PostalCode,HouseholdName,CityID,City,Members,LICOVerified")] Household household)
         {
             if (id != household.ID)
             {
@@ -289,9 +289,6 @@ namespace Grow.Controllers
 
                     // Get updated City for comparison
                     household.City = _context.Cities.FirstOrDefault(x => x.ID == household.CityID);
-
-                    // Update calculated fields
-                    UpdateCalculatedFields(household);
 
                     // Update Household
                     _context.Update(household);
@@ -484,7 +481,7 @@ namespace Grow.Controllers
                 {
                     //Send a Notice.
                     List<EmailAddress> folks = (from p in _context.Members
-                                                where p.DataConsent == true
+                                                where p.EmailConsent == true
                                                 select new EmailAddress
                                                 {
                                                     Name = p.FullName,

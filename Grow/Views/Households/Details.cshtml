@@ -110,7 +110,11 @@
                         <th>
                             <input type="submit" disabled="disabled" value="Income Verified" class="btn btn-link" />
                         </th>
-                        <th></th>
+                        <th>
+                            <a asp-controller="Members" asp-action="Create" asp-route-id="@Model.ID">
+                                <button class="btn btn-outline-success modal-link" title="Add Member" type="button">&#x271A;</button>
+                            </a>
+                        </th>
                     </tr>
 
                     @foreach (var member in Model.Members)

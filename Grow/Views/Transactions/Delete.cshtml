@@ -117,8 +117,8 @@
     <input type="hidden" asp-for="ID" />
     <div class="row">
         <div class="form-group">
-            <a asp-action="SalesHistory">
-                <input type="button" value="Back to List" class="btn btn-secondary" />
+            <a asp-action="Details" asp-route-id="@Model.ID">
+                <input type="button" value="Cancel" class="btn btn-secondary" />
             </a>
         </div>
         <div class="ml-2"></div>
