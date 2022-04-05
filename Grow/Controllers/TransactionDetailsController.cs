@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Grow.Data;
 using Grow.Models;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Grow.Controllers
 {
+    [Authorize(Roles = "Admin, SuperAdmin, Volunteer")]
     public class TransactionDetailsController : Controller
     {
         private readonly GrowContext _context;

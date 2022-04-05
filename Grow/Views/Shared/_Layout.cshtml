@@ -24,6 +24,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Volunteer"))
+                        {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Households" asp-action="Index">Households</a>
                         </li>
@@ -32,12 +34,15 @@
                                 Menu<b class="caret"></b>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
                                 <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Lookup Values</a>
                                 <div class="dropdown-divider"></div>
+                                }
                                 <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">Inventory</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Transactions" asp-action="Index">Sales</a>
-                                @if (User.IsInRole("Admin"))
+                                @if (User.IsInRole("SuperAdmin"))
                                 {
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register User</a>
@@ -46,6 +51,7 @@
                                     <a asp-controller="Households" asp-action="Notification" class="dropdown-item">Send Email Notification</a>
                                 }
                             </div>
+                        </li> }
                     </ul>
                 </div>
             </div>

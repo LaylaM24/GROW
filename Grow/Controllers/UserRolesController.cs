@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Grow.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class UserRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
