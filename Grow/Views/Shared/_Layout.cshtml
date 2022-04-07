@@ -36,11 +36,14 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @if (User.IsInRole("SuperAdmin"))
                                 {
-                                <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Lookup Values</a>
-                                <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Reports" asp-action="Index">Reports</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Lookups" asp-action="Index">Maintain Lookup Values</a>
+                                    <div class="dropdown-divider"></div>
                                 }
-                                <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">Inventory</a>
+                                @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                {
+                                    <a class="dropdown-item" asp-area="" asp-controller="Items" asp-action="Index">Inventory</a>
+                                }
                                 <a class="dropdown-item" asp-area="" asp-controller="Transactions" asp-action="Index">Sales</a>
                                 @if (User.IsInRole("SuperAdmin"))
                                 {
