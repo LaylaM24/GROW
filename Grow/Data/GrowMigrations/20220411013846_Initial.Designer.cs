@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grow.Data.GrowMigrations
 {
     [DbContext(typeof(GrowContext))]
-    [Migration("20220401012208_Initial")]
+    [Migration("20220411013846_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -512,6 +512,8 @@ namespace Grow.Data.GrowMigrations
 
                     b.HasIndex("HouseholdID");
 
+                    b.HasIndex("MemberID");
+
                     b.HasIndex("VolunteerID");
 
                     b.ToTable("Transactions");
@@ -715,6 +717,12 @@ namespace Grow.Data.GrowMigrations
                     b.HasOne("Grow.Models.Household", "Household")
                         .WithMany("Transactions")
                         .HasForeignKey("HouseholdID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Grow.Models.Member", "Member")
+                        .WithMany("Transactions")
+                        .HasForeignKey("MemberID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

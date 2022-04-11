@@ -510,6 +510,8 @@ namespace Grow.Data.GrowMigrations
 
                     b.HasIndex("HouseholdID");
 
+                    b.HasIndex("MemberID");
+
                     b.HasIndex("VolunteerID");
 
                     b.ToTable("Transactions");
@@ -713,6 +715,12 @@ namespace Grow.Data.GrowMigrations
                     b.HasOne("Grow.Models.Household", "Household")
                         .WithMany("Transactions")
                         .HasForeignKey("HouseholdID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Grow.Models.Member", "Member")
+                        .WithMany("Transactions")
+                        .HasForeignKey("MemberID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

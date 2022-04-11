@@ -12,6 +12,7 @@ namespace Grow.Models
             this.MemberRestrictions = new HashSet<MemberRestriction>();
             this.MemberConcerns = new HashSet<MemberConcern>();
             this.MemberIncomes = new HashSet<MemberIncome>();
+            this.Transactions = new HashSet<Transaction>();
         }
 
         [Display(Name = "Member")]
@@ -126,6 +127,8 @@ namespace Grow.Models
 
         [Display(Name = "Documents")]
         public ICollection<MemberDocument> MemberDocuments { get; set; }
+
+        public ICollection<Transaction> Transactions { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
