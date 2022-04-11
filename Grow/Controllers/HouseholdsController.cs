@@ -50,8 +50,9 @@ namespace Grow.Controllers
 
             if (!String.IsNullOrEmpty(SearchString))
             {
-                households = households.Where(h => h.StreetNumber.ToUpper().Contains(SearchString.ToUpper())
-                                                || h.StreetName.ToUpper().Contains(SearchString.ToUpper()));
+                SearchString = SearchString.Trim();
+                households = households.Where(h => (h.StreetNumber + " " + h.StreetName + (h.ApartmentNumber != null ? " Apt. " + h.ApartmentNumber : "") + ", " + h.City.CityName + " " + h.PostalCode).ToUpper().Contains(SearchString.ToUpper())
+                                                || h.HouseholdName.ToUpper().Contains(SearchString.ToUpper()) || h.Members.Any(x => (x.FirstName + " " + x.LastName).ToUpper().Contains(SearchString.ToUpper())));
                 ViewData["Filtering"] = " show";
             }
 

@@ -9,6 +9,7 @@ using Grow.Data;
 using Grow.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Authorization;
+using Grow.ViewModels;
 
 namespace Grow.Controllers
 {
@@ -177,7 +178,19 @@ namespace Grow.Controllers
 
         private void PopulateDropDownLists(Item item = null)
         {
-            ViewBag.ItemID = new SelectList(_context.Items, "ID", "ItemName", item?.ID);
+            var allItems = _context.Items;
+            var items = new List<ListOptionVM>();
+            foreach (var s in allItems)
+            {
+                items.Add(new ListOptionVM
+                {
+                    ID = s.ID,
+                    DisplayText = s.ItemName
+                });
+            }
+
+            ViewData["ItemList"] = new MultiSelectList(items.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+            ViewBag.Categories = new SelectList(_context.ItemCategories.OrderBy(x => x.CategoryName), "ID", "CategoryName", item?.ItemCategoryID);
         }
 
         private bool TransactionDetailExists(int id)

@@ -46,8 +46,10 @@ namespace Grow.Controllers
 
             if (!String.IsNullOrEmpty(SearchString))
             {
-                members = members.Where(h => h.Household.StreetNumber.ToUpper().Contains(SearchString.ToUpper())
-                                                || h.Household.StreetName.ToUpper().Contains(SearchString.ToUpper()));
+                SearchString = SearchString.Trim();
+                members = members.Where(h => (h.Household.StreetNumber + " " + h.Household.StreetName + (h.Household.ApartmentNumber != null ? " Apt. " + h.Household.ApartmentNumber : "") 
+                                                + ", " + h.Household.City.CityName + " " + h.Household.PostalCode).ToUpper().Contains(SearchString.ToUpper())
+                                                || h.Household.HouseholdName.ToUpper().Contains(SearchString.ToUpper()) || (h.FirstName + " " + h.LastName).ToUpper().Contains(SearchString.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 
@@ -152,7 +154,8 @@ namespace Grow.Controllers
 
             if (!String.IsNullOrEmpty(SearchString))
             {
-                transaction = transaction.Where(t => t.Household.HouseholdName.ToUpper().Contains(SearchString.ToUpper()));
+                transaction = transaction.Where(t => t.Household.HouseholdName.ToUpper().Contains(SearchString.ToUpper()) || (t.Member.FirstName + " " + t.Member.LastName).ToUpper().Contains(SearchString.ToUpper())
+                                                    || (t.Volunteer.FirstName + " " + t.Volunteer.LastName).ToUpper().Contains(SearchString.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 

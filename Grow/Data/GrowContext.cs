@@ -139,6 +139,12 @@ namespace Grow.Data
                 .WithOne(m => m.Member)
                 .HasForeignKey(m => m.MemberID);
 
+            // Member - Transaction Relationship
+            modelBuilder.Entity<Member>()
+                .HasMany(m => m.Transactions)
+                .WithOne(m => m.Member)
+                .HasForeignKey(m => m.MemberID);
+
             // MemberIncome - IncomeSource Relationship
             modelBuilder.Entity<IncomeSource>()
                 .HasMany(m => m.MemberIncomes)
