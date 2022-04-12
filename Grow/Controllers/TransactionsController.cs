@@ -294,6 +294,7 @@ namespace Grow.Controllers
                 MemberID = member.ID,
                 TransactionDate = DateTime.Today,
                 TransactionTotal = 0,
+                Paid = false,
                 // Change to actual volunteer later
                 VolunteerID = 1
             };

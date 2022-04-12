@@ -1,0 +1,165 @@
+﻿@model Grow.Models.Transaction
+
+@{
+    ViewData["Title"] = "Sale Payment";
+}
+
+<h2>Sale Payment</h2>
+
+<hr />
+<partial name="_PaymentModal" />
+<form id="createForm">
+    <div class="media">
+        <div class="media-body ml-3">
+            <div class="row">
+                <div class="col-sm-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.TransactionDate)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.TransactionDate)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-sm-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.TransactionTotal)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.TransactionTotal)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" id="ListPayments">
+        <h3>Payments</h3>
+        <dl class="dl-horizontal">
+            <dt>
+            </dt>
+            <dd>
+                <div id="PaymentList">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Payment Method" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Payment Amount" class="btn btn-link" />
+                            </th>
+                            <th>
+                                <button class="btn btn-outline-success modal-link" tag="@Model.ID" name="AddForm" data-toggle="modal" data-target="#thePaymentModal" title="Add Payment" type="button">&#x271A;</button>
+                            </th>
+                        </tr>
+
+                        @foreach (var payment in Model.Payments)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => payment.PaymentMethod)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => payment.PaymentAmount)
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm modal-link" tag="@payment.ID" name="EditForm" data-toggle="modal" data-target="#thePaymentModal" title="Edit Payment" type="button">&#x270D;</button>
+                                    <button class="btn btn-sm modal-link" tag="@payment.ID" name="DeleteForm" data-toggle="modal" data-target="#thePaymentModal" title="Delete Payment" type="button">&#x274C;</button>
+                                </td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <th>
+                                <input type="submit" disabled="disabled" value="Balance Due" class="btn btn-link" />
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>
+                                @{ 
+                                    var paidAmount = Model.Payments.Sum(x => x.PaymentAmount);
+                                    var amountOwed = Model.TransactionTotal - paidAmount;
+                                }
+                                @amountOwed.ToString("C")
+                            </th>
+                            <th></th>
+                        </tr>
+                    </table>
+                </div>
+            </dd>
+        </dl>
+    </div>
+    <br />
+    <div class="row ml-1">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="ml-2"></div>
+                <div class="form-group">
+                    <a asp-controller="Transactions" asp-action="Details" asp-route-id="@Model.ID">
+                        <input type="button" value="Done" class="btn btn-primary" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+
+            // Member Modal Scripts
+                function refreshModal(actionForm, transID) {
+                  switch (actionForm) {
+                      case 'AddForm': $('#formPaymentBody').load('/Payment/AddPayment/' + transID);
+                        break;
+                      case 'EditForm': $('#formPaymentBody').load('/Payment/EditPayment/' + transID);
+                          break;
+                      case 'DeleteForm': $('#formPaymentBody').load('/Payment/DeletePayment/' + transID);
+                          break;
+                    default: break;
+                  };
+                return;
+                };
+
+                $(document).on("click", ".modal-link", function () {
+                    var actionForm = $(this).attr("name");
+                    var itemID = $(this).attr("tag");
+                    refreshModal(actionForm, itemID);
+                });
+
+                $(document).on("click", "#submitPaymentForm", function (event) {
+                    event.preventDefault();
+
+                    var form = $('#thePaymentForm');
+                    if (form.valid()) {
+                        $.ajax({
+                            type: "POST",
+                            url: form.attr('action'),
+                            data: form.serialize(),
+                            success: function () {
+                                $('#thePaymentModal').modal('hide');
+                            },
+                            error: function () {
+                                alert("Operation Failed. Please make sure all required fields are filled correctly.");
+                            }
+                        });
+                    }
+                    return false;
+                });
+
+                $('#thePaymentModal').on('hide.bs.modal', function () {
+                    $('#PaymentList').load('/Payment/PaymentList/@Model.ID');
+                });
+
+        });
+    </script>
+}
