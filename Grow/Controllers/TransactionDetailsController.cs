@@ -94,7 +94,6 @@ namespace Grow.Controllers
                     TransactionDetail td = _context.TransactionDetails.FirstOrDefault(x => x.ID == transDetail.ID);
 
                     // Update fields
-                    td.ItemID = transDetail.ItemID;
                     td.Quantity = transDetail.Quantity;
 
                     // Get unit cost and extended cost
@@ -156,6 +155,32 @@ namespace Grow.Controllers
             return View(td);
         }
 
+        public List<ListOptionVM> GetItems(int filter, string search)
+        {
+            var itemList = _context.Items.OrderBy(x => x.ItemName).ToList();
+            
+            if(filter != -1)
+            {
+                itemList = itemList.Where(x => x.ItemCategoryID == filter).ToList();
+            }
+
+            if (!String.IsNullOrEmpty(search?.Trim()))
+            {
+                itemList = itemList.Where(x => x.ItemName.ToUpper().Contains(search.ToUpper()) || x.ItemNo.ToString().ToUpper().Contains(search.ToUpper())).ToList();
+            }
+
+            var items = new List<ListOptionVM>();
+            foreach (var s in itemList)
+            {
+                items.Add(new ListOptionVM
+                {
+                    ID = s.ID,
+                    DisplayText = s.ItemNo + "    -    " + s.ItemName
+                });
+            }
+
+            return items;
+        }
 
         private void UpdateTransactionTotal(int id)
         {
@@ -185,7 +210,7 @@ namespace Grow.Controllers
                 items.Add(new ListOptionVM
                 {
                     ID = s.ID,
-                    DisplayText = s.ItemName
+                    DisplayText = s.ItemNo + "    -    " + s.ItemName
                 });
             }
 

@@ -151,53 +151,53 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script>
-    $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
 
-        // Member Modal Scripts
-            function refreshModal(actionForm, transDetailID) {
-              switch (actionForm) {
-                  case 'AddForm': $('#formItemBody').load('/TransactionDetails/AddItem/' + transDetailID);
-                    break;
-                  case 'EditForm': $('#formItemBody').load('/TransactionDetails/EditItem/' + transDetailID);
-                      break;
-                  case 'DeleteForm': $('#formItemBody').load('/TransactionDetails/DeleteItem/' + transDetailID);
-                      break;
-                default: break;
-              };
-            return;
-            };
+            // Member Modal Scripts
+                function refreshModal(actionForm, transDetailID) {
+                  switch (actionForm) {
+                      case 'AddForm': $('#formItemBody').load('/TransactionDetails/AddItem/' + transDetailID);
+                        break;
+                      case 'EditForm': $('#formItemBody').load('/TransactionDetails/EditItem/' + transDetailID);
+                          break;
+                      case 'DeleteForm': $('#formItemBody').load('/TransactionDetails/DeleteItem/' + transDetailID);
+                          break;
+                    default: break;
+                  };
+                return;
+                };
 
-            $(document).on("click", ".modal-link", function () {
-                var actionForm = $(this).attr("name");
-                var itemID = $(this).attr("tag");
-                refreshModal(actionForm, itemID);
-            });
+                $(document).on("click", ".modal-link", function () {
+                    var actionForm = $(this).attr("name");
+                    var itemID = $(this).attr("tag");
+                    refreshModal(actionForm, itemID);
+                });
 
-            $(document).on("click", "#submitItemForm", function (event) {
-                event.preventDefault();
+                $(document).on("click", "#submitItemForm", function (event) {
+                    event.preventDefault();
 
-                var form = $('#theItemForm');
-                if (form.valid()) {
-                    $.ajax({
-                        type: "POST",
-                        url: form.attr('action'),
-                        data: form.serialize(),
-                        success: function () {
-                            $('#theItemModal').modal('hide');
-                        },
-                        error: function () {
-                            alert("Operation Failed. Please make sure all required fields are filled correctly.");
-                        }
-                    });
-                }
-                return false;
-            });
+                    var form = $('#theItemForm');
+                    if (form.valid()) {
+                        $.ajax({
+                            type: "POST",
+                            url: form.attr('action'),
+                            data: form.serialize(),
+                            success: function () {
+                                $('#theItemModal').modal('hide');
+                            },
+                            error: function () {
+                                alert("Operation Failed. Please make sure all required fields are filled correctly.");
+                            }
+                        });
+                    }
+                    return false;
+                });
 
-            $('#theItemModal').on('hide.bs.modal', function () {
-                $('#ItemList').load('/Transactions/ItemList/@Model.ID');
-            });
+                $('#theItemModal').on('hide.bs.modal', function () {
+                    $('#ItemList').load('/Transactions/ItemList/@Model.ID');
+                });
 
-    });
-</script>
+        });
+    </script>
 }
