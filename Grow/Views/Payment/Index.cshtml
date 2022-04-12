@@ -15,20 +15,38 @@
                 <div class="col-sm-6">
                     <dl class="row">
                         <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.TransactionDate)
+                            @Html.DisplayNameFor(model => model.Household.HouseholdName)
                         </dt>
                         <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.TransactionDate)
+                            @Html.DisplayFor(model => model.Household.HouseholdName)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Household.AddressWithCity)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Household.AddressWithCity)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Member.FullName)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Member.FullName)
                         </dd>
                     </dl>
                 </div>
                 <div class="col-sm-6">
                     <dl class="row">
                         <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.TransactionTotal)
+                            @Html.DisplayNameFor(model => model.TransactionDate)
                         </dt>
                         <dd class="col-sm-8">
-                            @Html.DisplayFor(model => model.TransactionTotal)
+                            @Html.DisplayFor(model => model.TransactionDate)
+                        </dd>
+                        <dt class="col-sm-4">
+                            Sales Person
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Volunteer.ShortName)
                         </dd>
                     </dl>
                 </div>
@@ -75,10 +93,6 @@
                         <tr>
                             <th>
                                 <input type="submit" disabled="disabled" value="Balance Due" class="btn btn-link" />
-                            </th>
-                            <th>
-                            </th>
-                            <th>
                             </th>
                             <th>
                             </th>

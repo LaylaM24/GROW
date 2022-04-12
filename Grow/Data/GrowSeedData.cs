@@ -311,6 +311,31 @@ namespace Grow.Data
                 }
                 #endregion
 
+                #region Payment Methods
+                if (!context.PaymentMethods.Any())
+                {
+                    context.PaymentMethods.AddRange(
+                        new PaymentMethod
+                        {
+                            Method = "Debit"
+                        },
+                        new PaymentMethod
+                        {
+                            Method = "Credit"
+                        },
+                        new PaymentMethod
+                        {
+                            Method = "Cash"
+                        },
+                        new PaymentMethod
+                        {
+                            Method = "Gift Card"
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
                 // Test data
                 #region Items
                 if (!context.Items.Any())

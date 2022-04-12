@@ -29,6 +29,11 @@ namespace Grow.Controllers
             var transaction = _context.Transactions
                 .Include(x => x.Payments)
                 .ThenInclude(x => x.PaymentMethod)
+                .Include(x => x.Household)
+                .ThenInclude(x => x.City)
+                .Include(x => x.Member)
+                .Include(x => x.TransactionDetails)
+                .Include(x => x.Volunteer)
                 .Where(x => x.ID == id)
                 .FirstOrDefault();
 
@@ -162,6 +167,11 @@ namespace Grow.Controllers
             var transaction = _context.Transactions
                 .Include(x => x.Payments)
                 .ThenInclude(x => x.PaymentMethod)
+                .Include(x => x.Household)
+                .ThenInclude(x => x.City)
+                .Include(x => x.Member)
+                .Include(x => x.TransactionDetails)
+                .Include(x => x.Volunteer)
                 .Where(x => x.ID == id)
                 .FirstOrDefault();
 
