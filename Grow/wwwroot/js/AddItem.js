@@ -1,13 +1,72 @@
 ﻿$(document).ready(function () {
 
-    $("#ddlItem").change(function () {
+    $('#btnFilter').click(function () {
 
-        if ($("#ddlItem option:selected").val() != -1) {
-            $("#submitItemForm").prop("disabled", false);
+        var filter = $('#ddlCat option:selected').val();
+        var search = $('#txtSearch').val();
+
+        if (filter != -1 || search.trim()) {
+
+            $.ajax({
+                type: "POST",
+                url: "/TransactionDetails/GetItems",
+                data: {
+                    filter: filter,
+                    search: search
+                },
+                dataType: "json",
+                success: function (data) {
+
+                    var itemList = $('#itemList');
+                    itemList.empty();
+
+                    $.each(data, function (i) {
+
+                        itemList.append($('<option value="' + data[i].id + '" >' + data[i].displayText + '</option>'));
+
+                    });
+                }
+            });
         }
-        else {
-            $("#submitItemForm").prop("disabled", true);
-        }
+
+    });
+
+    $('#btnClear').click(function () {
+
+        $('#ddlCat').prop("selectedIndex", 0);
+        $('#txtSearch').val('');
+
+        $.ajax({
+            type: "POST",
+            url: "/TransactionDetails/GetItems",
+            data: {
+                filter: -1,
+                search: ''
+            },
+            dataType: "json",
+            success: function (data) {
+
+                var itemList = $('#itemList');
+                itemList.empty();
+
+                $.each(data, function (i) {
+
+                    itemList.append($('<option value="' + data[i].id + '" >' + data[i].displayText + '</option>'));
+
+                });
+            }
+        });
+
+    });
+
+    $('#itemList').change(function () {
+
+        var selected = $('#itemList :selected')[0];
+
+        $('#txtItem').val(selected.text);
+        $('#txtItemID').val(selected.value);
+
+        $("#submitItemForm").prop("disabled", false);
 
     });
 
