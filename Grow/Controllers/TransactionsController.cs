@@ -143,7 +143,7 @@ namespace Grow.Controllers
         {
             ViewData["Filtering"] = "";
 
-            string[] sortOptions = new[] { "Transaction Date", "Total", "Household", "Member", "Sales Person" };
+            string[] sortOptions = new[] { "Transaction Date", "Total", "Household", "Member", "Sales Person", "Paid" };
 
             var transaction = from t in _context.Transactions
                               .Include(t => t.Household)
@@ -227,6 +227,19 @@ namespace Grow.Controllers
                         .ThenByDescending(x => x.Member.FirstName);
                 }
             }
+            else if (sortField == "Paid")
+            {
+                if (sortDirection == "asc")
+                {
+                    transaction = transaction
+                        .OrderBy(h => h.Paid);
+                }
+                else
+                {
+                    transaction = transaction
+                        .OrderByDescending(h => h.Paid);
+                }
+            }
             else
             {
                 if (sortDirection == "asc")
@@ -265,7 +278,9 @@ namespace Grow.Controllers
                 .Include(x => x.Member)
                 .Include(t => t.Volunteer)
                 .Include(t => t.TransactionDetails)
-                    .ThenInclude(td => td.Item)
+                .ThenInclude(td => td.Item)
+                .Include(x => x.Payments)
+                .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (transaction == null)
@@ -294,6 +309,7 @@ namespace Grow.Controllers
                 MemberID = member.ID,
                 TransactionDate = DateTime.Today,
                 TransactionTotal = 0,
+                Paid = false,
                 // Change to actual volunteer later
                 VolunteerID = 1
             };
@@ -314,6 +330,8 @@ namespace Grow.Controllers
                 .Include(x => x.Member)
                 .Include(x => x.TransactionDetails)
                 .Include(x => x.Volunteer)
+                .Include(x => x.Payments)
+                .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefault(x => x.ID == newTrans.ID);
 
             return View(trans);
@@ -334,6 +352,8 @@ namespace Grow.Controllers
                 .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
+                .Include(x => x.Payments)
+                .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (transaction == null)
@@ -360,6 +380,8 @@ namespace Grow.Controllers
                 .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
+                .Include(x => x.Payments)
+                .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (transaction == null)
@@ -378,7 +400,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions.FindAsync(id);
             _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(SalesHistory));
         }
 
         public PartialViewResult ItemList(int id)

@@ -1,13 +1,13 @@
 ﻿@model Grow.Models.Transaction
 
 @{
-    ViewData["Title"] = "New Sale";
+    ViewData["Title"] = "Sale Payment";
 }
 
-<h2>New Sale</h2>
+<h2>Sale Payment</h2>
 
 <hr />
-<partial name="_ItemModal" />
+<partial name="_PaymentModal" />
 <form id="createForm">
     <div class="media">
         <div class="media-body ml-3">
@@ -60,74 +60,55 @@
         </div>
     </div>
 
-    <div class="form-group" id="ListItems">
-        <h3>Items</h3>
+    <div class="form-group" id="ListPayments">
+        <h3>Payments</h3>
         <dl class="dl-horizontal">
             <dt>
             </dt>
             <dd>
-                <div id="ItemList">
+                <div id="PaymentList">
                     <table class="table">
                         <tr>
                             <th>
-                                <input type="submit" disabled="disabled" value="Item No." class="btn btn-link" />
+                                <input type="submit" disabled="disabled" value="Payment Method" class="btn btn-link" />
                             </th>
                             <th>
-                                <input type="submit" disabled="disabled" value="Item" class="btn btn-link" />
+                                <input type="submit" disabled="disabled" value="Payment Amount" class="btn btn-link" />
                             </th>
                             <th>
-                                <input type="submit" disabled="disabled" value="Cost" class="btn btn-link" />
-                            </th>
-                            <th>
-                                <input type="submit" disabled="disabled" value="Quantity" class="btn btn-link" />
-                            </th>
-                            <th>
-                                <input type="submit" disabled="disabled" value="Ext. Cost" class="btn btn-link" />
-                            </th>
-                            <th>
-                                <button class="btn btn-outline-success modal-link" tag="@Model.ID" name="AddForm" data-toggle="modal" data-target="#theItemModal" title="Add Item" type="button">&#x271A;</button>
+                                <button class="btn btn-outline-success modal-link" tag="@Model.ID" name="AddForm" data-toggle="modal" data-target="#thePaymentModal" title="Add Payment" type="button">&#x271A;</button>
                             </th>
                         </tr>
 
-                        @foreach (var item in Model.TransactionDetails)
+                        @foreach (var payment in Model.Payments)
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Item.ItemNo)
+                                    @Html.DisplayFor(modelItem => payment.PaymentMethod.Method)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Item.ItemName)
+                                    @Html.DisplayFor(modelItem => payment.PaymentAmount)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.UnitCost)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Quantity)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ExtendedCost)
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theItemModal" title="Edit @item.Item.ItemName" type="button">&#x270D;</button>
-                                    <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theItemModal" title="Delete @item.Item.ItemName" type="button">&#x274C;</button>
+                                    <button class="btn btn-sm modal-link" tag="@payment.ID" name="EditForm" data-toggle="modal" data-target="#thePaymentModal" title="Edit Payment" type="button">&#x270D;</button>
+                                    <button class="btn btn-sm modal-link" tag="@payment.ID" name="DeleteForm" data-toggle="modal" data-target="#thePaymentModal" title="Delete Payment" type="button">&#x274C;</button>
                                 </td>
                             </tr>
                         }
 
                         <tr>
                             <th>
-                                <input type="submit" disabled="disabled" value="Total" class="btn btn-link" />
+                                <input type="submit" disabled="disabled" value="Balance Due" class="btn btn-link" />
                             </th>
                             <th>
                             </th>
                             <th>
+                                @{ 
+                                    var paidAmount = Model.Payments.Sum(x => x.PaymentAmount);
+                                    var amountOwed = Model.TransactionTotal - paidAmount;
+                                }
+                                @amountOwed.ToString("C")
                             </th>
-                            <th>
-                            </th>
-                            <th>
-                                @Model.TransactionTotal.ToString("C")
-                            </th>
-                            <th></th>
                         </tr>
                     </table>
                 </div>
@@ -135,18 +116,12 @@
         </dl>
     </div>
     <br />
-
     <div class="row ml-1">
         <div class="col-md-6">
             <div class="row">
-                <div class="form-group">
-                    <a asp-action="Delete" asp-route-id="@Model.ID">
-                        <input type="button" value="Delete" class="btn btn-danger" style="width: 75px;" />
-                    </a>
-                </div>
                 <div class="ml-2"></div>
                 <div class="form-group">
-                    <a asp-controller="Payment" asp-action="Index" asp-route-id="@Model.ID">
+                    <a asp-controller="Transactions" asp-action="Details" asp-route-id="@Model.ID">
                         <input type="button" value="Done" class="btn btn-primary" />
                     </a>
                 </div>
@@ -161,13 +136,13 @@
         $(document).ready(function () {
 
             // Member Modal Scripts
-                function refreshModal(actionForm, transDetailID) {
+                function refreshModal(actionForm, transID) {
                   switch (actionForm) {
-                      case 'AddForm': $('#formItemBody').load('/TransactionDetails/AddItem/' + transDetailID);
+                      case 'AddForm': $('#formPaymentBody').load('/Payment/AddPayment/' + transID);
                         break;
-                      case 'EditForm': $('#formItemBody').load('/TransactionDetails/EditItem/' + transDetailID);
+                      case 'EditForm': $('#formPaymentBody').load('/Payment/EditPayment/' + transID);
                           break;
-                      case 'DeleteForm': $('#formItemBody').load('/TransactionDetails/DeleteItem/' + transDetailID);
+                      case 'DeleteForm': $('#formPaymentBody').load('/Payment/DeletePayment/' + transID);
                           break;
                     default: break;
                   };
@@ -176,21 +151,21 @@
 
                 $(document).on("click", ".modal-link", function () {
                     var actionForm = $(this).attr("name");
-                    var itemID = $(this).attr("tag");
-                    refreshModal(actionForm, itemID);
+                    var transID = $(this).attr("tag");
+                    refreshModal(actionForm, transID);
                 });
 
-                $(document).on("click", "#submitItemForm", function (event) {
+                $(document).on("click", "#submitPaymentForm", function (event) {
                     event.preventDefault();
 
-                    var form = $('#theItemForm');
+                    var form = $('#thePaymentForm');
                     if (form.valid()) {
                         $.ajax({
                             type: "POST",
                             url: form.attr('action'),
                             data: form.serialize(),
                             success: function () {
-                                $('#theItemModal').modal('hide');
+                                $('#thePaymentModal').modal('hide');
                             },
                             error: function () {
                                 alert("Operation Failed. Please make sure all required fields are filled correctly.");
@@ -200,8 +175,8 @@
                     return false;
                 });
 
-                $('#theItemModal').on('hide.bs.modal', function () {
-                    $('#ItemList').load('/Transactions/ItemList/@Model.ID');
+                $('#thePaymentModal').on('hide.bs.modal', function () {
+                    $('#PaymentList').load('/Payment/PaymentList/@Model.ID');
                 });
 
         });

@@ -30,6 +30,8 @@ namespace Grow.Data
         public DbSet<LowIncomeCutOff> LowIncomeCutOffs { get; set; }
         public DbSet<GROWAddress> GROWAddresses { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -93,6 +95,12 @@ namespace Grow.Data
             modelBuilder.Entity<Transaction>()
                 .HasMany(m => m.TransactionDetails)
                 .WithOne(m => m.Transactions)
+                .HasForeignKey(m => m.TransactionID);
+
+            // Transaction - Payment Relationship
+            modelBuilder.Entity<Transaction>()
+                .HasMany(m => m.Payments)
+                .WithOne(m => m.Transaction)
                 .HasForeignKey(m => m.TransactionID);
 
             // TransactionDetail - Item Relationship
@@ -164,6 +172,13 @@ namespace Grow.Data
                 .HasMany(m => m.MemberConcerns)
                 .WithOne(m => m.HealthConcern)
                 .HasForeignKey(m => m.HealthConcernID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Payment - PaymentMethod Relationship
+            modelBuilder.Entity<PaymentMethod>()
+                .HasMany(m => m.Payments)
+                .WithOne(m => m.PaymentMethod)
+                .HasForeignKey(m => m.PaymentMethodID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // GROWAddress - City Relationship

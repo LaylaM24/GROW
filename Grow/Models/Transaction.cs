@@ -9,6 +9,7 @@ namespace Grow.Models
         public Transaction()
         {
             this.TransactionDetails = new HashSet<TransactionDetail>();
+            this.Payments = new HashSet<Payment>();
         }
 
         public int ID { get; set; }
@@ -23,6 +24,9 @@ namespace Grow.Models
         [Required(ErrorMessage = "Transaction total is required.")]
         [DataType(DataType.Currency)]
         public double TransactionTotal { get; set; }
+
+        [Required(ErrorMessage = "Paid is a required field.")]
+        public bool Paid { get; set; }
 
         // Foreign keys
         [Display(Name = "Household")]
@@ -42,6 +46,9 @@ namespace Grow.Models
 
         [Display(Name = "Items")]
         public ICollection<TransactionDetail> TransactionDetails { get; set; }
+
+        [Display(Name = "Payments")]
+        public ICollection<Payment> Payments { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

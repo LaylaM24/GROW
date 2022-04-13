@@ -1,0 +1,40 @@
+﻿@model Grow.Models.Payment
+
+<h2>Add Payment</h2>
+<br />
+<form asp-controller="Payment" asp-action="AddPayment" method="post" id="thePaymentForm">
+    <input type="hidden" asp-for="ID" value="0" />
+    <input type="hidden" asp-for="TransactionID" value="@ViewData["TransactionID"]" />
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label asp-for="PaymentMethodID" class="control-label"></label>
+                <select id="ddlPayment" asp-for="PaymentMethodID" class="form-control" asp-items="ViewBag.PaymentMethods">
+                    <option value="-1" selected disabled>Select a Payment Method</option>
+                </select>
+                <span asp-validation-for="PaymentMethodID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="PaymentAmount" class="control-label"></label>
+                <input asp-for="PaymentAmount" value="1" min="1" class="form-control" />
+                <span asp-validation-for="PaymentAmount" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="submit" value="Add" class="btn btn-success" id="submitPaymentForm" disabled="disabled" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/js/AddPayment.js"></script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

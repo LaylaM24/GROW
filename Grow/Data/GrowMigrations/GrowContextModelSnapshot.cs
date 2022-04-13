@@ -485,6 +485,47 @@ namespace Grow.Data.GrowMigrations
                     b.ToTable("MembershipChanges");
                 });
 
+            modelBuilder.Entity("Grow.Models.Payment", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("PaymentAmount")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("PaymentMethodID")
+                        .HasColumnType("INTEGER")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("TransactionID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PaymentMethodID");
+
+                    b.HasIndex("TransactionID");
+
+                    b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("Grow.Models.PaymentMethod", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Method")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("PaymentMethods");
+                });
+
             modelBuilder.Entity("Grow.Models.Transaction", b =>
                 {
                     b.Property<int>("ID")
@@ -495,6 +536,9 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("MemberID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Paid")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("TransactionDate")
@@ -706,6 +750,21 @@ namespace Grow.Data.GrowMigrations
                     b.HasOne("Grow.Models.Household", "Household")
                         .WithMany("MembershipChanges")
                         .HasForeignKey("HouseholdID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Grow.Models.Payment", b =>
+                {
+                    b.HasOne("Grow.Models.PaymentMethod", "PaymentMethod")
+                        .WithMany("Payments")
+                        .HasForeignKey("PaymentMethodID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Grow.Models.Transaction", "Transaction")
+                        .WithMany("Payments")
+                        .HasForeignKey("TransactionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

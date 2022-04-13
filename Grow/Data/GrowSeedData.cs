@@ -311,6 +311,31 @@ namespace Grow.Data
                 }
                 #endregion
 
+                #region Payment Methods
+                if (!context.PaymentMethods.Any())
+                {
+                    context.PaymentMethods.AddRange(
+                        new PaymentMethod
+                        {
+                            Method = "Debit"
+                        },
+                        new PaymentMethod
+                        {
+                            Method = "Credit"
+                        },
+                        new PaymentMethod
+                        {
+                            Method = "Cash"
+                        },
+                        new PaymentMethod
+                        {
+                            Method = "Gift Card"
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
                 // Test data
                 #region Items
                 if (!context.Items.Any())
@@ -1666,40 +1691,6 @@ namespace Grow.Data
                     context.SaveChanges();
                 }
                 #endregion
-
-                //#region Employee
-                //// Look for any Employees.  Seed ones to match the seeded Identity accounts.
-                //if (!context.Employees.Any())
-                //{
-                //    context.Employees.AddRange(
-                //     new Employee
-                //     {
-                //         FirstName = "Brooke",
-                //         LastName = "Smith",
-                //         Email = "admin1@outlook.com"
-                //     },
-                //     new Employee
-                //     {
-                //         FirstName = "Connor",
-                //         LastName = "Mack",
-                //         Email = "super1@outlook.com"
-                //     },
-                //     new Employee
-                //     {
-                //         FirstName = "Layla",
-                //         LastName = "Roe",
-                //         Email = "volunteer1@outlook.com"
-                //     },
-                //     new Employee
-                //     {
-                //         FirstName = "Matthew",
-                //         LastName = "Stevens",
-                //         Email = "user1@outlook.com"
-                //     });
-
-                //    context.SaveChanges();
-                //}
-                //#endregion
             }
         }
     }
