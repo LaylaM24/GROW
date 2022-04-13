@@ -18,7 +18,6 @@ namespace Grow.Models
         // Foreign Keys
         [Display(Name = "Payment Method")]
         [Required(ErrorMessage = "Payment Method is required.")]
-        [StringLength(50, ErrorMessage = "Payment Method cannot exceed 50 characters.")]
         public int PaymentMethodID { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
 

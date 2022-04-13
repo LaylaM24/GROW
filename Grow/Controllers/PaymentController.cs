@@ -81,7 +81,7 @@ namespace Grow.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
-            PopulateDropDownLists();
+            PopulateDropDownLists(payment);
             return View(payment);
         }
 
@@ -90,6 +90,8 @@ namespace Grow.Controllers
         {
             var payment = _context.Payments
                 .FirstOrDefault(x => x.ID == ID);
+
+            PopulateDropDownLists(payment);
 
             return PartialView("_EditPayment", payment);
         }
@@ -125,6 +127,8 @@ namespace Grow.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
+            PopulateDropDownLists(payment);
+
             return View(payment);
         }
 
@@ -133,6 +137,7 @@ namespace Grow.Controllers
         {
             // Get the payment to delete
             Payment p = _context.Payments
+                .Include(x => x.PaymentMethod)
                 .FirstOrDefault(x => x.ID == ID);
 
             return PartialView("_DeletePayment", p);
@@ -144,6 +149,7 @@ namespace Grow.Controllers
         public async Task<IActionResult> DeleteConfirmed(int ID)
         {
             var p = _context.Payments
+                .Include(x => x.PaymentMethod)
                 .FirstOrDefault(x => x.ID == ID);
 
             int transID = p.TransactionID;
@@ -201,9 +207,9 @@ namespace Grow.Controllers
             }
         }
 
-        private void PopulateDropDownLists()
+        private void PopulateDropDownLists(Payment payment = null)
         {
-            ViewBag.PaymentMethods = new SelectList(_context.PaymentMethods.OrderBy(x => x.Method), "ID", "Method");
+            ViewBag.PaymentMethods = new SelectList(_context.PaymentMethods.OrderBy(x => x.Method), "ID", "Method", payment?.PaymentMethodID);
         }
     }
 }

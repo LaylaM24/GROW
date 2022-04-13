@@ -48,6 +48,12 @@
                         <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.Volunteer.ShortName)
                         </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Paid)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Paid)
+                        </dd>
                     </dl>
                 </div>
             </div>
@@ -78,7 +84,7 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => payment.PaymentMethod)
+                                    @Html.DisplayFor(modelItem => payment.PaymentMethod.Method)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => payment.PaymentAmount)
@@ -103,7 +109,6 @@
                                 }
                                 @amountOwed.ToString("C")
                             </th>
-                            <th></th>
                         </tr>
                     </table>
                 </div>
@@ -146,8 +151,8 @@
 
                 $(document).on("click", ".modal-link", function () {
                     var actionForm = $(this).attr("name");
-                    var itemID = $(this).attr("tag");
-                    refreshModal(actionForm, itemID);
+                    var transID = $(this).attr("tag");
+                    refreshModal(actionForm, transID);
                 });
 
                 $(document).on("click", "#submitPaymentForm", function (event) {
