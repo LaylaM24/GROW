@@ -85,7 +85,10 @@
                                 <input type="submit" disabled="disabled" value="Ext. Cost" class="btn btn-link" />
                             </th>
                             <th>
-                                <button class="btn btn-outline-success modal-link" tag="@Model.ID" name="AddForm" data-toggle="modal" data-target="#theItemModal" title="Add Item" type="button">&#x271A;</button>
+                                @if (Model.Paid == false)
+                                {
+                                    <button class="btn btn-outline-success modal-link" tag="@Model.ID" name="AddForm" data-toggle="modal" data-target="#theItemModal" title="Add Item" type="button">&#x271A;</button>
+                                }
                             </th>
                         </tr>
 
@@ -108,8 +111,11 @@
                                     @Html.DisplayFor(modelItem => item.ExtendedCost)
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theItemModal" title="Edit @item.Item.ItemName" type="button">&#x270D;</button>
-                                    <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theItemModal" title="Delete @item.Item.ItemName" type="button">&#x274C;</button>
+                                    @if (Model.Paid == false)
+                                    {
+                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="EditForm" data-toggle="modal" data-target="#theItemModal" title="Edit @item.Item.ItemName" type="button">&#x270D;</button>
+                                        <button class="btn btn-sm modal-link" tag="@item.ID" name="DeleteForm" data-toggle="modal" data-target="#theItemModal" title="Delete @item.Item.ItemName" type="button">&#x274C;</button>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -138,11 +144,14 @@
     <div class="row ml-1">
         <div class="col-md-6">
             <div class="row">
-                <div class="form-group">
-                    <a asp-action="Delete" asp-route-id="@Model.ID">
-                        <input type="button" value="Delete" class="btn btn-danger" />
-                    </a>
-                </div>
+                @if (Model.Paid == false)
+                {
+                    <div class="form-group">
+                        <a asp-action="Delete" asp-route-id="@Model.ID">
+                            <input type="button" value="Delete" class="btn btn-danger" />
+                        </a>
+                    </div>
+                }
                 <div class="ml-2"></div>
                 <div class="form-group">
                     <a asp-action="Details" asp-route-id="@Model.ID">
