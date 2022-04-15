@@ -46,8 +46,10 @@ namespace Grow.Controllers
 
             if (!String.IsNullOrEmpty(SearchString))
             {
-                members = members.Where(h => h.Household.StreetNumber.ToUpper().Contains(SearchString.ToUpper())
-                                                || h.Household.StreetName.ToUpper().Contains(SearchString.ToUpper()));
+                SearchString = SearchString.Trim();
+                members = members.Where(h => (h.Household.StreetNumber + " " + h.Household.StreetName + (h.Household.ApartmentNumber != null ? " Apt. " + h.Household.ApartmentNumber : "") 
+                                                + ", " + h.Household.City.CityName + " " + h.Household.PostalCode).ToUpper().Contains(SearchString.ToUpper())
+                                                || h.Household.HouseholdName.ToUpper().Contains(SearchString.ToUpper()) || (h.FirstName + " " + h.LastName).ToUpper().Contains(SearchString.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 
@@ -141,7 +143,7 @@ namespace Grow.Controllers
         {
             ViewData["Filtering"] = "";
 
-            string[] sortOptions = new[] { "Transaction Date", "Total", "Household", "Member", "Sales Person" };
+            string[] sortOptions = new[] { "Transaction Date", "Total", "Household", "Member", "Sales Person", "Paid" };
 
             var transaction = from t in _context.Transactions
                               .Include(t => t.Household)
@@ -152,7 +154,8 @@ namespace Grow.Controllers
 
             if (!String.IsNullOrEmpty(SearchString))
             {
-                transaction = transaction.Where(t => t.Household.HouseholdName.ToUpper().Contains(SearchString.ToUpper()));
+                transaction = transaction.Where(t => t.Household.HouseholdName.ToUpper().Contains(SearchString.ToUpper()) || (t.Member.FirstName + " " + t.Member.LastName).ToUpper().Contains(SearchString.ToUpper())
+                                                    || (t.Volunteer.FirstName + " " + t.Volunteer.LastName).ToUpper().Contains(SearchString.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 
@@ -224,6 +227,19 @@ namespace Grow.Controllers
                         .ThenByDescending(x => x.Member.FirstName);
                 }
             }
+            else if (sortField == "Paid")
+            {
+                if (sortDirection == "asc")
+                {
+                    transaction = transaction
+                        .OrderBy(h => h.Paid);
+                }
+                else
+                {
+                    transaction = transaction
+                        .OrderByDescending(h => h.Paid);
+                }
+            }
             else
             {
                 if (sortDirection == "asc")
@@ -262,7 +278,9 @@ namespace Grow.Controllers
                 .Include(x => x.Member)
                 .Include(t => t.Volunteer)
                 .Include(t => t.TransactionDetails)
-                    .ThenInclude(td => td.Item)
+                .ThenInclude(td => td.Item)
+                .Include(x => x.Payments)
+                .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (transaction == null)
@@ -291,6 +309,7 @@ namespace Grow.Controllers
                 MemberID = member.ID,
                 TransactionDate = DateTime.Today,
                 TransactionTotal = 0,
+                Paid = false,
                 // Change to actual volunteer later
                 VolunteerID = 1
             };
@@ -311,6 +330,8 @@ namespace Grow.Controllers
                 .Include(x => x.Member)
                 .Include(x => x.TransactionDetails)
                 .Include(x => x.Volunteer)
+                .Include(x => x.Payments)
+                .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefault(x => x.ID == newTrans.ID);
 
             return View(trans);
@@ -331,6 +352,8 @@ namespace Grow.Controllers
                 .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
+                .Include(x => x.Payments)
+                .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (transaction == null)
@@ -357,6 +380,8 @@ namespace Grow.Controllers
                 .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
+                .Include(x => x.Payments)
+                .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (transaction == null)
@@ -375,7 +400,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions.FindAsync(id);
             _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(SalesHistory));
         }
 
         public PartialViewResult ItemList(int id)

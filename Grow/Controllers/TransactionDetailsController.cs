@@ -9,6 +9,7 @@ using Grow.Data;
 using Grow.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.AspNetCore.Authorization;
+using Grow.ViewModels;
 
 namespace Grow.Controllers
 {
@@ -93,7 +94,6 @@ namespace Grow.Controllers
                     TransactionDetail td = _context.TransactionDetails.FirstOrDefault(x => x.ID == transDetail.ID);
 
                     // Update fields
-                    td.ItemID = transDetail.ItemID;
                     td.Quantity = transDetail.Quantity;
 
                     // Get unit cost and extended cost
@@ -155,6 +155,32 @@ namespace Grow.Controllers
             return View(td);
         }
 
+        public List<ListOptionVM> GetItems(int filter, string search)
+        {
+            var itemList = _context.Items.OrderBy(x => x.ItemName).ToList();
+            
+            if(filter != -1)
+            {
+                itemList = itemList.Where(x => x.ItemCategoryID == filter).ToList();
+            }
+
+            if (!String.IsNullOrEmpty(search?.Trim()))
+            {
+                itemList = itemList.Where(x => x.ItemName.ToUpper().Contains(search.ToUpper()) || x.ItemNo.ToString().ToUpper().Contains(search.ToUpper())).ToList();
+            }
+
+            var items = new List<ListOptionVM>();
+            foreach (var s in itemList)
+            {
+                items.Add(new ListOptionVM
+                {
+                    ID = s.ID,
+                    DisplayText = s.ItemNo + "    -    " + s.ItemName
+                });
+            }
+
+            return items;
+        }
 
         private void UpdateTransactionTotal(int id)
         {
@@ -177,7 +203,19 @@ namespace Grow.Controllers
 
         private void PopulateDropDownLists(Item item = null)
         {
-            ViewBag.ItemID = new SelectList(_context.Items, "ID", "ItemName", item?.ID);
+            var allItems = _context.Items;
+            var items = new List<ListOptionVM>();
+            foreach (var s in allItems)
+            {
+                items.Add(new ListOptionVM
+                {
+                    ID = s.ID,
+                    DisplayText = s.ItemNo + "    -    " + s.ItemName
+                });
+            }
+
+            ViewData["ItemList"] = new MultiSelectList(items.OrderBy(s => s.DisplayText), "ID", "DisplayText");
+            ViewBag.Categories = new SelectList(_context.ItemCategories.OrderBy(x => x.CategoryName), "ID", "CategoryName", item?.ItemCategoryID);
         }
 
         private bool TransactionDetailExists(int id)

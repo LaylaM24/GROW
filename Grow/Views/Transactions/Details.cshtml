@@ -46,6 +46,12 @@
                     <dd class="col-sm-8">
                         @Html.DisplayFor(model => model.Volunteer.ShortName)
                     </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Paid)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Paid)
+                    </dd>
                 </dl>
             </div>
         </div>
@@ -100,35 +106,49 @@
                     }
 
                     <tr>
-                        <th>
-                            <input type="submit" disabled="disabled" value="Total" class="btn btn-link" />
-                        </th>
-                        <th>
-                        </th>
-                        <th>
-                        </th>
-                        <th>
-                        </th>
-                        <th>
-                            @Model.TransactionTotal.ToString("C")
-                        </th>
-                        <th></th>
+                        <td>
+                            <b>Total</b><br />
+                            Paid<br />
+                            Due
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <b>@Model.TransactionTotal.ToString("C")</b><br />
+                            @Model.Payments.Sum(x => x.PaymentAmount).ToString("C")
+                            <a asp-controller="Payment" asp-action="Index" asp-route-id="@Model.ID">
+                                <button class="btn btn-sm modal-link" title="Edit Payments" type="button">&#x270D;</button>
+                            </a>
+                            <br />
+                            @{
+                                var amountPaid = Model.Payments.Sum(x => x.PaymentAmount);
+                            }
+                            @((Model.TransactionTotal - amountPaid).ToString("C"))
+                        </td>
                     </tr>
                 </table>
             </div>
         </dd>
     </dl>
 </div>
+
 <br />
 <div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <a asp-action="Edit" asp-route-id="@Model.ID">
-                    <input type="button" value="Edit" class="btn btn-primary" style="width: 75px;" />
-                </a>
+    @if (Model.Paid == false)
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <a asp-action="Edit" asp-route-id="@Model.ID">
+                        <input type="button" value="Edit" class="btn btn-primary" style="width: 75px;" />
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    }
     <a asp-action="SalesHistory">Back to List</a>
 </div>

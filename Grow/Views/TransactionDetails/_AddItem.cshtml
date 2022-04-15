@@ -4,13 +4,34 @@
 <br />
 <form asp-controller="TransactionDetails" asp-action="AddItem" method="post" id="theItemForm">
     <input type="hidden" asp-for="TransactionID" value="@ViewData["TransactionID"]" />
+    <input id="txtItemID" type="hidden" asp-for="ItemID" />
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label class="control-label">Filter by Category:</label>
+            <select id="ddlCat" class="form-control" asp-items="ViewBag.Categories">
+                <option value="-1" selected>Select a Category</option>
+            </select>
+        </div>
+        <div class="form-group col-md-5">
+            <label class="control-label">Search Items:</label>
+            <input id="txtSearch" class="form-control" />
+        </div>
+        <div class="form-group col-md-3 align-self-end">
+            <input id="btnFilter" type="button" value="Filter" class="btn btn-outline-primary" />
+            <input id="btnClear" type="button" value="Clear" class="btn btn-outline-dark" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.ListBox("itemList", (MultiSelectList)ViewBag.ItemList, new { @id = "itemList", @size = 8, @class = "form-control" })
+        </div>
+    </div>
+    <hr />
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="ItemID" class="control-label"></label>
-                <select id="ddlItem" asp-for="ItemID" class="form-control" asp-items="ViewBag.ItemID">
-                    <option value="-1" selected disabled>Select an Item</option>
-                </select>
+                <input id="txtItem" class="form-control" readonly />
                 <span asp-validation-for="ItemID" class="text-danger"></span>
             </div>
         </div>

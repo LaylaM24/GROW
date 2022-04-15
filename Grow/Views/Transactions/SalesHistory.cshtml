@@ -30,7 +30,7 @@
             <div class="card card-body bg-light">
                 <div class="row">
                     <div class="form-group col-md-4">
-                        <label class="control-label">Search Household Name:</label>
+                        <label class="control-label">Search Transactions:</label>
                         @Html.TextBox("SearchString", null, new { @class = "form-control" })
                     </div>
                     <div class="form-group col-md-4 align-self-end">
@@ -60,6 +60,9 @@
                 <th>
                     <input type="submit" name="actionButton" value="Sales Person" class="btn btn-link" />
                 </th>
+                <th>
+                    <input type="submit" name="actionButton" value="Paid" class="btn btn-link" />
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -83,7 +86,13 @@
                         @Html.DisplayFor(modelItem => item.Volunteer.ShortName)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        @Html.DisplayFor(modelItem => item.Paid)
+                    </td>
+                    <td>
+                        @if (item.Paid == false)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> <text>|</text>
+                        }
                         <a asp-action="Details" asp-route-id="@item.ID">View Details</a>
                     </td>
                 </tr>
