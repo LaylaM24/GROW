@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+GrowSecurity.db
+Grow.db
+*.db-shm
+*.db-wal
+Grow/GrowSecurity.db

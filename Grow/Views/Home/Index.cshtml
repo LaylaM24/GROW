@@ -9,6 +9,8 @@
     <p>Use the links below to visit the page you are looking for.</p>
 </div>
 
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Volunteer"))
+    {
 <div class="row">
     <div class="col-md-4">
         <h2>Create Households</h2>
@@ -16,13 +18,14 @@
         <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Households")'">Households</button></p>
     </div>
     <div class="col-md-4">
-        <h2>Create Reports</h2>
-        <p>Create new reports based on current data.</p>
-        <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Reports")'">Reports</button></p>
-    </div>
-    <div class="col-md-4">
         <h2>Create Sales</h2>
         <p>Create a new sale for a specific household.</p>
         <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Transactions")'">Sales</button></p>
     </div>
+    <div class="col-md-4">
+        <h2>Create Reports</h2>
+        <p>Create new reports based on current data.</p>
+        <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Reports")'">Reports</button></p>
+    </div>
 </div>
+    }

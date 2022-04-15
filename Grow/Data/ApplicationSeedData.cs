@@ -70,17 +70,6 @@ namespace Grow.Data
                     userManager.AddToRoleAsync(user, "Volunteer").Wait();
                 }
             }
-            if (userManager.FindByEmailAsync("user1@outlook.com").Result == null)
-            {
-                IdentityUser user = new IdentityUser
-                {
-                    UserName = "user1@outlook.com",
-                    Email = "user1@outlook.com"
-                };
-
-                IdentityResult result = userManager.CreateAsync(user, "Password").Result;
-                //Not in any role
-            }
         }
     }
 }

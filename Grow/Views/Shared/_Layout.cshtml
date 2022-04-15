@@ -45,9 +45,9 @@
                                 @if (User.IsInRole("SuperAdmin"))
                                 {
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register User</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="UserRoles" asp-action="Index">Manage User Roles</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Employees" asp-action="Index">Manage Staff Accounts</a>
+                                    @*<a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register User</a>*@
+                                    <a class="dropdown-item" asp-area="" asp-controller="UserRoles" asp-action="Index">Manage Employee Roles</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Employees" asp-action="Index">Manage Employee Accounts</a>
                                     <a asp-controller="Households" asp-action="Notification" class="dropdown-item">Send Email Notification</a>
                                 }
                             </div>
