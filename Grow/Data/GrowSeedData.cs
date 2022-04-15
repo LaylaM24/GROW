@@ -311,31 +311,6 @@ namespace Grow.Data
                 }
                 #endregion
 
-                #region Payment Methods
-                if (!context.PaymentMethods.Any())
-                {
-                    context.PaymentMethods.AddRange(
-                        new PaymentMethod
-                        {
-                            Method = "Debit"
-                        },
-                        new PaymentMethod
-                        {
-                            Method = "Credit"
-                        },
-                        new PaymentMethod
-                        {
-                            Method = "Cash"
-                        },
-                        new PaymentMethod
-                        {
-                            Method = "Gift Card"
-                        }
-                    );
-                    context.SaveChanges();
-                }
-                #endregion
-
                 // Test data
                 #region Items
                 if (!context.Items.Any())
@@ -1688,6 +1663,34 @@ namespace Grow.Data
                             ChangeDate = DateTime.Now
                         }
                     );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                #region Employee
+                // Look for any Employees.  Seed ones to match the seeded Identity accounts.
+                if (!context.Employees.Any())
+                {
+                    context.Employees.AddRange(
+                     new Employee
+                     {
+                         FirstName = "Bob",
+                         LastName = "Smith",
+                         Email = "superadmin1@outlook.com"
+                     },
+                     new Employee
+                     {
+                         FirstName = "Billy",
+                         LastName = "Mack",
+                         Email = "admin1@outlook.com"
+                     },
+                     new Employee
+                     {
+                         FirstName = "Stephanie",
+                         LastName = "Stevens",
+                         Email = "volunteer1@outlook.com"
+                     });
+
                     context.SaveChanges();
                 }
                 #endregion

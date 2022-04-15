@@ -9,6 +9,7 @@ using Grow.Data;
 using Grow.Models;
 using Grow.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using Grow.ViewModels;
 
 namespace Grow.Controllers
 {
@@ -37,43 +38,19 @@ namespace Grow.Controllers
 
             var employee = await _context.Employees
                .Where(c => c.Email == User.Identity.Name)
+               .Select(c => new EmployeeVM
+               {
+                   ID = c.ID,
+                   FirstName = c.FirstName,
+                   LastName = c.LastName,
+                   Phone = c.Phone,
+                   Email = c.Email,
+                   Active = c.Active
+               })
                .FirstOrDefaultAsync();
             if (employee == null)
             {
-                return RedirectToAction(nameof(Create));
-            }
-
-            return View(employee);
-        }
-
-        // GET: EmployeeAccount/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: EmployeeAccount/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Phone,FavouriteIceCream,Email")] Employee employee)
-        {
-
-            employee.Email = User.Identity.Name;
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _context.Add(employee);
-                    await _context.SaveChangesAsync();
-                    UpdateUserNameCookie(employee.FullName);
-                    return RedirectToAction(nameof(Details));
-                }
-            }
-            catch (DbUpdateException)
-            {
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                return NotFound();
             }
 
             return View(employee);
@@ -84,17 +61,24 @@ namespace Grow.Controllers
         {
             var employee = await _context.Employees
                 .Where(c => c.Email == User.Identity.Name)
+                .Select(c => new EmployeeVM
+                {
+                    ID = c.ID,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    Phone = c.Phone,
+                    Email = c.Email,
+                    Active = c.Active
+                })
                 .FirstOrDefaultAsync();
             if (employee == null)
             {
-                return RedirectToAction(nameof(Create));
+                return NotFound();
             }
             return View(employee);
         }
 
         // POST: EmployeeAccount/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
@@ -102,6 +86,8 @@ namespace Grow.Controllers
             var employeeToUpdate = await _context.Employees
                 .FirstOrDefaultAsync(m => m.ID == id);
 
+            //Note: Using TryUpdateModel we do not need to invoke the ViewModel
+            //Only allow some properties to be updated
             if (await TryUpdateModelAsync<Employee>(employeeToUpdate, "",
                 c => c.FirstName, c => c.LastName, c => c.Phone))
             {
@@ -126,6 +112,7 @@ namespace Grow.Controllers
                 }
                 catch (DbUpdateException)
                 {
+                    //Since we do not allow changing the email, we cannot introduce a duplicate
                     ModelState.AddModelError("", "Something went wrong in the database.");
                 }
             }

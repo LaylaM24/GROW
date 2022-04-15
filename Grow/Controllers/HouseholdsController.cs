@@ -359,6 +359,7 @@ namespace Grow.Controllers
         }
 
         // GET: Households/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -381,6 +382,7 @@ namespace Grow.Controllers
         }
 
         // POST: Households/Delete/5
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

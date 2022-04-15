@@ -8,11 +8,14 @@
     <div class="col-6">
         <h1>Edit Household</h1>
     </div>
+    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+    {
     <div class="col-6 text-right">
         <a asp-action="Delete" asp-route-id="@Model.ID">
             <span class="btn btn-danger"><strong>Delete</strong></span>
         </a>
     </div>
+    }
 </div>
 <hr />
 <partial name="_MemberModal" />
@@ -174,12 +177,15 @@
                                     <a asp-controller="Members" asp-action="Edit" asp-route-id="@member.ID">
                                         <button class="btn btn-sm modal-link" title="Edit @member.FullName" type="button">&#x270D;</button>
                                     </a>
-                                    <a asp-controller="Members" asp-action="Delete" asp-route-id="@member.ID">
-                                        <button class="btn btn-sm modal-link" title="Delete @member.FullName" type="button">&#x274C;</button>
-                                    </a>
-                                    @*<button class="btn btn-sm modal-link" tag="@member.ID" name="EditForm" data-toggle="modal" data-target="#theMemberModal" title="Edit @member.FullName" type="button">&#x270D;</button>
-                                    <button class="btn btn-sm modal-link" tag="@member.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberModal" title="Delete @member.FullName" type="button">&#x274C;</button>*@
-                                </td>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                    {
+                                        <a asp-controller="Members" asp-action="Delete" asp-route-id="@member.ID">
+                                            <button class="btn btn-sm modal-link" title="Delete @member.FullName" type="button">&#x274C;</button>
+                                        </a>
+                                    }
+                                        @*<button class="btn btn-sm modal-link" tag="@member.ID" name="EditForm" data-toggle="modal" data-target="#theMemberModal" title="Edit @member.FullName" type="button">&#x270D;</button>
+            <button class="btn btn-sm modal-link" tag="@member.ID" name="DeleteForm" data-toggle="modal" data-target="#theMemberModal" title="Delete @member.FullName" type="button">&#x274C;</button>*@
+                                    </td>
                             </tr>
                         }
                     </table>
