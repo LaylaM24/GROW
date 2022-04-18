@@ -78,14 +78,14 @@ namespace Grow.Controllers
                 {
                     DateTime d = Convert.ToDateTime(date);
                     households = households.Where(x => x.RenewalDate <= d);
-                    ViewData["Date"] = d.ToShortDateString();
+                    ViewData["Date"] = d.ToString("yyyy-MM-dd");
                 }
                 catch { }
             }
             else
             {
                 households = households.Where(x => x.RenewalDate <= DateTime.Today);
-                ViewData["Date"] = DateTime.Today.ToShortDateString();
+                ViewData["Date"] = DateTime.Today.ToString("yyyy-MM-dd");
             }
 
             if(cbInactive == true)
