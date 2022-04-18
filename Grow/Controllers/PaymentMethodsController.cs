@@ -53,15 +53,15 @@ namespace Grow.Controllers
         // POST: PaymentMethods/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Method")] PaymentMethod method)
+        public async Task<IActionResult> Create([Bind("ID,Method")] PaymentMethod paymentMethod)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(method);
+                _context.Add(paymentMethod);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Lookups");
             }
-            return View(method);
+            return View(paymentMethod);
         }
 
         // GET: PaymentMethods/Edit/5
@@ -85,9 +85,9 @@ namespace Grow.Controllers
         // POST: PaymentMethods/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Method")] PaymentMethod method)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Method")] PaymentMethod paymentMethod)
         {
-            if (id != method.ID)
+            if (id != paymentMethod.ID)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace Grow.Controllers
             {
                 try
                 {
-                    _context.Update(method);
+                    _context.Update(paymentMethod);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PaymentMethodExists(method.ID))
+                    if (!PaymentMethodExists(paymentMethod.ID))
                     {
                         return NotFound();
                     }
@@ -112,7 +112,7 @@ namespace Grow.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(method);
+            return View(paymentMethod);
         }
 
         // GET: PaymentMethods/Delete/5

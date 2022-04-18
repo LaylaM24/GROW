@@ -57,6 +57,15 @@ namespace Grow.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if cutoff already exists for specified number of members
+                LowIncomeCutOff c = _context.LowIncomeCutOffs.Where(x => x.NumberOfMembers == cutOff.NumberOfMembers).FirstOrDefault();
+
+                if(c != null)
+                {
+                    ModelState.AddModelError("NumberOfMembers", "Low Income Cut Off for " + c.NumberOfMembers + " member(s) already exists.");
+                    return View(cutOff);
+                }
+
                 _context.Add(cutOff);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Lookups");
