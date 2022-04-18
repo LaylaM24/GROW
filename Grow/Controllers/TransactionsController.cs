@@ -302,6 +302,14 @@ namespace Grow.Controllers
                 return RedirectToAction("Index", "Transactions");
             }
 
+            // Get employee info
+            Employee employee = new Employee();
+            try
+            {
+                employee = _context.Employees.Where(x => x.Email == User.Identity.Name).FirstOrDefault();
+            }
+            catch { }
+
             // Create a new transaction immediately
             Transaction newTrans = new Transaction()
             {
@@ -311,7 +319,7 @@ namespace Grow.Controllers
                 TransactionTotal = 0,
                 Paid = false,
                 // Change to actual volunteer later
-                EmployeeID = 1
+                EmployeeID = employee.ID
             };
 
             try
@@ -429,7 +437,7 @@ namespace Grow.Controllers
                          select c;
 
             ViewData["HouseholdID"] = new SelectList(hQuery, "ID", "HouseholdName", transaction?.HouseholdID);
-            ViewData["VolunteerID"] = new SelectList(vQuery, "ID", "FormalName", transaction?.EmployeeID);
+            ViewData["VolunteerID"] = new SelectList(vQuery, "ID", "FullName", transaction?.EmployeeID);
             ViewData["CityID"] = new SelectList(cQuery, "ID", "CityName");
         }
 

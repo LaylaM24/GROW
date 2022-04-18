@@ -196,6 +196,19 @@ namespace Grow.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    Employee employee;
+
+                    if (member.IncomeVerified)
+                    {
+                        try
+                        {
+                            // get employee
+                            employee = _context.Employees.Where(x => x.Email == User.Identity.Name).FirstOrDefault();
+                            member.IncomeVerifiedBy = employee != null ? employee.FullName : "Unknown";
+                        }
+                        catch { }
+                    }
+
                     _context.Add(member);
                     _context.SaveChanges();
 
@@ -309,6 +322,21 @@ namespace Grow.Controllers
             memberToUpdate.DataConsent = member.DataConsent;
             memberToUpdate.EmailConsent = member.EmailConsent;
             memberToUpdate.IncomeVerified = member.IncomeVerified;
+
+            if (memberToUpdate.IncomeVerified)
+            {
+                try
+                {
+                    // get employee
+                    var employee = _context.Employees.Where(x => x.Email == User.Identity.Name).FirstOrDefault();
+                    memberToUpdate.IncomeVerifiedBy = employee != null ? employee.FullName : "Unknown";
+                }
+                catch { }
+            }
+            else
+            {
+                memberToUpdate.IncomeVerifiedBy = null;
+            }
 
             // Get Dictionary of Income Sources
             Dictionary<int, double> sources = new Dictionary<int, double>();
