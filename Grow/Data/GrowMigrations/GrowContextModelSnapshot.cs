@@ -283,9 +283,6 @@ namespace Grow.Data.GrowMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("MonthlyIncome")
-                        .HasColumnType("REAL");
-
                     b.Property<byte>("NumberOfMembers")
                         .HasColumnType("INTEGER");
 
@@ -495,8 +492,7 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("REAL");
 
                     b.Property<int>("PaymentMethodID")
-                        .HasColumnType("INTEGER")
-                        .HasMaxLength(50);
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TransactionID")
                         .HasColumnType("INTEGER");

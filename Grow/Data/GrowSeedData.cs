@@ -248,44 +248,37 @@ namespace Grow.Data
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 1,
-                            YearlyIncome = 22186,
-                            MonthlyIncome = 1849
+                            YearlyIncome = 22186
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 2,
-                            YearlyIncome = 27619,
-                            MonthlyIncome = 2302
+                            YearlyIncome = 27619
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 3,
-                            YearlyIncome = 33953,
-                            MonthlyIncome = 2830
+                            YearlyIncome = 33953
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 4,
-                            YearlyIncome = 41225,
-                            MonthlyIncome = 3435
+                            YearlyIncome = 41225
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 5,
-                            YearlyIncome = 46757,
-                            MonthlyIncome = 3896
+                            YearlyIncome = 46757
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 6,
-                            YearlyIncome = 52734,
-                            MonthlyIncome = 4395
+                            YearlyIncome = 52734
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 7,
-                            YearlyIncome = 58712,
-                            MonthlyIncome = 4893
+                            YearlyIncome = 58712
                         }
                     );
                     context.SaveChanges();
@@ -305,6 +298,31 @@ namespace Grow.Data
                            PostalCode = "L2E 4N1",
                            CityID = city.ID,
                            City = city
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                #region Payment Methods
+                if (!context.PaymentMethods.Any())
+                {
+                    context.PaymentMethods.AddRange(
+                        new PaymentMethod
+                        {
+                            Method = "Cash"
+                        },
+                        new PaymentMethod
+                        {
+                            Method = "Debit"
+                        }, 
+                        new PaymentMethod
+                        {
+                            Method = "Credit"
+                        }, 
+                        new PaymentMethod
+                        {
+                            Method = "Gift Card"
                         }
                     );
                     context.SaveChanges();
