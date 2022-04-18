@@ -248,44 +248,37 @@ namespace Grow.Data
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 1,
-                            YearlyIncome = 22186,
-                            MonthlyIncome = 1849
+                            YearlyIncome = 22186
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 2,
-                            YearlyIncome = 27619,
-                            MonthlyIncome = 2302
+                            YearlyIncome = 27619
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 3,
-                            YearlyIncome = 33953,
-                            MonthlyIncome = 2830
+                            YearlyIncome = 33953
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 4,
-                            YearlyIncome = 41225,
-                            MonthlyIncome = 3435
+                            YearlyIncome = 41225
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 5,
-                            YearlyIncome = 46757,
-                            MonthlyIncome = 3896
+                            YearlyIncome = 46757
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 6,
-                            YearlyIncome = 52734,
-                            MonthlyIncome = 4395
+                            YearlyIncome = 52734
                         },
                         new LowIncomeCutOff
                         {
                             NumberOfMembers = 7,
-                            YearlyIncome = 58712,
-                            MonthlyIncome = 4893
+                            YearlyIncome = 58712
                         }
                     );
                     context.SaveChanges();
@@ -305,6 +298,31 @@ namespace Grow.Data
                            PostalCode = "L2E 4N1",
                            CityID = city.ID,
                            City = city
+                        }
+                    );
+                    context.SaveChanges();
+                }
+                #endregion
+
+                #region Payment Methods
+                if (!context.PaymentMethods.Any())
+                {
+                    context.PaymentMethods.AddRange(
+                        new PaymentMethod
+                        {
+                            Method = "Cash"
+                        },
+                        new PaymentMethod
+                        {
+                            Method = "Debit"
+                        }, 
+                        new PaymentMethod
+                        {
+                            Method = "Credit"
+                        }, 
+                        new PaymentMethod
+                        {
+                            Method = "Gift Card"
                         }
                     );
                     context.SaveChanges();
@@ -1487,80 +1505,6 @@ namespace Grow.Data
                             MemberID = 2,
                             IncomeAmount = 5000
                         });
-                    context.SaveChanges();
-                }
-                #endregion
-
-                #region Volunteers
-                if (!context.Volunteers.Any())
-                {
-                    context.Volunteers.AddRange(
-                        new Volunteer
-                        {
-                            FirstName = "Matt",
-                            LastName = "Bruce",
-                            Phone = "2895018561",
-                            Email = "matthewbruce@hotmail.com",
-                            StartDate = DateTime.Now,
-                            VolunteerHours = 0,
-                            StreetName = "Cresent Ave.",
-                            StreetNum = "72",
-                            PostalCode = "p2k2p2",
-                            CityID = 1
-                        },
-                        new Volunteer
-                        {
-                            FirstName = "Mike",
-                            LastName = "Bruce",
-                            Phone = "9051245524",
-                            Email = "mikebruce@hotmail.com",
-                            StartDate = DateTime.Now,
-                            VolunteerHours = 20,
-                            StreetName = "Lakeport Bvld.",
-                            StreetNum = "123",
-                            PostalCode = "n1n2j3",
-                            CityID = 2
-                        },
-                        new Volunteer
-                        {
-                            FirstName = "Olivia",
-                            LastName = "Port",
-                            Phone = "9125231682",
-                            Email = "oliviaport@hotmail.com",
-                            StartDate = DateTime.Now,
-                            VolunteerHours = 1140,
-                            StreetName = "Queenstone Stn.",
-                            StreetNum = "42",
-                            PostalCode = "L4n 3kp",
-                            CityID = 3
-                        },
-                        new Volunteer
-                        {
-                            FirstName = "Rebecca",
-                            LastName = "White",
-                            Phone = "9052127566",
-                            Email = "beccawhite@hotmail.com",
-                            StartDate = DateTime.Now,
-                            VolunteerHours = 0,
-                            StreetName = "Niagara St.",
-                            StreetNum = "625",
-                            PostalCode = "t9n3h4",
-                            CityID = 4
-                        },
-                        new Volunteer
-                        {
-                            FirstName = "Ryan",
-                            LastName = "West",
-                            Phone = "2895237323",
-                            Email = "Ryanwest@hotmail.com",
-                            StartDate = DateTime.Now,
-                            VolunteerHours = 800,
-                            StreetName = "Terrance Lane",
-                            StreetNum = "36",
-                            PostalCode = "d8d2n4",
-                            CityID = 5
-                        }
-                    );
                     context.SaveChanges();
                 }
                 #endregion

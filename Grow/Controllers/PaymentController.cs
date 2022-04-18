@@ -33,7 +33,7 @@ namespace Grow.Controllers
                 .ThenInclude(x => x.City)
                 .Include(x => x.Member)
                 .Include(x => x.TransactionDetails)
-                .Include(x => x.Volunteer)
+                .Include(x => x.Employee)
                 .Where(x => x.ID == id)
                 .FirstOrDefault();
 
@@ -177,7 +177,7 @@ namespace Grow.Controllers
                 .ThenInclude(x => x.City)
                 .Include(x => x.Member)
                 .Include(x => x.TransactionDetails)
-                .Include(x => x.Volunteer)
+                .Include(x => x.Employee)
                 .Where(x => x.ID == id)
                 .FirstOrDefault();
 

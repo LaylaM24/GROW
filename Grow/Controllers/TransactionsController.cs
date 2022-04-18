@@ -148,14 +148,14 @@ namespace Grow.Controllers
             var transaction = from t in _context.Transactions
                               .Include(t => t.Household)
                               .Include(t => t.Member)
-                              .Include(t => t.Volunteer)
+                              .Include(t => t.Employee)
                               .AsNoTracking()
                               select t;
 
             if (!String.IsNullOrEmpty(SearchString))
             {
                 transaction = transaction.Where(t => t.Household.HouseholdName.ToUpper().Contains(SearchString.ToUpper()) || (t.Member.FirstName + " " + t.Member.LastName).ToUpper().Contains(SearchString.ToUpper())
-                                                    || (t.Volunteer.FirstName + " " + t.Volunteer.LastName).ToUpper().Contains(SearchString.ToUpper()));
+                                                    || (t.Employee.FirstName + " " + t.Employee.LastName).ToUpper().Contains(SearchString.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 
@@ -191,12 +191,12 @@ namespace Grow.Controllers
                 if (sortDirection == "asc")
                 {
                     transaction = transaction
-                        .OrderBy(h => h.Volunteer);
+                        .OrderBy(h => h.Employee);
                 }
                 else
                 {
                     transaction = transaction
-                        .OrderByDescending(h => h.Volunteer);
+                        .OrderByDescending(h => h.Employee);
                 }
             }
             else if (sortField == "Household")
@@ -276,7 +276,7 @@ namespace Grow.Controllers
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
                 .Include(x => x.Member)
-                .Include(t => t.Volunteer)
+                .Include(t => t.Employee)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(td => td.Item)
                 .Include(x => x.Payments)
@@ -311,7 +311,7 @@ namespace Grow.Controllers
                 TransactionTotal = 0,
                 Paid = false,
                 // Change to actual volunteer later
-                VolunteerID = 1
+                EmployeeID = 1
             };
 
             try
@@ -329,7 +329,7 @@ namespace Grow.Controllers
                 .ThenInclude(x => x.City)
                 .Include(x => x.Member)
                 .Include(x => x.TransactionDetails)
-                .Include(x => x.Volunteer)
+                .Include(x => x.Employee)
                 .Include(x => x.Payments)
                 .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefault(x => x.ID == newTrans.ID);
@@ -348,7 +348,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
-                .Include(t => t.Volunteer)
+                .Include(t => t.Employee)
                 .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
@@ -376,7 +376,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
-                .Include(t => t.Volunteer)
+                .Include(t => t.Employee)
                 .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
@@ -420,7 +420,7 @@ namespace Grow.Controllers
                          orderby h.HouseholdName
                          select h;
 
-            var vQuery = from v in _context.Volunteers
+            var vQuery = from v in _context.Employees
                          orderby v.LastName, v.FirstName
                          select v;
 
@@ -429,7 +429,7 @@ namespace Grow.Controllers
                          select c;
 
             ViewData["HouseholdID"] = new SelectList(hQuery, "ID", "HouseholdName", transaction?.HouseholdID);
-            ViewData["VolunteerID"] = new SelectList(vQuery, "ID", "FormalName", transaction?.VolunteerID);
+            ViewData["VolunteerID"] = new SelectList(vQuery, "ID", "FormalName", transaction?.EmployeeID);
             ViewData["CityID"] = new SelectList(cQuery, "ID", "CityName");
         }
 

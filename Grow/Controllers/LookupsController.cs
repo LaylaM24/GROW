@@ -28,6 +28,18 @@ namespace Grow.Controllers
             ViewData["CitiesID"] = new SelectList(_context.Cities.OrderBy(a => a.CityName), "ID", "CityName");
             ViewData["GendersID"] = new SelectList(_context.Genders.OrderBy(a => a.GenderType), "ID", "GenderType");
             ViewData["ItemCategoriesID"] = new SelectList(_context.ItemCategories.OrderBy(a => a.CategoryName), "ID", "CategoryName");
+            ViewData["PaymentMethodsID"] = new SelectList(_context.PaymentMethods.OrderBy(a => a.Method), "ID", "Method");
+
+            var lowIncomeCutOffs = _context.LowIncomeCutOffs.OrderBy(x => x.NumberOfMembers);
+            List<SelectListItem> licoCutOffs = new List<SelectListItem>();
+
+            foreach (var i in lowIncomeCutOffs)
+            {
+                licoCutOffs.Add(new SelectListItem($"{i.NumberOfMembers} Member(s) - {i.YearlyIncome.ToString("C")}", i.ID.ToString()));
+            }
+
+            ViewData["LowIncomeCutOffsID"] = new SelectList(licoCutOffs, "Value", "Text");
+
             return View();
         }
     }

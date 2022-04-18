@@ -283,9 +283,6 @@ namespace Grow.Data.GrowMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("MonthlyIncome")
-                        .HasColumnType("REAL");
-
                     b.Property<byte>("NumberOfMembers")
                         .HasColumnType("INTEGER");
 
@@ -495,8 +492,7 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("REAL");
 
                     b.Property<int>("PaymentMethodID")
-                        .HasColumnType("INTEGER")
-                        .HasMaxLength(50);
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TransactionID")
                         .HasColumnType("INTEGER");
@@ -532,6 +528,9 @@ namespace Grow.Data.GrowMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("HouseholdID")
                         .HasColumnType("INTEGER");
 
@@ -547,16 +546,13 @@ namespace Grow.Data.GrowMigrations
                     b.Property<double>("TransactionTotal")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("VolunteerID")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ID");
+
+                    b.HasIndex("EmployeeID");
 
                     b.HasIndex("HouseholdID");
 
                     b.HasIndex("MemberID");
-
-                    b.HasIndex("VolunteerID");
 
                     b.ToTable("Transactions");
                 });
@@ -589,64 +585,6 @@ namespace Grow.Data.GrowMigrations
                     b.HasIndex("TransactionID");
 
                     b.ToTable("TransactionDetails");
-                });
-
-            modelBuilder.Entity("Grow.Models.Volunteer", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ApartmentNum")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(10);
-
-                    b.Property<int>("CityID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(75);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(75);
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(15);
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("StreetName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("StreetNum")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(10);
-
-                    b.Property<double>("VolunteerHours")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CityID");
-
-                    b.ToTable("Volunteers");
                 });
 
             modelBuilder.Entity("Grow.Models.GROWAddress", b =>
@@ -771,6 +709,12 @@ namespace Grow.Data.GrowMigrations
 
             modelBuilder.Entity("Grow.Models.Transaction", b =>
                 {
+                    b.HasOne("Grow.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Grow.Models.Household", "Household")
                         .WithMany("Transactions")
                         .HasForeignKey("HouseholdID")
@@ -780,12 +724,6 @@ namespace Grow.Data.GrowMigrations
                     b.HasOne("Grow.Models.Member", "Member")
                         .WithMany("Transactions")
                         .HasForeignKey("MemberID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Grow.Models.Volunteer", "Volunteer")
-                        .WithMany()
-                        .HasForeignKey("VolunteerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -802,15 +740,6 @@ namespace Grow.Data.GrowMigrations
                         .WithMany("TransactionDetails")
                         .HasForeignKey("TransactionID")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Grow.Models.Volunteer", b =>
-                {
-                    b.HasOne("Grow.Models.City", "City")
-                        .WithMany("Volunteers")
-                        .HasForeignKey("CityID")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

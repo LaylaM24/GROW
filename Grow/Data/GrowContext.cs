@@ -12,7 +12,6 @@ namespace Grow.Data
 
         public DbSet<Household> Households { get; set; }
         public DbSet<Member> Members { get; set; }
-        public DbSet<Volunteer> Volunteers { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<IncomeSource> IncomeSources { get; set; }
@@ -80,13 +79,6 @@ namespace Grow.Data
             // Household - City Relationship
             modelBuilder.Entity<City>()
                 .HasMany(m => m.Households)
-                .WithOne(m => m.City)
-                .HasForeignKey(m => m.CityID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Volunteer - City Relationship
-            modelBuilder.Entity<City>()
-                .HasMany(m => m.Volunteers)
                 .WithOne(m => m.City)
                 .HasForeignKey(m => m.CityID)
                 .OnDelete(DeleteBehavior.Restrict);
