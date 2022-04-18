@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Grow.Models.Employee>
+﻿@model IEnumerable<Grow.ViewModels.EmployeeAdminVM>
 
 @{
     ViewData["Title"] = "Employee Index";
@@ -21,7 +21,7 @@
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.UserRoles)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Active)
@@ -32,23 +32,29 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Active)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)<br />
+                Email: @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @{
+                    foreach (var r in item.UserRoles)
+                    {
+                        @:  @r <br />
+                    }
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Active)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

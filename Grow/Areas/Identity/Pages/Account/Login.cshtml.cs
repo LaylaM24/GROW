@@ -87,7 +87,7 @@ namespace Grow.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var emp = _context.Employees.Where(e => e.Email == Input.Email).FirstOrDefault();
+                    var emp = _context.Employees.Where(e => e.Email.ToLower() == Input.Email.Trim().ToLower()).FirstOrDefault();
                     CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
                     if (String.IsNullOrEmpty(emp.Phone))
                     {
