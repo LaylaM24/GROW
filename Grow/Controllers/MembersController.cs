@@ -598,7 +598,7 @@ namespace Grow.Controllers
                 {
                     var cutOff = _context.LowIncomeCutOffs.Where(x => x.NumberOfMembers == household.NumOfMembers).FirstOrDefault();
 
-                    if (household.IncomeTotal <= cutOff.YearlyIncome)
+                    if (household.IncomeTotal <= cutOff.YearlyIncome && household.Members.All(x => x.IncomeVerified == true))
                     {
                         household.LICOVerified = true;
                         household.LICOVerifiedDate = DateTime.Today;

@@ -293,8 +293,19 @@ namespace Grow.Controllers
                     // Get updated City for comparison
                     household.City = _context.Cities.FirstOrDefault(x => x.ID == household.CityID);
 
-                    // Update Household
-                    _context.Update(household);
+                    // Get Household and update fields
+                    var householdToUpdate = _context.Households.FirstOrDefault(x => x.ID == id);
+
+                    householdToUpdate.HouseholdName = household.HouseholdName;
+                    householdToUpdate.RenewalDate = household.RenewalDate;
+                    householdToUpdate.LICOVerified = household.LICOVerified;
+                    householdToUpdate.CityID = household.CityID;
+                    householdToUpdate.StreetNumber = household.StreetNumber;
+                    householdToUpdate.StreetName = household.StreetName;
+                    householdToUpdate.ApartmentNumber = household.ApartmentNumber;
+                    householdToUpdate.PostalCode = household.PostalCode;
+
+                    _context.SaveChanges();
 
                     // Add entry to Membership Changes
                     string changes = "";
