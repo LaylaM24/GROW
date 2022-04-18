@@ -528,7 +528,7 @@ namespace Grow.Data.GrowMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EmployeeID")
+                    b.Property<int>("EmployeeID")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("HouseholdID")
@@ -545,9 +545,6 @@ namespace Grow.Data.GrowMigrations
 
                     b.Property<double>("TransactionTotal")
                         .HasColumnType("REAL");
-
-                    b.Property<int>("VolunteerID")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 
@@ -714,7 +711,9 @@ namespace Grow.Data.GrowMigrations
                 {
                     b.HasOne("Grow.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeID");
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Grow.Models.Household", "Household")
                         .WithMany("Transactions")

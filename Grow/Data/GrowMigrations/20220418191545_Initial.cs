@@ -379,8 +379,7 @@ namespace Grow.Data.GrowMigrations
                     Paid = table.Column<bool>(nullable: false),
                     HouseholdID = table.Column<int>(nullable: false),
                     MemberID = table.Column<int>(nullable: false),
-                    VolunteerID = table.Column<int>(nullable: false),
-                    EmployeeID = table.Column<int>(nullable: true)
+                    EmployeeID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -390,7 +389,7 @@ namespace Grow.Data.GrowMigrations
                         column: x => x.EmployeeID,
                         principalTable: "Employees",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Households_HouseholdID",
                         column: x => x.HouseholdID,

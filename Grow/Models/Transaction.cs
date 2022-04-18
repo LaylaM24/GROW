@@ -41,7 +41,7 @@ namespace Grow.Models
 
         [Display(Name = "Employee")]
         [Required(ErrorMessage = "Employee is required.")]
-        public int VolunteerID { get; set; }
+        public int EmployeeID { get; set; }
         public Employee Employee { get; set; }
 
         [Display(Name = "Items")]

@@ -311,7 +311,7 @@ namespace Grow.Controllers
                 TransactionTotal = 0,
                 Paid = false,
                 // Change to actual volunteer later
-                VolunteerID = 1
+                EmployeeID = 1
             };
 
             try
@@ -429,7 +429,7 @@ namespace Grow.Controllers
                          select c;
 
             ViewData["HouseholdID"] = new SelectList(hQuery, "ID", "HouseholdName", transaction?.HouseholdID);
-            ViewData["VolunteerID"] = new SelectList(vQuery, "ID", "FormalName", transaction?.VolunteerID);
+            ViewData["VolunteerID"] = new SelectList(vQuery, "ID", "FormalName", transaction?.EmployeeID);
             ViewData["CityID"] = new SelectList(cQuery, "ID", "CityName");
         }
 
