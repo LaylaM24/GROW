@@ -227,7 +227,7 @@ namespace Grow.Data
                         new ItemCategory
                         {
                             CategoryName = "Dairy/Eggs/Bread"
-                        },                        
+                        },
                         new ItemCategory
                         {
                             CategoryName = "Freezer"
@@ -300,11 +300,11 @@ namespace Grow.Data
                     context.GROWAddresses.AddRange(
                         new GROWAddress
                         {
-                           StreetNumber = "4377",
-                           StreetName = "Fourth Ave.",
-                           PostalCode = "L2E 4N1",
-                           CityID = city.ID,
-                           City = city
+                            StreetNumber = "4377",
+                            StreetName = "Fourth Ave.",
+                            PostalCode = "L2E 4N1",
+                            CityID = city.ID,
+                            City = city
                         }
                     );
                     context.SaveChanges();
@@ -581,7 +581,7 @@ namespace Grow.Data
                             ItemName = "Potatoes",
                             Price = 0.05,
                             ItemCategoryID = 1
-                        },                        
+                        },
                         new Item
                         {
                             ItemNo = 137,
@@ -1358,7 +1358,7 @@ namespace Grow.Data
                             RenewalDate = new DateTime(DateTime.Now.Year + 1, DateTime.Now.Month, DateTime.Now.Day),
                             StreetNumber = "743",
                             StreetName = "Queen St.",
-                            PostalCode = "2N42I4",
+                            PostalCode = "N2L7Y3",
                             CityID = 4,
                         },
                         new Household
@@ -1368,7 +1368,7 @@ namespace Grow.Data
                             Active = true,
                             NumOfMembers = 1,
                             CreatedDate = DateTime.Now,
-                            LICOVerified = false,
+                            LICOVerified = true,
                             IncomeTotal = 10000,
                             RenewalDate = new DateTime(DateTime.Now.Year + 1, DateTime.Now.Month, DateTime.Now.Day),
                             StreetNumber = "321",
@@ -1387,30 +1387,30 @@ namespace Grow.Data
                     context.Members.AddRange(
                         new Member
                         {
-                            HouseholdID = 1,
+                            HouseholdID = 5,
                             FirstName = "Barry",
                             LastName = "Bonds",
                             DOB = Convert.ToDateTime("1966-05-04"),
                             Phone = "9053332343",
                             Email = "BarryBonds@hotmail.com",
                             IncomeVerified = true,
-                            IncomeAmount = 10000,
+                            IncomeAmount = 1000,
                             DataConsent = true,
                             EmailConsent = false,
                             GenderID = 1
                         },
                         new Member
                         {
-                            HouseholdID = 2,
+                            HouseholdID = 4,
                             FirstName = "Larry",
                             LastName = "Walker",
                             DOB = Convert.ToDateTime("1939-09-18"),
                             Phone = "2894321444",
                             Email = "LarryWalker@hotmail.com",
                             IncomeVerified = false,
-                            IncomeAmount = 15000,
+                            IncomeAmount = 5000,
                             DataConsent = true,
-                            EmailConsent = true,
+                            EmailConsent = false,
                             GenderID = 1
                         },
                         new Member
@@ -1424,35 +1424,35 @@ namespace Grow.Data
                             IncomeVerified = true,
                             IncomeAmount = 20000,
                             DataConsent = false,
-                            EmailConsent = true,
+                            EmailConsent = false,
                             GenderID = 1
                         },
                         new Member
                         {
-                            HouseholdID = 4,
+                            HouseholdID = 2,
                             FirstName = "David",
                             LastName = "Ortiz",
                             DOB = Convert.ToDateTime("1960-10-27"),
                             Phone = "2895128571",
                             Email = "DavidOrtiz@hotmail.com",
                             IncomeVerified = true,
-                            IncomeAmount = 5000,
+                            IncomeAmount = 15000,
                             DataConsent = true,
-                            EmailConsent = true,
+                            EmailConsent = false,
                             GenderID = 1
                         },
                         new Member
                         {
-                            HouseholdID = 5,
+                            HouseholdID = 1,
                             FirstName = "Roger",
                             LastName = "Clemens",
                             DOB = Convert.ToDateTime("1991-07-15"),
                             Phone = "9051241111",
                             Email = "RogerClemens@hotmail.com",
-                            IncomeVerified = false,
-                            IncomeAmount = 1000,
+                            IncomeVerified = true,
+                            IncomeAmount = 10000,
                             DataConsent = true,
-                            EmailConsent = true,
+                            EmailConsent = false,
                             GenderID = 1
                         });
                     context.SaveChanges();
@@ -1694,6 +1694,93 @@ namespace Grow.Data
                     context.SaveChanges();
                 }
                 #endregion
+
+                #region FAQ
+                if (!context.Faqs.Any())
+                {
+                    context.Faqs.AddRange(
+                     new Faq
+                     {
+                         Question = "What is the difference between Data Consent and Email Consent?",
+                         Answer = "As the 2 fields seem to be similar. Email Consent is strictly for the purpose of sending emails to the members. Data Consent is about the collection of personal information that is used for data collection purposes throughout the site."
+                     },
+                     new Faq
+                     {
+                         Question = "The household is just over the low-income cut off and cannot be verified",
+                         Answer = "Talk to someone who has super admin privileges on the site. they have access to override the LICO verification!"
+                     },
+                     new Faq
+                     {
+                         Question = "A potential member has no fixed address. how can they become a member?",
+                         Answer = "Even though having an address is required on the site. we have installed a checkbox in the households that automatically fills in the address field with GROWS address. No address? no problem!"
+                     },
+                     new Faq
+                     {
+                         Question = "What can a Volunteer access?",
+                         Answer = "Volunteer accounts are heavily restricted to limit any user error. Volunteers are aloud to create and edit Households and Members as well as Sales."
+                     },
+                     new Faq
+                     {
+                         Question = "What can a Admin access?",
+                         Answer = "Admins have the same access as a Volunteer with the added ability to maintain the inventory!"
+                     },
+                     new Faq
+                     {
+                         Question = "What can a SuperAdmin access?",
+                         Answer = "SuperAdmins have access to everything the site offers and are responsible for providing site access"
+                     },
+                     new Faq
+                     {
+                         Question = "How can i Email a member?",
+                         Answer = "you cannot email one specific member. the site features a mass email feature that you can use to send out any information you want to the members who have consented to receive emails!"
+                     },
+                     new Faq
+                     {
+                         Question = "I have a question i cant find on here",
+                         Answer = "You will have to ask some with SuperAdmin privileges and they can create and answer a question for you!"
+                     },
+                     new Faq
+                     {
+                         Question = "How to change Grows address?",
+                         Answer = "In the 'maintain lookup values' section there’s a textbox for 'Grows Address'. simply edit the address."
+                     },
+                     new Faq
+                     {
+                         Question = "A member has a common health or dietary concern that is not listed",
+                         Answer = "for the time being select other and write about it in the notes. let someone with SuperAdmin privileges know and they can add it to the lookup values!"
+                     },
+                     new Faq
+                     {
+                         Question = "What are the Lookup Values the SuperAdmin can maintain?",
+                         Answer = "Health Concerns, Dietary Restrictions, Income Sources, Cities, Genders, and Item Categories are all lookup values that the SuperAdmin can add to, edit, or remove"
+                     },
+                     new Faq
+                     {
+                         Question = "How does the Sales page work?",
+                         Answer = "The sales page shows you a list of every member in the system. this way you can create a sale based on what member has shown up to the store. the easiest way to find the member would be to search for the member by name. and then you can create the sale beside the member’s name!"
+                     },
+                     new Faq
+                     {
+                         Question = "Why can’t I edit a Sale?",
+                         Answer = "Once a Sale has been paid for you can no longer edit"
+                     },
+                     new Faq
+                     {
+                         Question = "How can i make a sale quickly?",
+                         Answer = "in the households overview you can see there’s a 'current members' click on the button and all the members in that household will show up. click on a member and that will allow you to make a sale for that member."
+                     }
+
+
+
+                     );
+
+                    context.SaveChanges();
+                }
+
+                #endregion
+
+
+
             }
         }
     }

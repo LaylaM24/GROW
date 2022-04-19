@@ -83,6 +83,25 @@ namespace Grow.Data.GrowMigrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("Grow.Models.Faq", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Faqs");
+                });
+
             modelBuilder.Entity("Grow.Models.GROWAddress", b =>
                 {
                     b.Property<int>("ID")
@@ -495,8 +514,7 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("REAL");
 
                     b.Property<int>("PaymentMethodID")
-                        .HasColumnType("INTEGER")
-                        .HasMaxLength(50);
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TransactionID")
                         .HasColumnType("INTEGER");

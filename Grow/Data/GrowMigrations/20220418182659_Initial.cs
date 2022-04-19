@@ -51,6 +51,20 @@ namespace Grow.Data.GrowMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Faqs",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Question = table.Column<string>(nullable: false),
+                    Answer = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Faqs", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Genders",
                 columns: table => new
                 {
@@ -441,7 +455,7 @@ namespace Grow.Data.GrowMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PaymentAmount = table.Column<double>(nullable: false),
-                    PaymentMethodID = table.Column<int>(maxLength: 50, nullable: false),
+                    PaymentMethodID = table.Column<int>(nullable: false),
                     TransactionID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -624,6 +638,9 @@ namespace Grow.Data.GrowMigrations
         {
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "Faqs");
 
             migrationBuilder.DropTable(
                 name: "GROWAddresses");

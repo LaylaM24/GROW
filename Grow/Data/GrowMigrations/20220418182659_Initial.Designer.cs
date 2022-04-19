@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Grow.Data.GrowMigrations
 {
     [DbContext(typeof(GrowContext))]
-    [Migration("20220412234522_Initial")]
+    [Migration("20220418182659_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,6 +83,25 @@ namespace Grow.Data.GrowMigrations
                         .IsUnique();
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("Grow.Models.Faq", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Faqs");
                 });
 
             modelBuilder.Entity("Grow.Models.GROWAddress", b =>
@@ -497,8 +516,7 @@ namespace Grow.Data.GrowMigrations
                         .HasColumnType("REAL");
 
                     b.Property<int>("PaymentMethodID")
-                        .HasColumnType("INTEGER")
-                        .HasMaxLength(50);
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TransactionID")
                         .HasColumnType("INTEGER");

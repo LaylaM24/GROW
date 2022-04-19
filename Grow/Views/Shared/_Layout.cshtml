@@ -24,6 +24,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+
                         @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin") || User.IsInRole("Volunteer"))
                         {
                         <li class="nav-item">
@@ -54,7 +55,12 @@
                                     <a asp-controller="Households" asp-action="Notification" class="dropdown-item">Send Email Notification</a>
                                 }
                             </div>
-                        </li> }
+                            
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Faqs" asp-action="Index">FAQs</a>
+                        </li>}
+                        
                     </ul>
                 </div>
             </div>

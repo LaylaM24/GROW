@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Grow.Models.Faq>
+
+@{
+    ViewData["Title"] = "Frequently Asked Questions";
+}
+
+<h1>Frequently Asked Questions</h1>
+<p>
+    @if (User.IsInRole("SuperAdmin"))
+                     {
+                     @: @{    <a asp-action="Create">Create New Coach</a>
+ }
+                     }
+</p>
+
+
+<form asp-action="Index" method="get">
+    <div class="form-horizontal">
+        <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" id="filterToggle" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+            Filter/Search
+        </button>
+        <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
+            <div class="card card-body bg-light">
+                <div class="row">
+
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Search for a Question:</label>
+                        @Html.TextBox("SearchString", null, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4 align-self-end">
+                        <input type="submit" name="actionButton" value="Filter" class="btn btn-outline-primary" />
+                        <a asp-action="Index" class="btn btn-outline-dark">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <h4>Question</h4>
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Question)
+                </td>
+
+                <td>
+                     <a asp-action="Details" asp-route-id="@item.ID">Details</a>
+                     @if (User.IsInRole("SuperAdmin"))
+                     {
+                     @: @{<a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                         <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                            }
+                     }
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+    <br />
+    </form>
