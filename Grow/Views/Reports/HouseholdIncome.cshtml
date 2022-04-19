@@ -24,8 +24,7 @@
             <a asp-action="HouseholdIncome" class="btn btn-outline-dark" style="display: inline;">Clear</a>
         </div>
         <div class="col form-check float-right align-baseline">
-            <partial name="_HouseholdIncomeGraph" />
-            <br />
+            <a asp-action="HouseholdIncomeGraph" class="btn btn-info float-right" style="margin-left: 12px">View Graph</a>
             <a asp-action="DownloadHouseholdIncome" asp-route-exclInactive="@ViewData["ExclInactive"]" asp-route-lowRange="@ViewData["lowRange"]" asp-route-highRange="@ViewData["highRange"]" class="btn btn-info float-right">Download Report</a> <br />
             <br />
             <label class="form-check-label float-right">
