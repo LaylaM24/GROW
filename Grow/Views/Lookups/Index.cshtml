@@ -12,8 +12,10 @@
             <input value="@ViewBag.GrowAddress" style="width:500px;" readonly />
             <a asp-controller="GROWAddresses" asp-action="Edit">Edit</a>
         </div>
-        <div class="col-sm-6 col-md-4">
-            <h4 id="MedicalTrials">Health Concerns</h4>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <h4 id="HealthConcerns">Health Concerns</h4>
             @Html.DropDownList("HealthConcernsID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
             <div>
                 <a asp-controller="HealthConcerns" asp-action="Create">Create</a> |
@@ -21,8 +23,8 @@
                 <a asp-controller="HealthConcerns" asp-action="Delete" class="linkClick">Delete</a>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4">
-            <h4 id="Conditions">Dietary Restrictions</h4>
+        <div class="col-3">
+            <h4 id="DietaryRestrictions">Dietary Restrictions</h4>
             @Html.DropDownList("DietaryRestrictionsID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
             <div>
                 <a asp-controller="DietaryRestrictions" asp-action="Create">Create</a> |
@@ -30,8 +32,8 @@
                 <a asp-controller="DietaryRestrictions" asp-action="Delete" class="linkClick">Delete</a>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4">
-            <h4 id="Specialties">Income Sources</h4>
+        <div class="col-3">
+            <h4 id="IncomeSources">Income Sources</h4>
             @Html.DropDownList("IncomeSourcesID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
             <div>
                 <a asp-controller="IncomeSources" asp-action="Create">Create</a> |
@@ -39,9 +41,8 @@
                 <a asp-controller="IncomeSources" asp-action="Delete" class="linkClick">Delete</a>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4">
-            <br />
-            <h4 id="MedicalTrials">Cities</h4>
+        <div class="col-3">
+            <h4 id="Cities">Cities</h4>
             @Html.DropDownList("CitiesID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
             <div>
                 <a asp-controller="Cities" asp-action="Create">Create</a> |
@@ -49,9 +50,12 @@
                 <a asp-controller="Cities" asp-action="Delete" class="linkClick">Delete</a>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4">
+    </div>
+
+    <div class="row">
+        <div class="col-3">
             <br />
-            <h4 id="Conditions">Genders</h4>
+            <h4 id="Genders">Genders</h4>
             @Html.DropDownList("GendersID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
             <div>
                 <a asp-controller="Genders" asp-action="Create">Create</a> |
@@ -59,14 +63,34 @@
                 <a asp-controller="Genders" asp-action="Delete" class="linkClick">Delete</a>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4">
+        <div class="col-3">
             <br />
-            <h4 id="Specialties">Item Categories</h4>
+            <h4 id="ItemCategories">Item Categories</h4>
             @Html.DropDownList("ItemCategoriesID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
             <div>
                 <a asp-controller="ItemCategories" asp-action="Create">Create</a> |
                 <a asp-controller="ItemCategories" asp-action="Edit" class="linkClick">Edit</a> |
                 <a asp-controller="ItemCategories" asp-action="Delete" class="linkClick">Delete</a>
+            </div>
+        </div>
+        <div class="col-3">
+            <br />
+            <h4 id="PaymentMethods">Payment Methods</h4>
+            @Html.DropDownList("PaymentMethodsID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
+            <div>
+                <a asp-controller="PaymentMethods" asp-action="Create">Create</a> |
+                <a asp-controller="PaymentMethods" asp-action="Edit" class="linkClick">Edit</a> |
+                <a asp-controller="PaymentMethods" asp-action="Delete" class="linkClick">Delete</a>
+            </div>
+        </div>
+        <div class="col-3">
+            <br />
+            <h4 id="LowIncomeCutOffs">Low Income Cut Offs</h4>
+            @Html.DropDownList("LowIncomeCutOffsID", null, htmlAttributes: new { @size = 6, @class = "form-control" })
+            <div>
+                <a asp-controller="LowIncomeCutOffs" asp-action="Create">Create</a> |
+                <a asp-controller="LowIncomeCutOffs" asp-action="Edit" class="linkClick">Edit</a> |
+                <a asp-controller="LowIncomeCutOffs" asp-action="Delete" class="linkClick">Delete</a>
             </div>
         </div>
     </div>

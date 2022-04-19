@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
@@ -78,14 +79,14 @@ namespace Grow.Controllers
                 {
                     DateTime d = Convert.ToDateTime(date);
                     households = households.Where(x => x.RenewalDate <= d);
-                    ViewData["Date"] = d.ToShortDateString();
+                    ViewData["Date"] = d.ToString("yyyy-MM-dd");
                 }
                 catch { }
             }
             else
             {
                 households = households.Where(x => x.RenewalDate <= DateTime.Today);
-                ViewData["Date"] = DateTime.Today.ToShortDateString();
+                ViewData["Date"] = DateTime.Today.ToString("yyyy-MM-dd");
             }
 
             if(cbInactive == true)
@@ -449,6 +450,23 @@ namespace Grow.Controllers
             return View(pagedData);
         }
 
+        public async Task<IActionResult> HouseholdIncomeGraph()
+        {
+            var income = await _context.Households
+                .OrderBy(h => h.HouseholdName)
+                .Select(grp => new
+                {
+                    householdName = grp.HouseholdName,
+                    totalIncome = grp.IncomeTotal
+                })
+                .ToListAsync();
+
+            var incomeData = JsonConvert.SerializeObject(income);
+            ViewData["IncomeData"] = incomeData;
+
+            return View();
+        }
+
         public async Task<IActionResult> HouseholdVisits(int? page, int? pageSizeID,
             string actionButton, bool cbInactive, string sortDirection = "asc", string sortField = "Membership No.")
         {
@@ -542,6 +560,25 @@ namespace Grow.Controllers
             return View(pagedData);
         }
 
+        public async Task<IActionResult> HouseholdVisitsGraph()
+        {
+            var visits = await _context.Transactions
+                .Include(t => t.Household)
+                .OrderBy(t => t.Household.HouseholdName)
+                .GroupBy(t => new { t.Household.HouseholdName, t.TransactionDate })
+                .Select(grp => new
+                {
+                    householdName = grp.Key.HouseholdName,
+                    totalVisits = grp.Count()
+                })
+                .ToListAsync();
+
+            var visitsData = JsonConvert.SerializeObject(visits);
+            ViewData["VisitsData"] = visitsData;
+
+            return View();
+        }
+
         public async Task<IActionResult> MemberAges(int? page, int? pageSizeID,
             string actionButton, string LowRange, string HighRange, bool cbInactive, string sortDirection = "asc", string sortField = "Household")
         {
@@ -627,6 +664,22 @@ namespace Grow.Controllers
 
             var pagedData = await PaginatedList<Member>.CreateAsync(members.AsNoTracking(), page ?? 1, pageSize);
             return View(pagedData);
+        }
+
+        public async Task<IActionResult> MemberAgesGraph()
+        {
+            var ages = await _context.Members
+                .Select(grp => new
+                {
+                    memberName = grp.FullName,
+                    ageGroup = grp.Age
+                })
+                .ToListAsync();
+
+            var agesData = JsonConvert.SerializeObject(ages);
+            ViewData["AgesData"] = agesData;
+
+            return View();
         }
 
         public IActionResult DownloadMembershipRenewal(bool exclInactive, string date = "")

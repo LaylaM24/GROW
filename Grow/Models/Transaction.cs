@@ -39,10 +39,10 @@ namespace Grow.Models
         public int MemberID { get; set; }
         public Member Member { get; set; }
 
-        [Display(Name = "Volunteer")]
-        [Required(ErrorMessage = "Volunteer is required.")]
-        public int VolunteerID { get; set; }
-        public Volunteer Volunteer { get; set; }
+        [Display(Name = "Employee")]
+        [Required(ErrorMessage = "Employee is required.")]
+        public int EmployeeID { get; set; }
+        public Employee Employee { get; set; }
 
         [Display(Name = "Items")]
         public ICollection<TransactionDetail> TransactionDetails { get; set; }

@@ -63,6 +63,15 @@
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.IncomeAmount)
                 </dd>
+                @if (!String.IsNullOrEmpty(Model.IncomeVerifiedBy))
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.IncomeVerifiedBy)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.IncomeVerifiedBy)
+                    </dd>
+                }
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.IncomeVerified)
                 </dt>
