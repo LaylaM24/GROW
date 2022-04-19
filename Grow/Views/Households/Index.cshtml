@@ -93,7 +93,14 @@
                                 @{
                                     foreach (var i in item.Members)
                                     {
-                                        <a asp-controller="Transactions" asp-action="Create" asp-route-id="@i.ID">@i.FullName</a><br />
+                                        @if (item.LICOVerified)
+                                        {
+                                            <a asp-controller="Transactions" asp-action="Create" asp-route-id="@i.ID">@i.FullName</a><br />
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">@i.FullName</p>
+                                        }
                                     }
                                 }
                             </div>
