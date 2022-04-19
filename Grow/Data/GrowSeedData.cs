@@ -1676,19 +1676,22 @@ namespace Grow.Data
                      {
                          FirstName = "Bob",
                          LastName = "Smith",
-                         Email = "superadmin1@outlook.com"
+                         Email = "superadmin1@outlook.com",
+                         Phone = "2896961287"
                      },
                      new Employee
                      {
                          FirstName = "Billy",
                          LastName = "Mack",
-                         Email = "admin1@outlook.com"
+                         Email = "admin1@outlook.com",
+                         Phone = "9056465879"
                      },
                      new Employee
                      {
                          FirstName = "Stephanie",
                          LastName = "Stevens",
-                         Email = "volunteer1@outlook.com"
+                         Email = "volunteer1@outlook.com",
+                         Phone = "9056468798"
                      });
 
                     context.SaveChanges();

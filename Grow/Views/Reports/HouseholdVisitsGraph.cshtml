@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Household Visits";
+}
+
+<h1>Household Visits By Residence</h1>
+
+<br />
+
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const config = {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        backgroundColor: ["red", "green", "yellow", "blue", "orange"],
+                        data: @Html.Raw(ViewData["VisitsData"])
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false }
+                    },
+                    parsing: {
+                        xAxisKey: 'householdName',
+                        yAxisKey: 'totalVisits'
+                    }
+                }
+            };
+            const myChart = new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+        });
+    </script>
+}

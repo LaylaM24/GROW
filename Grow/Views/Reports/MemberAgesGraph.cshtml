@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Member Ages";
+}
+
+<h1>Household Members By Age</h1>
+
+<br />
+
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const config = {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        backgroundColor: ["red", "green", "yellow", "blue", "orange"],
+                        data: @Html.Raw(ViewData["AgesData"])
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false }
+                    },
+                    parsing: {
+                        xAxisKey: 'memberName',
+                        yAxisKey: 'ageGroup'
+                    }
+                }
+            };
+            const myChart = new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+        });
+    </script>
+}

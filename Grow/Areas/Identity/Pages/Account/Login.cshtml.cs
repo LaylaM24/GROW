@@ -89,6 +89,7 @@ namespace Grow.Areas.Identity.Pages.Account
                 {
                     var emp = _context.Employees.Where(e => e.Email.ToLower() == Input.Email.Trim().ToLower()).FirstOrDefault();
                     CookieHelper.CookieSet(HttpContext, "userName", emp.FullName, 3200);
+                    CookieHelper.CookieSet(HttpContext, "firstName", emp.FirstName, 3200);
                     if (String.IsNullOrEmpty(emp.Phone))
                     {
                         //Nag to complete the profile?
