@@ -77,7 +77,14 @@
                         @Html.DisplayFor(modelItem => item.FullName)
                     </td>
                     <td>
-                        <a asp-action="Create" asp-route-id="@item.ID">&#x271A; Create Sale</a>
+                        @if (item.Household.LICOVerified)
+                        {
+                            <a asp-action="Create" asp-route-id="@item.ID">&#x271A; Create Sale</a>
+                        }
+                        else
+                        {
+                            <small class="text-muted">Not LICO Verified</small>
+                        }
                     </td>
                 </tr>
             }

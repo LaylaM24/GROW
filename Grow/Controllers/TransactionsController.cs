@@ -9,6 +9,7 @@ using Grow.Data;
 using Grow.Models;
 using Grow.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using Grow.ViewModels;
 
 namespace Grow.Controllers
 {
@@ -16,10 +17,12 @@ namespace Grow.Controllers
     public class TransactionsController : Controller
     {
         private readonly GrowContext _context;
+        private readonly IMyEmailSender _emailSender;
 
-        public TransactionsController(GrowContext context)
+        public TransactionsController(GrowContext context, IMyEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         // GET: Transactions
@@ -148,14 +151,14 @@ namespace Grow.Controllers
             var transaction = from t in _context.Transactions
                               .Include(t => t.Household)
                               .Include(t => t.Member)
-                              .Include(t => t.Volunteer)
+                              .Include(t => t.Employee)
                               .AsNoTracking()
                               select t;
 
             if (!String.IsNullOrEmpty(SearchString))
             {
                 transaction = transaction.Where(t => t.Household.HouseholdName.ToUpper().Contains(SearchString.ToUpper()) || (t.Member.FirstName + " " + t.Member.LastName).ToUpper().Contains(SearchString.ToUpper())
-                                                    || (t.Volunteer.FirstName + " " + t.Volunteer.LastName).ToUpper().Contains(SearchString.ToUpper()));
+                                                    || (t.Employee.FirstName + " " + t.Employee.LastName).ToUpper().Contains(SearchString.ToUpper()));
                 ViewData["Filtering"] = " show";
             }
 
@@ -191,12 +194,12 @@ namespace Grow.Controllers
                 if (sortDirection == "asc")
                 {
                     transaction = transaction
-                        .OrderBy(h => h.Volunteer);
+                        .OrderBy(h => h.Employee);
                 }
                 else
                 {
                     transaction = transaction
-                        .OrderByDescending(h => h.Volunteer);
+                        .OrderByDescending(h => h.Employee);
                 }
             }
             else if (sortField == "Household")
@@ -276,7 +279,7 @@ namespace Grow.Controllers
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
                 .Include(x => x.Member)
-                .Include(t => t.Volunteer)
+                .Include(t => t.Employee)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(td => td.Item)
                 .Include(x => x.Payments)
@@ -302,6 +305,14 @@ namespace Grow.Controllers
                 return RedirectToAction("Index", "Transactions");
             }
 
+            // Get employee info
+            Employee employee = new Employee();
+            try
+            {
+                employee = _context.Employees.Where(x => x.Email == User.Identity.Name).FirstOrDefault();
+            }
+            catch { }
+
             // Create a new transaction immediately
             Transaction newTrans = new Transaction()
             {
@@ -311,7 +322,7 @@ namespace Grow.Controllers
                 TransactionTotal = 0,
                 Paid = false,
                 // Change to actual volunteer later
-                VolunteerID = 1
+                EmployeeID = employee.ID
             };
 
             try
@@ -329,7 +340,7 @@ namespace Grow.Controllers
                 .ThenInclude(x => x.City)
                 .Include(x => x.Member)
                 .Include(x => x.TransactionDetails)
-                .Include(x => x.Volunteer)
+                .Include(x => x.Employee)
                 .Include(x => x.Payments)
                 .ThenInclude(x => x.PaymentMethod)
                 .FirstOrDefault(x => x.ID == newTrans.ID);
@@ -348,7 +359,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
-                .Include(t => t.Volunteer)
+                .Include(t => t.Employee)
                 .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
@@ -376,7 +387,7 @@ namespace Grow.Controllers
             var transaction = await _context.Transactions
                 .Include(t => t.Household)
                 .ThenInclude(x => x.City)
-                .Include(t => t.Volunteer)
+                .Include(t => t.Employee)
                 .Include(x => x.Member)
                 .Include(t => t.TransactionDetails)
                 .ThenInclude(t => t.Item)
@@ -420,7 +431,7 @@ namespace Grow.Controllers
                          orderby h.HouseholdName
                          select h;
 
-            var vQuery = from v in _context.Volunteers
+            var vQuery = from v in _context.Employees
                          orderby v.LastName, v.FirstName
                          select v;
 
@@ -429,13 +440,62 @@ namespace Grow.Controllers
                          select c;
 
             ViewData["HouseholdID"] = new SelectList(hQuery, "ID", "HouseholdName", transaction?.HouseholdID);
-            ViewData["VolunteerID"] = new SelectList(vQuery, "ID", "FormalName", transaction?.VolunteerID);
+            ViewData["VolunteerID"] = new SelectList(vQuery, "ID", "FullName", transaction?.EmployeeID);
             ViewData["CityID"] = new SelectList(cQuery, "ID", "CityName");
         }
 
         private bool TransactionExists(int id)
         {
             return _context.Transactions.Any(e => e.ID == id);
+        }
+
+        public IActionResult SendReceiptEmail(int transID)
+        {
+            try
+            {
+                // Get Transaction and Member
+                Transaction trans = _context.Transactions.Where(x => x.ID == transID)
+                    .Include(x => x.Member)
+                    .Include(x => x.Employee)
+                    .Include(x => x.TransactionDetails)
+                    .ThenInclude(x => x.Item)
+                    .Include(x => x.Payments)
+                    .FirstOrDefault();
+                Member member = _context.Members.Where(x => x.ID == trans.MemberID).FirstOrDefault();
+
+                if(member == null || trans == null)
+                {
+                    return Json(new { success = false });
+                }
+
+                EmailAddress email = new EmailAddress() { Name = member.FullName, Address = member.Email };
+
+                // Get message contents
+                string messageContent = $"<h3>Sale Details</h3><p>Member: &emsp; {trans.Member.FullName}</p><p>Transaction Date: &emsp; {trans.TransactionDate.ToShortDateString()}</p>"
+                    + $"<p>Sales Person: &emsp; {trans.Employee.FullName}</p><br/><h3>Items</h3>";
+
+                foreach(TransactionDetail td in trans.TransactionDetails)
+                {
+                    messageContent += $"<p>{td.Item.ItemName} &emsp; Cost: {td.UnitCost.ToString("C")} &emsp; Qty: {td.Quantity} &emsp; Ext. Cost: {td.ExtendedCost.ToString("C")}</p>";
+                }
+
+                messageContent += $"<br/><p>Transaction Total: {trans.TransactionTotal.ToString("C")}</p><p>Amount Paid: {trans.Payments.Sum(x => x.PaymentAmount).ToString("C")}</p>" +
+                    "<br/><p>Thanks for shopping at GROW Community Food Literacy Centre!</p>";
+
+                var msg = new EmailMessage()
+                {
+                    ToAddresses = new List<EmailAddress>() { email },
+                    Subject = $"GROW Sale Receipt {DateTime.Today.ToShortDateString()}",
+                    Content = messageContent
+                };
+
+                _emailSender.SendToManyAsync(msg);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false });
+            }
         }
     }
 }

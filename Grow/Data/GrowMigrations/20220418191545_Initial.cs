@@ -109,8 +109,7 @@ namespace Grow.Data.GrowMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     NumberOfMembers = table.Column<byte>(nullable: false),
-                    YearlyIncome = table.Column<double>(nullable: false),
-                    MonthlyIncome = table.Column<double>(nullable: false)
+                    YearlyIncome = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -179,35 +178,6 @@ namespace Grow.Data.GrowMigrations
                     table.PrimaryKey("PK_Households", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Households_Cities_CityID",
-                        column: x => x.CityID,
-                        principalTable: "Cities",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Volunteers",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    FirstName = table.Column<string>(maxLength: 75, nullable: false),
-                    LastName = table.Column<string>(maxLength: 75, nullable: false),
-                    Phone = table.Column<string>(maxLength: 15, nullable: false),
-                    Email = table.Column<string>(maxLength: 255, nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    VolunteerHours = table.Column<double>(nullable: false),
-                    StreetNum = table.Column<string>(maxLength: 10, nullable: false),
-                    StreetName = table.Column<string>(maxLength: 100, nullable: false),
-                    ApartmentNum = table.Column<string>(maxLength: 10, nullable: true),
-                    PostalCode = table.Column<string>(nullable: true),
-                    CityID = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Volunteers", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Volunteers_Cities_CityID",
                         column: x => x.CityID,
                         principalTable: "Cities",
                         principalColumn: "ID",
@@ -409,11 +379,17 @@ namespace Grow.Data.GrowMigrations
                     Paid = table.Column<bool>(nullable: false),
                     HouseholdID = table.Column<int>(nullable: false),
                     MemberID = table.Column<int>(nullable: false),
-                    VolunteerID = table.Column<int>(nullable: false)
+                    EmployeeID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Employees_EmployeeID",
+                        column: x => x.EmployeeID,
+                        principalTable: "Employees",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Households_HouseholdID",
                         column: x => x.HouseholdID,
@@ -426,12 +402,6 @@ namespace Grow.Data.GrowMigrations
                         principalTable: "Members",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Volunteers_VolunteerID",
-                        column: x => x.VolunteerID,
-                        principalTable: "Volunteers",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -441,7 +411,7 @@ namespace Grow.Data.GrowMigrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PaymentAmount = table.Column<double>(nullable: false),
-                    PaymentMethodID = table.Column<int>(maxLength: 50, nullable: false),
+                    PaymentMethodID = table.Column<int>(nullable: false),
                     TransactionID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -600,6 +570,11 @@ namespace Grow.Data.GrowMigrations
                 column: "TransactionID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Transactions_EmployeeID",
+                table: "Transactions",
+                column: "EmployeeID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_HouseholdID",
                 table: "Transactions",
                 column: "HouseholdID");
@@ -608,23 +583,10 @@ namespace Grow.Data.GrowMigrations
                 name: "IX_Transactions_MemberID",
                 table: "Transactions",
                 column: "MemberID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transactions_VolunteerID",
-                table: "Transactions",
-                column: "VolunteerID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Volunteers_CityID",
-                table: "Volunteers",
-                column: "CityID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Employees");
-
             migrationBuilder.DropTable(
                 name: "GROWAddresses");
 
@@ -674,10 +636,10 @@ namespace Grow.Data.GrowMigrations
                 name: "ItemCategories");
 
             migrationBuilder.DropTable(
-                name: "Members");
+                name: "Employees");
 
             migrationBuilder.DropTable(
-                name: "Volunteers");
+                name: "Members");
 
             migrationBuilder.DropTable(
                 name: "Genders");

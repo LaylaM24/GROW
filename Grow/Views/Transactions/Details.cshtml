@@ -4,7 +4,21 @@
     ViewData["Title"] = "Sale Details";
 }
 
-<h2>Sale Details</h2>
+<div class="row">
+    <div class="col-6">
+        <h2>Sale Details</h2>
+    </div>
+    <div class="col-6 text-right">
+        @if (Model.Paid)
+        {
+            <button id="btnPrint" onclick="window.print()" class="btn btn-outline-secondary">Print Invoice</button>
+        }
+        @if (Model.Paid && !String.IsNullOrEmpty(Model.Member.Email))
+        {
+            <button id="btnEmail" class="btn btn-primary">Email Receipt</button>
+        }
+    </div>
+</div>
 
 <hr />
 <div class="media">
@@ -44,7 +58,7 @@
                         Sales Person
                     </dt>
                     <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.Volunteer.ShortName)
+                        @Html.DisplayFor(model => model.Employee.FullName)
                     </dd>
                     <dt class="col-sm-4">
                         @Html.DisplayNameFor(model => model.Paid)
@@ -152,3 +166,31 @@
     }
     <a asp-action="SalesHistory">Back to List</a>
 </div>
+
+@section Scripts{ 
+    <script>
+
+        $(document).ready(function () {
+
+            var transID = @Html.Raw(Json.Serialize(Model.ID));
+
+            $("#btnEmail").click(function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Transactions/SendReceiptEmail",
+                    data: { transID: transID },
+                    success: function () {
+                        alert("Email sent successfully.");
+                    },
+                    error: function () {
+                        alert("Unable to send email. Please refresh page and try again.");
+                    }
+                });
+
+            });
+
+        });
+
+    </script>
+}
