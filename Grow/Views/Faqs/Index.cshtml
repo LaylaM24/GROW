@@ -16,11 +16,14 @@
                     Filter / Search
                 </button>
             </div>
-            <div class="col-6 text-right">
-                <a asp-action="Create">
-                    <span class="btn btn-success"><strong>&#x271A; Add Question</strong></span>
-                </a>
-            </div>
+            @if (User.IsInRole("SuperAdmin"))
+            {
+                <div class="col-6 text-right">
+                    <a asp-action="Create">
+                        <span class="btn btn-success"><strong>&#x271A; Add Question</strong></span>
+                    </a>
+                </div>
+            }
         </div>
         <div class="collapse @(ViewData["Filtering"])" id="collapseFilter">
             <div class="card card-body bg-light">
