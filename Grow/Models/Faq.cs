@@ -6,12 +6,10 @@ namespace Grow.Models
     {
         public int ID { get; set; }
 
-        [Required(ErrorMessage = "a question is required.")]
+        [Required(ErrorMessage = "The question was not provided.")]
         public string Question { get; set; }
 
-        [Required(ErrorMessage = "an question must have an answer!")]
+        [Required(ErrorMessage = "The question must have an answer!")]
         public string Answer { get; set; }
-
-
     }
 }

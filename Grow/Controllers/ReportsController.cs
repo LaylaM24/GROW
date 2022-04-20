@@ -562,14 +562,13 @@ namespace Grow.Controllers
 
         public async Task<IActionResult> HouseholdVisitsGraph()
         {
-            var visits = await _context.Transactions
-                .Include(t => t.Household)
-                .OrderBy(t => t.Household.HouseholdName)
-                .GroupBy(t => new { t.Household.HouseholdName, t.TransactionDate })
+            var visits = await _context.Households
+                .Include(h => h.Transactions)
+                .OrderBy(h => h.HouseholdName)
                 .Select(grp => new
                 {
-                    householdName = grp.Key.HouseholdName,
-                    totalVisits = grp.Count()
+                    householdName = grp.HouseholdName,
+                    totalVisits = grp.Transactions.Count()
                 })
                 .ToListAsync();
 
@@ -669,6 +668,8 @@ namespace Grow.Controllers
         public async Task<IActionResult> MemberAgesGraph()
         {
             var ages = await _context.Members
+                .OrderBy(m => m.LastName)
+                    .ThenBy(m => m.FirstName)
                 .Select(grp => new
                 {
                     memberName = grp.FullName,

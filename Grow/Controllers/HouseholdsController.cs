@@ -481,11 +481,9 @@ namespace Grow.Controllers
             return _context.Households.Any(e => e.ID == id);
         }
 
-                // GET/POST: Grow/Notification/5
+        // GET/POST: Grow/Notification/5
         public async Task<IActionResult> Notification(int? id, string Subject, string emailContent)
         {
-
-
             if (string.IsNullOrEmpty(Subject) || string.IsNullOrEmpty(emailContent))
             {
                 ViewData["Message"] = "You must enter both a Subject Line and Message Content before sending out a notification.";
@@ -493,28 +491,31 @@ namespace Grow.Controllers
             else
             {
                 int folksCount = 0;
+
                 try
                 {
-                    //Send a Notice.
+                    //Send a Notice
                     List<EmailAddress> folks = (from p in _context.Members
                                                 where p.EmailConsent == true
                                                 select new EmailAddress
                                                 {
                                                     Name = p.FullName,
                                                     Address = p.Email
-                                                }).ToList();
+                                                })
+                                                .ToList();
                     folksCount = folks.Count();
+
                     if (folksCount > 0)
                     {
                         var msg = new EmailMessage()
                         {
                             ToAddresses = folks,
                             Subject = Subject,
-                            //possibly use this if theres a signature that wants to be sent by grow
-                            Content = "<p>" + emailContent + "</p><p>Insert message from grow here</p>"
-
+                            Content = "<p>" + emailContent + "</p><p>From the GROW Team</p>"
                         };
+
                         await _emailSender.SendToManyAsync(msg);
+
                         ViewData["Message"] = "Message sent to " + folksCount + " Member"
                             + ((folksCount == 1) ? "." : "s.");
                     }
