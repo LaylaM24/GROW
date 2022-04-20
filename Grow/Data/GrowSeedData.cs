@@ -1649,22 +1649,22 @@ namespace Grow.Data
                      new Faq
                      {
                          Question = "What is the difference between Data Consent and Email Consent?",
-                         Answer = "As the 2 fields seem to be similar. Email Consent is strictly for the purpose of sending emails to the members. Data Consent is about the collection of personal information that is used for data collection purposes throughout the site."
+                         Answer = "As the two fields appear to be similar, Email Consent is strictly for the purpose of sending emails to members. Data Consent is about the collection of personal information that is used for data collection purposes throughout the site."
                      },
                      new Faq
                      {
-                         Question = "The household is just over the low-income cut off and cannot be verified",
-                         Answer = "Talk to someone who has super admin privileges on the site. they have access to override the LICO verification!"
+                         Question = "The household is just over the low-income cut off and cannot be verified.",
+                         Answer = "Talk to someone who has SuperAdmin privileges. They have access to override the LICO verification!"
                      },
                      new Faq
                      {
-                         Question = "A potential member has no fixed address. how can they become a member?",
-                         Answer = "Even though having an address is required on the site. we have installed a checkbox in the households that automatically fills in the address field with GROWS address. No address? no problem!"
+                         Question = "A potential member has no fixed address. How can they become a member?",
+                         Answer = "Even though having an address is required on the site, we have installed a checkbox in the households that automatically fills in the address field with GROW's address. No address? No problem!"
                      },
                      new Faq
                      {
                          Question = "What can a Volunteer access?",
-                         Answer = "Volunteer accounts are heavily restricted to limit any user error. Volunteers are aloud to create and edit Households and Members as well as Sales."
+                         Answer = "Volunteer accounts are heavily restricted to limit any user error. Volunteers are allowed to create and edit Households and Members as well as Sales."
                      },
                      new Faq
                      {
@@ -1674,60 +1674,52 @@ namespace Grow.Data
                      new Faq
                      {
                          Question = "What can a SuperAdmin access?",
-                         Answer = "SuperAdmins have access to everything the site offers and are responsible for providing site access"
+                         Answer = "SuperAdmins have access to everything the site offers and are responsible for providing site access."
                      },
                      new Faq
                      {
-                         Question = "How can i Email a member?",
-                         Answer = "you cannot email one specific member. the site features a mass email feature that you can use to send out any information you want to the members who have consented to receive emails!"
+                         Question = "How can I email a member?",
+                         Answer = "You cannot email one specific member. The site features a mass email feature that you can use to send out any information you want to the members who have consented to receive emails!"
                      },
                      new Faq
                      {
-                         Question = "I have a question i cant find on here",
-                         Answer = "You will have to ask some with SuperAdmin privileges and they can create and answer a question for you!"
+                         Question = "I have a question that I cannot find on here.",
+                         Answer = "You will have to ask someone with SuperAdmin privileges and they can create and answer your question for you!"
                      },
                      new Faq
                      {
-                         Question = "How to change Grows address?",
-                         Answer = "In the 'maintain lookup values' section there’s a textbox for 'Grows Address'. simply edit the address."
+                         Question = "How can I change Grow's address?",
+                         Answer = "In the 'Maintain Lookup Values' section, there’s a textbox for 'Grow's Address'. Simply edit the address there."
                      },
                      new Faq
                      {
-                         Question = "A member has a common health or dietary concern that is not listed",
-                         Answer = "for the time being select other and write about it in the notes. let someone with SuperAdmin privileges know and they can add it to the lookup values!"
+                         Question = "A member has a common health or dietary concern that is not listed.",
+                         Answer = "For the time being, select other and write about it in the notes. Let someone with SuperAdmin privileges know and they can add it to the lookup values!"
                      },
                      new Faq
                      {
-                         Question = "What are the Lookup Values the SuperAdmin can maintain?",
-                         Answer = "Health Concerns, Dietary Restrictions, Income Sources, Cities, Genders, and Item Categories are all lookup values that the SuperAdmin can add to, edit, or remove"
+                         Question = "What are the Lookup Values that the SuperAdmin can maintain?",
+                         Answer = "Health Concerns, Dietary Restrictions, Income Sources, Cities, Genders and Item Categories are all lookup values that the SuperAdmin can add to, edit or remove."
                      },
                      new Faq
                      {
                          Question = "How does the Sales page work?",
-                         Answer = "The sales page shows you a list of every member in the system. this way you can create a sale based on what member has shown up to the store. the easiest way to find the member would be to search for the member by name. and then you can create the sale beside the member’s name!"
+                         Answer = "The sales page shows you a list of every member in the system. This way you can create a sale based on what member has shown up to the store. The easiest way to find a member would be to search for them by name. You can then create the sale by clicking on their name!"
                      },
                      new Faq
                      {
                          Question = "Why can’t I edit a Sale?",
-                         Answer = "Once a Sale has been paid for you can no longer edit"
+                         Answer = "Once a Sale has been paid for, you can no longer edit it."
                      },
                      new Faq
                      {
-                         Question = "How can i make a sale quickly?",
-                         Answer = "in the households overview you can see there’s a 'current members' click on the button and all the members in that household will show up. click on a member and that will allow you to make a sale for that member."
-                     }
-
-
-
-                     );
-
+                         Question = "How can I make a Sale quickly?",
+                         Answer = "In the households overview, you can see there’s a 'Current Members' button. Click on it and all the members in that household will show up. Click on a member and that will allow you to make a sale for that member."
+                     });
+                    
                     context.SaveChanges();
                 }
-
                 #endregion
-
-
-
             }
         }
     }

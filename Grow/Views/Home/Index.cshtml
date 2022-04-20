@@ -38,18 +38,38 @@
             <p>Create a new household and add members to it.</p>
             <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Households")'">Households</button></p>
         </div>
-        @if (User.IsInRole("SuperAdmin"))
-        {
-            <div class="col-md-4">
-                <h2>Create Reports</h2>
-                <p>Create new reports based on current data.</p>
-                <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Reports")'">Reports</button></p>
-            </div>
-        }
         <div class="col-md-4">
             <h2>Create Sales</h2>
             <p>Create a new sale for a specific household.</p>
             <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Transactions")'">Sales</button></p>
         </div>
+        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+        {
+            <div class="col-md-4">
+                <h2>Create Inventory</h2>
+                <p>Create inventory items based on current stock.</p>
+                <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Items")'">Inventory</button></p>
+            </div>
+        }
     </div>
+    @if (User.IsInRole("SuperAdmin"))
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Create Reports</h2>
+                <p>Create new reports based on current data.</p>
+                <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Reports")'">Reports</button></p>
+            </div>
+            <div class="col-md-4">
+                <h2>Create Employees</h2>
+                <p>Create new employees and set their roles.</p>
+                <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Index", "Employees")'">Employees</button></p>
+            </div>
+            <div class="col-md-4">
+                <h2>Create Messages</h2>
+                <p>Create new email messages for current members.</p>
+                <p><button type="button" class="btn btn-outline-success" onclick="location.href = '@Url.Action("Notification", "Households")'">Messages</button></p>
+            </div>
+        </div>
+    }
 }

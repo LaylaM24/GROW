@@ -7,11 +7,11 @@
 <h2>Edit Question</h2>
 
 <hr />
+
 <form asp-action="Edit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-4">
-
             <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Question" class="control-label"></label>
@@ -23,19 +23,16 @@
                 <input asp-for="Answer" class="form-control" />
                 <span asp-validation-for="Answer" class="text-danger"></span>
             </div>
-
+            <br />
             <div class="form-group">
+                <a href='@ViewData["returnURL"]'>
+                    <input type="button" value="Back to List" class="btn btn-secondary" />
+                </a>
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </div>
     </div>
 </form>
-
-<div>
-    <a href='@ViewData["returnURL"]'>
-            <input type="button" value="Back to List" class="btn btn-secondary" />
-        </a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
