@@ -19,8 +19,7 @@
             @Html.DropDownList("City", null, htmlAttributes: new { @id = "ddlCity", @class = "form-control", @onchange = "this.form.submit()" })
         </div>
         <div class="col form-check float-right">
-            <partial name="_HouseholdLocationsMap" />
-            <br />
+            <a asp-action="HouseholdLocationsMap" class="btn btn-info float-right" style="margin-left: 12px">View Map</a>
             <a asp-action="DownloadHouseholdLocations" asp-route-cityID="@ViewData["SelectedCity"]" asp-route-exclInactive="@ViewData["ExclInactive"]" class="btn btn-info float-right">Download Report</a> <br />
             <br />
             <label class="form-check-label float-right">
