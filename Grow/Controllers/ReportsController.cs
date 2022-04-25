@@ -368,6 +368,24 @@ namespace Grow.Controllers
             return View(pagedData);
         }
 
+        public async Task<IActionResult> HouseholdLocationsMap()
+        {
+            var location = await _context.Cities
+                .Include(c => c.Households)
+                .OrderBy(c => c.CityName)
+                .Select(grp => new
+                {
+                    cityName = grp.CityName,
+                    cityCount = grp.Households.Count()
+                })
+                .ToListAsync();
+
+            var locationData = JsonConvert.SerializeObject(location);
+            ViewData["LocationData"] = locationData;
+
+            return View();
+        }
+
         public async Task<IActionResult> HouseholdIncome(int? page, int? pageSizeID,
             string actionButton, string LowRange, string HighRange, bool cbInactive, string sortDirection = "asc", string sortField = "Membership No.")
         {
